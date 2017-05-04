@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>OpenVas 调研报告 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="安全,端口号">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="OpenVas 调研报告"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>OpenVas 调研报告</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/安全/openvas调研报告/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.151Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <a id="more"></a>
+<h1 id="1、openvas-简介"><a href="#1、openvas-简介" class="headerlink" title="1、openvas 简介"></a>1、openvas 简介</h1><p>Nessus是其中一个最流行的和有强力的漏洞扫描器,尤其是对UNIX系统。它最初是自由和开放源码,但他们在2005年关闭了源代码,在2008年取消了免费的“注册Feed”版本。现在每年花费1200美元。</p>
+<p>在Nessus的基础上发展了一个免费开源的分支，OpenVAS 用于管理目标系统的漏洞的同时也可以进行攻击渗透。</p>
+<h1 id="2、-整体结构"><a href="#2、-整体结构" class="headerlink" title="2、 整体结构"></a>2、 整体结构</h1><p><img src="img/1489109830456.jpg" alt="整体架构" title="1489109830456"></p>
+<h2 id="采用S-C模式"><a href="#采用S-C模式" class="headerlink" title="采用S/C模式"></a>采用S/C模式</h2><h2 id="Server-层（分为三部分）"><a href="#Server-层（分为三部分）" class="headerlink" title="Server 层（分为三部分）"></a>Server 层（分为三部分）</h2><blockquote>
+<p> 扫描器-openvas-scanner<br>  scanner监听端口为9391, 负责调用各种漏洞检测插件，完成实际的扫描操作。</p>
+<p>  管理器-openvas-manager<br>监听端口为9390, 负责分配扫描任务，并根据扫描结果生产评估报告。</p>
+<p> 管理者-openvas-administrator<br>administrator监听端 口为9393, 负责管理配置信息，用户授权等相关工作。</p>
+</blockquote>
+<h2 id="Client-层-任一都可以"><a href="#Client-层-任一都可以" class="headerlink" title="Client 层(任一都可以)"></a>Client 层(任一都可以)</h2><blockquote>
+<p>openvas-cli(命令行接口):<br>负责提供从命令行访问OpenVAS服务层程序。</p>
+<p>greenbone-security-assistant(安装助手):<br> 负责提供访问OpenVAS服务层的web接口，便于通过浏览器来执行扫描任务，是使用最简便的客户层组件。</p>
+<p>Greenbone-Desktop-Suite(桌面套件):<br> 负责提供访问OpenVAS服务层的图形程序界面，主要允许在Windows客户机中。</p>
+</blockquote>
+<h1 id="3-、OpenVas各组件"><a href="#3-、OpenVas各组件" class="headerlink" title="3 、OpenVas各组件"></a>3 、OpenVas各组件</h1><h3 id="安装辅助脚本"><a href="#安装辅助脚本" class="headerlink" title="安装辅助脚本"></a>安装辅助脚本</h3><ul>
+<li>openvas-setup:　　　　   执行安装</li>
+<li>openvas-check-setup:　　可以在配置之前使用该工具进行检查，看哪里有问题，有问题的时候根据提示进行fix</li>
+</ul>
+<h3 id="Server-组件"><a href="#Server-组件" class="headerlink" title="Server 组件"></a>Server 组件</h3><ul>
+<li>openvassd :　　扫描引擎</li>
+<li>openvasmd:　　管理引擎    可以添加用户等操作，详细查看help，</li>
+<li>openvasad　　  认证工具</li>
+</ul>
+<h3 id="漏洞库同步组件"><a href="#漏洞库同步组件" class="headerlink" title="漏洞库同步组件"></a>漏洞库同步组件</h3><ul>
+<li>openvas-nvt-sync　　　　同步nvt库（用于检测的脚本）</li>
+<li>openvas-scapdata-sync    同步scap数据库（后台采用sqlite）</li>
+<li>openvas-certdata-sync  同步 CERT 公告</li>
+</ul>
+<h1 id="4、安装"><a href="#4、安装" class="headerlink" title="4、安装"></a>4、安装</h1><h2 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h2><h3 id="详见Gitlib-安装"><a href="#详见Gitlib-安装" class="headerlink" title="详见Gitlib 安装"></a>详见Gitlib 安装</h3><p><a href="http://gitlab.buptnsrc.com/16new/openvas/blob/master/README.md" target="_blank" rel="external">http://gitlab.buptnsrc.com/16new/openvas/blob/master/README.md</a></p>
+<h1 id="5、漏洞数据（feed）"><a href="#5、漏洞数据（feed）" class="headerlink" title="5、漏洞数据（feed）"></a>5、漏洞数据（feed）</h1><p><img src="img/1489062782315.jpg" alt="同步数据" title="同步数据"></p>
+<h2 id="数据来源"><a href="#数据来源" class="headerlink" title="数据来源"></a>数据来源</h2><h3 id="NTVs-数据"><a href="#NTVs-数据" class="headerlink" title="NTVs 数据"></a>NTVs 数据</h3><p> OpenVas 包含了一个 NTVs（ Network Vulnerability Tests）的推送， 持续增长。所有检测方法都是通过NTVs 脚本进行检测的</p>
+<p>NTVs 所有分类 详见 主机扫描下的可扫描类型</p>
+<blockquote>
+<p>NTVs 采用 nasl脚本语言编写   nasl 示例<br><a href="http://wald.intevation.org/scm/viewvco.php/scripts/2008/deb_016_1.nasl" target="_blank" rel="external">http://wald.intevation.org/scm/viewvco.php/scripts/2008/deb_016_1.nasl</a></p>
+</blockquote>
+<h3 id="SCAP-数据"><a href="#SCAP-数据" class="headerlink" title="SCAP 数据"></a>SCAP 数据</h3><h4 id="主要包括"><a href="#主要包括" class="headerlink" title="主要包括"></a>主要包括</h4><ul>
+<li>CVE</li>
+<li>CPE</li>
+<li>OAVL<h3 id="CERT-公告数据"><a href="#CERT-公告数据" class="headerlink" title="CERT 公告数据"></a>CERT 公告数据</h3></li>
+<li>CERT-Bund 公告</li>
+<li>DFN-CERT 公告</li>
+</ul>
+<h2 id="数据数量（截止到2017-3-10）"><a href="#数据数量（截止到2017-3-10）" class="headerlink" title="数据数量（截止到2017.3.10）"></a>数据数量（截止到2017.3.10）</h2><ul>
+<li>NTVs  截止到2017年 3月 10号 有50391个测试脚本</li>
+<li>CVE数量 29346</li>
+<li>cpe 数量 164099</li>
+<li>OVAL定义数量 28175</li>
+<li>CERT-Bund 公告数量 5629</li>
+<li>DFN-CERT 公告数量 14226</li>
+</ul>
+<h2 id="更新方式"><a href="#更新方式" class="headerlink" title="更新方式"></a>更新方式</h2><h3 id="可以手动或自己编写脚本-在启动服务前更新漏洞库"><a href="#可以手动或自己编写脚本-在启动服务前更新漏洞库" class="headerlink" title="可以手动或自己编写脚本 在启动服务前更新漏洞库"></a>可以手动或自己编写脚本 在启动服务前更新漏洞库</h3><h3 id="openvas-做了一个更新限制-每天只能更新一次脚本"><a href="#openvas-做了一个更新限制-每天只能更新一次脚本" class="headerlink" title="openvas 做了一个更新限制 每天只能更新一次脚本"></a>openvas 做了一个更新限制 每天只能更新一次脚本</h3><p>采用增量更新、 采用更新脚本进行更新</p>
+<ul>
+<li>openvas-nvt-sync　　　　同步nvt库（用于检测的脚本）</li>
+<li>openvas-scapdata-sync    同步scap数据库（后台采用sqlite）</li>
+<li>openvas-certdata-sync  同步 CERT 公告</li>
+</ul>
+<p>NTVs 可以离线更新  更新地址为<br><a href="http://www.openvas.org/openvas-nvt-feed-current.tar.bz2" target="_blank" rel="external">http://www.openvas.org/openvas-nvt-feed-current.tar.bz2</a></p>
+<h2 id="更新频率"><a href="#更新频率" class="headerlink" title="更新频率"></a>更新频率</h2><p>漏洞库openvas feed端 更新频率大约一周一次</p>
+<h1 id="6、主机扫描"><a href="#6、主机扫描" class="headerlink" title="6、主机扫描"></a>6、主机扫描</h1><h2 id="NTV家族清单（可扫描类型）"><a href="#NTV家族清单（可扫描类型）" class="headerlink" title="NTV家族清单（可扫描类型）"></a>NTV家族清单（可扫描类型）</h2><ol>
+<li>AIX Local Security Checks</li>
+<li>Amazon Linux Local Security Checks<ol>
+<li>Brute force attacks</li>
+<li>Buffer overflow</li>
+<li>CISCO</li>
+<li>CentOS Local Security Checks</li>
+<li>Citrix Xenserver Local Security Checks</li>
+<li>Compliance</li>
+<li>Databases</li>
+<li>Debian Local Security Checks</li>
+<li>Default Accounts</li>
+<li>Denial of Service</li>
+<li>F5 Local Security Checks</li>
+<li>FTP</li>
+<li>Fedora Local Security Checks</li>
+<li>Finger abuses</li>
+<li>Firewalls</li>
+<li>FortiOS Local Security Checks</li>
+<li>FreeBSD Local Security Checks</li>
+<li>Gain a shell remotely</li>
+<li>General</li>
+<li>Gentoo Local Security Checks</li>
+<li>HP-UX Local Security Checks</li>
+<li>IT-Grundschutz</li>
+<li>IT-Grundschutz-10</li>
+<li>IT-Grundschutz-11</li>
+<li>IT-Grundschutz-12</li>
+<li>IT-Grundschutz-13</li>
+<li>JunOS Local Security Checks</li>
+<li>Mac OS X Local Security Checks</li>
+<li>Mageia Linux Local Security Checks</li>
+<li>Malware</li>
+<li>Mandrake Local Security Checks</li>
+<li>Netware</li>
+<li>Nmap NSE</li>
+<li>Nmap NSE net</li>
+<li>Oracle Linux Local Security Checks</li>
+<li>Peer-To-Peer File Sharing</li>
+<li>Policy</li>
+<li>Port scanners</li>
+<li>Privilege escalation</li>
+<li>Product detection</li>
+<li>RPC</li>
+<li>Red Hat Local Security Checks</li>
+<li>Remote file access</li>
+<li>SMTP problems</li>
+<li>SNMP</li>
+<li>Service detection</li>
+<li>Settings</li>
+<li>Slackware Local Security Checks</li>
+<li>Solaris Local Security Checks</li>
+<li>SuSE Local Security Checks</li>
+<li>Ubuntu Local Security Checks</li>
+<li>Useless services</li>
+<li>VMware Local Security Checks</li>
+<li>Web Servers</li>
+<li>Web application abuses</li>
+<li>Windows</li>
+<li>Windows : Microsoft Bulletins</li>
+</ol>
+</li>
+</ol>
+<h2 id="漏洞扫描结果示例（Apache-默认文件漏洞）"><a href="#漏洞扫描结果示例（Apache-默认文件漏洞）" class="headerlink" title="漏洞扫描结果示例（Apache 默认文件漏洞）"></a>漏洞扫描结果示例（Apache 默认文件漏洞）</h2><p><img src="img/1489132187650.jpg" alt="检测结果" title="结果示例"></p>
+<h1 id="7、结果导出"><a href="#7、结果导出" class="headerlink" title="7、结果导出"></a>7、结果导出</h1><h3 id="结果可以多种形式导出"><a href="#结果可以多种形式导出" class="headerlink" title="结果可以多种形式导出"></a>结果可以多种形式导出</h3><ul>
+<li>Anonymous XML</li>
+<li>ARF</li>
+<li>CPE</li>
+<li>CSV Hosts</li>
+<li>CSV Results</li>
+<li>HTML</li>
+<li>ITG</li>
+<li>LaTeX</li>
+<li>NBE</li>
+<li>PDF</li>
+<li>SVG</li>
+<li>TXT</li>
+<li>Verinice ISM</li>
+<li>Verinice ITG</li>
+<li>XML</li>
+</ul>
+<h1 id="8、-参考网址"><a href="#8、-参考网址" class="headerlink" title="8、 参考网址"></a>8、 参考网址</h1><p><a href="http://www.freebuf.com/articles/5474.html" target="_blank" rel="external">http://www.freebuf.com/articles/5474.html</a><br><a href="http://www.freebuf.com/articles/system/110027.html" target="_blank" rel="external">http://www.freebuf.com/articles/system/110027.html</a><br><a href="https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/28.html" target="_blank" rel="external">https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/28.html</a><br><a href="http://m.www.cnblogs.com/spacepirate/p/4113626.html" target="_blank" rel="external">http://m.www.cnblogs.com/spacepirate/p/4113626.html</a><br><a href="http://atic-tw.blogspot.com/2013/12/kali-openvas.html" target="_blank" rel="external">http://atic-tw.blogspot.com/2013/12/kali-openvas.html</a><br><a href="http://www.scap.org.cn/article_home_about-scap.html" target="_blank" rel="external">http://www.scap.org.cn/article_home_about-scap.html</a><br><a href="http://wiki.scap.org.cn/scap/overview" target="_blank" rel="external">http://wiki.scap.org.cn/scap/overview</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/安全/">安全</a><a href="/tags/端口号/">端口号</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

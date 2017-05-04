@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Plan 设置 crontab python 接口 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python pan">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Plan 设置 crontab python 接口"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Plan 设置 crontab python 接口</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/03/Python/2017-2-10 Plan 设置 crontab python 接口/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-03T11:07:43.000Z">
+          2014/03/03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> plan <span class="keyword">import</span> Plan</div><div class="line"></div><div class="line">cron = Plan()</div><div class="line"></div><div class="line">cron.command(<span class="string">'ls /tmp'</span>, every=<span class="string">'1.day'</span>, at=<span class="string">'12:00'</span>)</div><div class="line">cron.command(<span class="string">'pwd'</span>, every=<span class="string">'2.month'</span>)</div><div class="line">cron.command(<span class="string">'date'</span>, every=<span class="string">'weekend'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    cron.run()</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python-pan/">python pan</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

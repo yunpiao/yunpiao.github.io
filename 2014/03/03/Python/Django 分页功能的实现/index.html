@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Django 分页功能的实现 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,分页,django">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Django 分页功能的实现"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Django 分页功能的实现</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/03/Python/Django 分页功能的实现/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-03T11:07:43.000Z">
+          2014/03/03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="python-代码实现-后台逻辑"><a href="#python-代码实现-后台逻辑" class="headerlink" title="python 代码实现 后台逻辑"></a>python 代码实现 后台逻辑</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> django.core.paginator <span class="keyword">import</span> Paginator, EmptyPage, PageNotAnInteger</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">listing</span><span class="params">(request)</span>:</span></div><div class="line">    contact_list = Contacts.objects.all()</div><div class="line">    paginator = Paginator(contact_list, <span class="number">25</span>) <span class="comment"># Show 25 contacts per page</span></div><div class="line"></div><div class="line">    page = request.GET.get(<span class="string">'page'</span>)</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        contacts = paginator.page(page)</div><div class="line">    <span class="keyword">except</span> PageNotAnInteger:</div><div class="line">        <span class="comment"># If page is not an integer, deliver first page.</span></div><div class="line">        contacts = paginator.page(<span class="number">1</span>)</div><div class="line">    <span class="keyword">except</span> EmptyPage:</div><div class="line">        <span class="comment"># If page is out of range (e.g. 9999), deliver last page of results.</span></div><div class="line">        contacts = paginator.page(paginator.num_pages)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> render_to_response(<span class="string">'list.html'</span>, &#123;<span class="string">"contacts"</span>: contacts&#125;)</div></pre></td></tr></table></figure>
+<h2 id="Django前端显示部分"><a href="#Django前端显示部分" class="headerlink" title="Django前端显示部分"></a>Django前端显示部分</h2><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line"> &lt;head&gt;&lt;/head&gt;</div><div class="line"> &lt;body&gt;</div><div class="line">  &lt;table width="100%" class="table table-striped table-bordered table-hover"&gt; </div><div class="line">   &lt;thead&gt; </div><div class="line">    &lt;tr&gt; </div><div class="line">     &lt;th&gt; uuid&lt;/th&gt; </div><div class="line">     &lt;th&gt; 任务名称&lt;/th&gt; </div><div class="line">     &lt;th&gt; 任务结果&lt;/th&gt; </div><div class="line">     &lt;th&gt; 任务状态&lt;/th&gt; </div><div class="line">     &lt;th&gt; 接收时间&lt;/th&gt; </div><div class="line">     &lt;th&gt; 完成时间&lt;/th&gt; </div><div class="line">     &lt;th&gt; 传入参数&lt;/th&gt; </div><div class="line">    &lt;/tr&gt; </div><div class="line">   &lt;/thead&gt; </div><div class="line">   &lt;tbody&gt;</div><div class="line">     <span class="template-tag">&#123;% <span class="name"><span class="name">for</span></span> i, v <span class="keyword">in</span> model %&#125;</span> </div><div class="line">    &lt;tr&gt; </div><div class="line">     &lt;td&gt; </div><div class="line">      &lt;form method="POST" action="<span class="template-tag">&#123;% <span class="name"><span class="name">url</span></span> " celery_api_task"="" v.uuid="" %&#125;</span>"=""&gt;</div><div class="line">        <span class="template-tag">&#123;% <span class="name"><span class="name">csrf_token</span></span> %&#125;</span> </div><div class="line">       &lt;button type="submit" class="btn btn-default btn-xs" title="任务详情"&gt; <span class="template-variable">&#123;&#123; v.uuid &#125;&#125;</span> &lt;/button&gt; </div><div class="line">      &lt;/form&gt; &lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.name &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.result &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.state &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.received &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.timestamp &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.args &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; &lt;/td&gt; </div><div class="line">    &lt;/tr&gt; <span class="template-tag">&#123;% <span class="name"><span class="name">endfor</span></span> %&#125;</span> </div><div class="line">   &lt;/tbody&gt; </div><div class="line">  &lt;/table&gt; </div><div class="line">  &lt;div class="col-md-offset-3 " style=""&gt;</div><div class="line">    <span class="template-tag">&#123;% <span class="name">bootstrap_paginate</span> model range=10 show_prev_next=&amp;quot;true&amp;quot; show_first_last=&amp;quot;true&amp;quot; align=&amp;quot;center&amp;quot; %&#125;</span> </div><div class="line">  &lt;/div&gt; </div><div class="line"> &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><h3 id="分页器-objects"><a href="#分页器-objects" class="headerlink" title="分页器 objects"></a>分页器 objects</h3><p>Paginator类拥有以下构造器：</p>
+<blockquote>
+<p>class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)[source]¶</p>
+</blockquote>
+<p>所需参数¶</p>
+<pre><code>&gt; object_list
+    A list, tuple, Django QuerySet, or other sliceable object with a count() or __len__() method.
+&gt; per_page
+    The maximum number of items to include on a page, not including orphans (see the orphans optional argument below).
+</code></pre><p>可选参数¶</p>
+<pre><code>&gt; orphans
+    The minimum number of items allowed on the last page, defaults to zero. Use this when you don’t want to have a last page with very few items. If the last page would normally have a number of items less than or equal to orphans, then those items will be added to the previous page (which becomes the last page) instead of leaving the items on a page by themselves. For example, with 23 items, per_page=10, and orphans=3, there will be two pages; the first page with 10 items and the second (and last) page with 13 items.
+
+&gt; allow_empty_first_page
+Whether or not the first page is allowed to be empty. If False and object_list is empty, then an EmptyPage error will be raised.
+</code></pre><p>方法¶</p>
+<pre><code>&gt; Paginator.page(number)[source]¶
+返回在提供的下标处的Page对象，下标以1开始。如果提供的页码不存在，抛出InvalidPage异常。
+</code></pre><p>属性¶</p>
+<pre><code>&gt; Paginator.count¶
+    所有页面的对象总数。
+</code></pre><p>注意<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">当计算object_list所含对象的数量时， Paginator会首先尝试调用object_list.count()。如果object_list没有 count() 方法，Paginator 接着会回退使用len(object_list)。这样会使类似于Django’s QuerySet的对象使用更加便捷的count()方法，如果存在的话。</div><div class="line"></div><div class="line">Paginator.num_pages¶</div><div class="line">页面总数。</div><div class="line"></div><div class="line">Paginator.page_range¶</div><div class="line">页码的范围，从1开始，例如[1, 2, 3, 4]。</div><div class="line"></div><div class="line">InvalidPage exceptions</div><div class="line"></div><div class="line">exception InvalidPage[source]¶</div><div class="line">异常的基类，当paginator传入一个无效的页码时抛出。</div><div class="line"></div><div class="line">Paginator.page()放回在所请求的页面无效（比如不是一个整数）时，或者不包含任何对象时抛出异常。通常，捕获InvalidPage异常就够了，但是如果你想更加精细一些，可以捕获以下两个异常之一：</div><div class="line"></div><div class="line">exception PageNotAnInteger[source]¶</div><div class="line">当向page()提供一个不是整数的值时抛出。</div><div class="line"></div><div class="line">exception EmptyPage[source]¶</div><div class="line">当向page()提供一个有效值，但是那个页面上没有任何对象时抛出。</div><div class="line"></div><div class="line">这两个异常都是InvalidPage的子类，所以你可以通过简单的except InvalidPage来处理它们。</div><div class="line"></div><div class="line">Page objects</div><div class="line"></div><div class="line">你通常不需要手动构建 Page对象 -- 你可以从Paginator.page()来获得它们。</div><div class="line"></div><div class="line">class Page(object_list, number, paginator)[source]¶</div><div class="line">当调用len()或者直接迭代一个页面的时候，它的行为类似于 Page.object_list 的序列。</div><div class="line"></div><div class="line">方法¶</div><div class="line"></div><div class="line">Page.has_next()[source]¶</div><div class="line">如果有下一页，则返回True。</div><div class="line"></div><div class="line">Page.has_previous()[source]¶</div><div class="line">如果有上一页，返回 True。</div><div class="line"></div><div class="line">Page.has_other_pages()[source]¶</div><div class="line">如果有上一页或下一页，返回True。</div><div class="line"></div><div class="line">Page.next_page_number()[source]¶</div><div class="line">返回下一页的页码。如果下一页不存在，抛出InvalidPage异常。</div><div class="line"></div><div class="line">Page.previous_page_number()[source]¶</div><div class="line">返回上一页的页码。如果上一页不存在，抛出InvalidPage异常。</div><div class="line"></div><div class="line">Page.start_index()[source]¶</div><div class="line">返回当前页上的第一个对象，相对于分页列表的所有对象的序号，从1开始。比如，将五个对象的列表分为每页两个对象，第二页的start_index()会返回3。</div><div class="line"></div><div class="line">Page.end_index()[source]¶</div><div class="line">返回当前页上的最后一个对象，相对于分页列表的所有对象的序号，从1开始。 比如，将五个对象的列表分为每页两个对象，第二页的end_index() 会返回 4。</div><div class="line"></div><div class="line">属性¶</div><div class="line"></div><div class="line">Page.object_list¶</div><div class="line">当前页上所有对象的列表。</div><div class="line"></div><div class="line">Page.number¶</div><div class="line">当前页的序号，从1开始。</div><div class="line"></div><div class="line">Page.paginator¶</div><div class="line">相关的Paginator对象。</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/分页/">分页</a><a href="/tags/django/">django</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

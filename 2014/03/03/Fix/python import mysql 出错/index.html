@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python import mysql 出错 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,import mysql">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="python import mysql 出错"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>python import mysql 出错</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/03/Fix/python import mysql 出错/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-03T11:07:43.000Z">
+          2014/03/03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p> 升级系统后 不知道怎么回事 import mysql突然提示<br> ImportError: libmysqlclient.so.16: cannot open shared object file: No such file or directory<br> 刚好这几天有事 这种感觉就像在挖坑</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>首先查找自己有没有这个so</p>
+<blockquote>
+<p>find / -name “libmysql*”</p>
+</blockquote>
+<p>google 发现在/usr/lib/ 里创建这个软连接 可是无用 因为 我没有libmysqlclient.so.16文件</p>
+<p>之后发现在/usr/lib64/mysql/libmysql* 有许多 18 的so</p>
+<p>现在 假设 是升级 把我的16删了 升级到了18  :s<br>so :sad:</p>
+<p>在同一文件夹下发现 libmysqlclient.so 根据理所应当效应 我觉得这个就是我的16</p>
+<p>so</p>
+<p>ln -s /usr/lib64/mysql/libmysqlclient.so /usr/lib64</p>
+<p>so<br>import MySQLdb OK !!</p>
+<h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><p>sudo apt-get install libmysqlclient-dev</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/import-mysql/">import mysql</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

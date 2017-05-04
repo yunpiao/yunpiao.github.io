@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>open-falcon监控系统调研 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="open-falcon,openTsdb">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="open-falcon监控系统调研"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>open-falcon监控系统调研</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/监控平台/open-falcon监控系统调研/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.179Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="采集格式-类似于openTSDB"><a href="#采集格式-类似于openTSDB" class="headerlink" title="采集格式 类似于openTSDB"></a>采集格式 类似于openTSDB</h2><h3 id="TSdb-相关链接"><a href="#TSdb-相关链接" class="headerlink" title="TSdb 相关链接"></a>TSdb 相关链接</h3><p>TSDB <a href="http://liubin.org/blog/2016/02/18/tsdb-intro/" target="_blank" rel="external">http://liubin.org/blog/2016/02/18/tsdb-intro/</a><br>openTSDB <a href="http://liubin.org/blog/2016/03/05/tsdb-opentsdb/" target="_blank" rel="external">http://liubin.org/blog/2016/03/05/tsdb-opentsdb/</a></p>
+<a id="more"></a>
+<h3 id="openfalcon-采集格式示例"><a href="#openfalcon-采集格式示例" class="headerlink" title="openfalcon 采集格式示例"></a>openfalcon 采集格式示例</h3><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;</div><div class="line"><span class="string">Endpoint:</span>yunpiao, </div><div class="line"><span class="string">Metric:</span>snmp.Udp.RcvbufErrors, </div><div class="line"><span class="string">Tags:</span>map[], </div><div class="line"><span class="string">Value:</span><span class="number">0</span>, </div><div class="line"><span class="string">TS:</span><span class="number">1476770550</span> <span class="number">2016</span><span class="number">-10</span><span class="number">-18</span> <span class="number">14</span>:<span class="number">02</span>:<span class="number">30</span> </div><div class="line"><span class="string">DsType:</span>, </div><div class="line"><span class="string">Step:</span><span class="number">0</span>, </div><div class="line"><span class="string">Heartbeat:</span><span class="number">0</span></div><div class="line">&gt;</div></pre></td></tr></table></figure>
+<h3 id="相关技术"><a href="#相关技术" class="headerlink" title="相关技术"></a>相关技术</h3><ol>
+<li>采用心跳包,判断是否在线</li>
+<li>为控制洪流,采用内存定长queue,整理数据 </li>
+<li>采用一致性哈希判断所属实例</li>
+</ol>
+<h2 id="open-falcon-信息采集项"><a href="#open-falcon-信息采集项" class="headerlink" title="open-falcon 信息采集项"></a>open-falcon 信息采集项</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div></pre></td><td class="code"><pre><div class="line">Metric:agent.alive</div><div class="line">Metric:cpu.idle</div><div class="line">Metric:cpu.user</div><div class="line">Metric:cpu.nice</div><div class="line">Metric:cpu.system</div><div class="line">Metric:cpu.iowait</div><div class="line">Metric:cpu.irq</div><div class="line">Metric:cpu.softirq</div><div class="line">Metric:cpu.steal</div><div class="line">Metric:cpu.guest</div><div class="line">Metric:cpu.switches</div><div class="line">Metric:kernel.maxfiles</div><div class="line">Metric:kernel.maxproc</div><div class="line">Metric:kernel.files.allocated</div><div class="line">Metric:kernel.files.left</div><div class="line">Metric:load.1min</div><div class="line">Metric:load.5min</div><div class="line">Metric:load.15min</div><div class="line">Metric:mem.memtotal</div><div class="line">Metric:mem.memfree.percent</div><div class="line">Metric:mem.swapfree.percent</div><div class="line">Metric:mem.swapused.percent</div><div class="line">Metric:disk.io.read_requests</div><div class="line">Metric:disk.io.read_merged</div><div class="line">Metric:disk.io.read_sectors</div><div class="line">Metric:disk.io.msec_read</div><div class="line">Metric:disk.io.write_requests</div><div class="line">Metric:disk.io.write_merged</div><div class="line">Metric:disk.io.write_sectors</div><div class="line">Metric:disk.io.msec_write</div><div class="line">Metric:disk.io.ios_in_progress</div><div class="line">Metric:disk.io.msec_total</div><div class="line">Metric:disk.io.msec_weighted_total</div><div class="line">Metric:disk.io.read_requests</div><div class="line">Metric:disk.io.read_merged</div><div class="line">Metric:disk.io.read_sectors</div><div class="line">Metric:disk.io.msec_read</div><div class="line">Metric:disk.io.write_requests</div><div class="line">Metric:disk.io.write_merged</div><div class="line">Metric:disk.io.write_sectors</div><div class="line">Metric:disk.io.msec_write</div><div class="line">Metric:disk.io.ios_in_progress</div><div class="line">Metric:disk.io.msec_total</div><div class="line">Metric:disk.io.msec_weighted_total</div><div class="line">Metric:disk.io.read_bytes</div><div class="line">Metric:disk.io.write_bytes</div><div class="line">Metric:disk.io.avgrq_sz</div><div class="line">Metric:disk.io.avgqu-sz</div><div class="line">Metric:disk.io.await</div><div class="line">Metric:disk.io.svctm</div><div class="line">Metric:disk.io.util</div><div class="line">Metric:disk.io.read_bytes</div><div class="line">Metric:disk.io.write_bytes</div><div class="line">Metric:disk.io.avgrq_sz</div><div class="line">Metric:disk.io.avgqu-sz</div><div class="line">Metric:disk.io.await</div><div class="line">Metric:disk.io.svctm</div><div class="line">Metric:disk.io.util</div><div class="line">Metric:TcpExt.TCPFastRetrans</div><div class="line">Metric:TcpExt.DelayedACKLocked</div><div class="line">Metric:TcpExt.TCPDSACKUndo</div><div class="line">Metric:TcpExt.TCPLostRetransmit</div><div class="line">Metric:TcpExt.TCPPrequeueDropped</div><div class="line">Metric:TcpExt.TCPTSReorder</div><div class="line">Metric:TcpExt.TCPAbortOnTimeout</div><div class="line">Metric:TcpExt.TW</div><div class="line">Metric:TcpExt.ArpFilter</div><div class="line">Metric:TcpExt.TCPLossFailures</div><div class="line">Metric:TcpExt.TCPSchedulerFailed</div><div class="line">Metric:TcpExt.LockDroppedIcmps</div><div class="line">Metric:TcpExt.TCPAbortOnMemory</div><div class="line">Metric:TcpExt.TCPBacklogDrop</div><div class="line">Metric:TcpExt.TCPMinTTLDrop</div><div class="line">Metric:TcpExt.TCPMemoryPressures</div><div class="line">Metric:TcpExt.TCPAbortFailed</div><div class="line">Metric:TcpExt.TCPSpuriousRTOs</div><div class="line">Metric:TcpExt.ListenOverflows</div><div class="line">Metric:TcpExt.ListenDrops</div><div class="line">Metric:TcpExt.PruneCalled</div><div class="line">Metric:TcpExt.TCPTimeouts</div><div class="line">Metric:snmp.Udp.InErrors</div><div class="line">Metric:snmp.Udp.OutDatagrams</div><div class="line">Metric:snmp.Udp.RcvbufErrors</div><div class="line">Metric:snmp.Udp.SndbufErrors</div><div class="line">Metric:snmp.Udp.InCsumErrors</div><div class="line">Metric:snmp.Udp.IgnoredMulti</div><div class="line">Metric:snmp.Udp.InDatagrams</div><div class="line">Metric:snmp.Udp.NoPorts</div><div class="line">Metric:ss.closed</div><div class="line">Metric:ss.orphaned</div><div class="line">Metric:ss.synrecv</div><div class="line">Metric:ss.timewait</div><div class="line">Metric:ss.slabinfo.timewait</div><div class="line">Metric:ss.estab</div><div class="line">Metric:df.bytes.free.percent</div><div class="line">Metric:df.inodes.free.percent</div><div class="line">Metric:df.bytes.free.percent</div><div class="line">Metric:df.inodes.free.percent</div><div class="line">Metric:df.statistics.total</div><div class="line">Metric:df.statistics.used</div><div class="line">Metric:df.statistics.used.percent</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/open-falcon-openTsdb/">open-falcon,openTsdb</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

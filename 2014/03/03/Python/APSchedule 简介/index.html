@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>APSchedule 简介 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,APSchedule">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="APSchedule 简介"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>APSchedule 简介</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/03/Python/APSchedule 简介/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-03T11:07:43.000Z">
+          2014/03/03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="Python任务调度模块-–-APScheduler"><a href="#Python任务调度模块-–-APScheduler" class="headerlink" title="Python任务调度模块 – APScheduler"></a>Python任务调度模块 – APScheduler</h2><h4 id="APScheduler是一个Python定时任务框架，使用起来十分方便。提供了基于日期、固定时间间隔以及crontab类型的任务，并且可以持久化任务、并以daemon方式运行应用。目前最新版本为3-0-x。"><a href="#APScheduler是一个Python定时任务框架，使用起来十分方便。提供了基于日期、固定时间间隔以及crontab类型的任务，并且可以持久化任务、并以daemon方式运行应用。目前最新版本为3-0-x。" class="headerlink" title="APScheduler是一个Python定时任务框架，使用起来十分方便。提供了基于日期、固定时间间隔以及crontab类型的任务，并且可以持久化任务、并以daemon方式运行应用。目前最新版本为3.0.x。"></a>APScheduler是一个Python定时任务框架，使用起来十分方便。提供了基于日期、固定时间间隔以及crontab类型的任务，并且可以持久化任务、并以daemon方式运行应用。目前最新版本为3.0.x。</h4><a id="more"></a>
+<h2 id="四个组件："><a href="#四个组件：" class="headerlink" title="四个组件："></a>四个组件：</h2><h3 id="触发器-trigger"><a href="#触发器-trigger" class="headerlink" title="触发器(trigger)"></a>触发器(trigger)</h3><p>包含调度逻辑，每一个作业有它自己的触发器，用于决定接下来哪一个作业会运行。除了他们自己初始配置意外，触发器完全是无状态的。</p>
+<h3 id="作业存储-job-store"><a href="#作业存储-job-store" class="headerlink" title="作业存储(job store)"></a>作业存储(job store)</h3><p>存储被调度的作业，默认的作业存储是简单地把作业保存在内存中，其他的作业存储是将作业保存在数据库中。一个作业的数据讲在保存在持久化作业存储时被序列化，并在加载时被反序列化。调度器不能分享同一个作业存储。</p>
+<h3 id="执行器-executor"><a href="#执行器-executor" class="headerlink" title="执行器(executor)"></a>执行器(executor)</h3><p>处理作业的运行，他们通常通过在作业中提交制定的可调用对象到一个线程或者进城池来进行。当作业完成时，执行器将会通知调度器。</p>
+<h3 id="调度器-scheduler"><a href="#调度器-scheduler" class="headerlink" title="调度器(scheduler)"></a>调度器(scheduler)</h3><p>是其他的组成部分。你通常在应用只有一个调度器，应用的开发者通常不会直接处理作业存储、调度器和触发器，相反，调度器提供了处理这些的合适的接口。配置作业存储和执行器可以在调度器中完成，例如添加、修改和移除作业。<br>你需要选择合适的调度器，这取决于你的应用环境和你使用APScheduler的目的。通常最常用的两个：  </p>
+<blockquote>
+<p>BlockingScheduler: 当调度器是你应用中唯一要运行的东西时使用。<br>BackgroundScheduler: 当你不运行任何其他框架时使用，并希望调度器在你应用的后台执行。</p>
+</blockquote>
+<p>安装APScheduler非常简单：</p>
+<blockquote>
+<p>pip install apscheduler</p>
+</blockquote>
+<p>选择合适的作业存储，你需要决定是否需要作业持久化。如果你总是在应用开始时重建job，你可以直接使用默认的作业存储（MemoryJobStore).但是如果你需要将你的作业持久化，以避免应用崩溃和调度器重启时，你可以根据你的应用环境来选择具体的作业存储。例如：使用Mongo或者SQLAlchemyJobStore （用于支持大多数RDBMS）<br>然而，调度器的选择通常是为你如果你使用上面的框架之一。然而，默认的ThreadPoolExecutor 通常用于大多数用途。如果你的工作负载中有较大的CPU密集型操作，你可以考虑用ProcessPoolExecutor来使用更多的CPU核。你也可以在同一时间使用两者，将进程池调度器作为第二执行器。</p>
+<h3 id="配置调度器"><a href="#配置调度器" class="headerlink" title="配置调度器"></a>配置调度器</h3><p>APScheduler提供了许多不同的方式来配置调度器，你可以使用一个配置字典或者作为参数关键字的方式传入。你也可以先创建调度器，再配置和添加作业，这样你可以在不同的环境中得到更大的灵活性。<br>下面是一个简单使用BlockingScheduler，并使用默认内存存储和默认执行器。(默认选项分别是MemoryJobStore和ThreadPoolExecutor，其中线程池的最大线程数为10)。配置完成后使用start()方法来启动。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_job</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'hello world'</span></div><div class="line"></div><div class="line">sched = BlockingScheduler()</div><div class="line">sched.add_job(my_job, <span class="string">'interval'</span>, seconds=<span class="number">5</span>)</div><div class="line">sched.start()</div><div class="line"></div><div class="line"><span class="keyword">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_job</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'hello world'</span></div><div class="line"></div><div class="line">sched = BlockingScheduler()</div><div class="line">sched.add_job(my_job, <span class="string">'interval'</span>, seconds=<span class="number">5</span>)</div><div class="line">sched.start()</div></pre></td></tr></table></figure>
+<p>在运行程序5秒后，将会输出第一个Hello world。<br>下面进行一个更复杂的配置，使用两个作业存储和两个调度器。在这个配置中，作业将使用mongo作业存储，信息写入到MongoDB中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</div><div class="line"><span class="keyword">from</span> apscheduler.jobstores.mongodb <span class="keyword">import</span> MongoDBJobStore</div><div class="line"><span class="keyword">from</span> apscheduler.jobstores.memory <span class="keyword">import</span> MemoryJobStore</div><div class="line"><span class="keyword">from</span> apscheduler.executors.pool <span class="keyword">import</span> ThreadPoolExecutor, ProcessPoolExecutor</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_job</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'hello world'</span></div><div class="line">host = <span class="string">'127.0.0.1'</span></div><div class="line">port = <span class="number">27017</span></div><div class="line">client = MongoClient(host, port)</div><div class="line"></div><div class="line">jobstores = &#123;</div><div class="line">    <span class="string">'mongo'</span>: MongoDBJobStore(collection=<span class="string">'job'</span>, database=<span class="string">'test'</span>, client=client),</div><div class="line">    <span class="string">'default'</span>: MemoryJobStore()</div><div class="line">&#125;</div><div class="line">executors = &#123;</div><div class="line">    <span class="string">'default'</span>: ThreadPoolExecutor(<span class="number">10</span>),</div><div class="line">    <span class="string">'processpool'</span>: ProcessPoolExecutor(<span class="number">3</span>)</div><div class="line">&#125;</div><div class="line">job_defaults = &#123;</div><div class="line">    <span class="string">'coalesce'</span>: <span class="keyword">False</span>,</div><div class="line">    <span class="string">'max_instances'</span>: <span class="number">3</span></div><div class="line">&#125;</div><div class="line">scheduler = BlockingScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults)</div><div class="line">scheduler.add_job(my_job, <span class="string">'interval'</span>, seconds=<span class="number">5</span>)</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    scheduler.start()</div><div class="line"><span class="keyword">except</span> SystemExit:</div><div class="line">    client.close()</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> apscheduler.schedulers.blocking <span class="keyword">import</span> BlockingScheduler</div><div class="line"><span class="keyword">from</span> apscheduler.jobstores.mongodb <span class="keyword">import</span> MongoDBJobStore</div><div class="line"><span class="keyword">from</span> apscheduler.jobstores.memory <span class="keyword">import</span> MemoryJobStore</div><div class="line"><span class="keyword">from</span> apscheduler.executors.pool <span class="keyword">import</span> ThreadPoolExecutor, ProcessPoolExecutor</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_job</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">print</span> <span class="string">'hello world'</span></div><div class="line">host = <span class="string">'127.0.0.1'</span></div><div class="line">port = <span class="number">27017</span></div><div class="line">client = MongoClient(host, port)</div><div class="line"></div><div class="line">jobstores = &#123;</div><div class="line">    <span class="string">'mongo'</span>: MongoDBJobStore(collection=<span class="string">'job'</span>, database=<span class="string">'test'</span>, client=client),</div><div class="line">    <span class="string">'default'</span>: MemoryJobStore()</div><div class="line">&#125;</div><div class="line">executors = &#123;</div><div class="line">    <span class="string">'default'</span>: ThreadPoolExecutor(<span class="number">10</span>),</div><div class="line">    <span class="string">'processpool'</span>: ProcessPoolExecutor(<span class="number">3</span>)</div><div class="line">&#125;</div><div class="line">job_defaults = &#123;</div><div class="line">    <span class="string">'coalesce'</span>: <span class="keyword">False</span>,</div><div class="line">    <span class="string">'max_instances'</span>: <span class="number">3</span></div><div class="line">&#125;</div><div class="line">scheduler = BlockingScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults)</div><div class="line">scheduler.add_job(my_job, <span class="string">'interval'</span>, seconds=<span class="number">5</span>)</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">    scheduler.start()</div><div class="line"><span class="keyword">except</span> SystemExit:</div><div class="line">    client.close()</div></pre></td></tr></table></figure>
+<p>查询MongoDB可以看到作业的运行情况如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  "_id" : "55ca54ee4bb744f8a5ab08cc4319bc24",</div><div class="line">  "next_run_time" : 1434017278.797,</div><div class="line">  "job_state" : new BinData(0, "gAJ9cQEoVQRhcmdzcQIpVQhleGVjdXRvcnEDVQdkZWZhdWx0cQRVDW1heF9pbnN0YW5jZXNxBUsDVQRmdW5jcQZVD19fbWFpbl9fOm15X2pvYnEHVQJpZHEIVSA1NWNhNTRlZTRiYjc0NGY4YTVhYjA4Y2M0MzE5YmMyNHEJVQ1uZXh0X3J1bl90aW1lcQpjZGF0ZXRpbWUKZGF0ZXRpbWUKcQtVCgffBgsSBzoMKUhjcHl0egpfcApxDChVDUFzaWEvU2hhbmdoYWlxDU2AcEsAVQNDU1RxDnRScQ+GUnEQVQRuYW1lcRFVBm15X2pvYnESVRJtaXNmaXJlX2dyYWNlX3RpbWVxE0sBVQd0cmlnZ2VycRRjYXBzY2hlZHVsZXIudHJpZ2dlcnMuaW50ZXJ2YWwKSW50ZXJ2YWxUcmlnZ2VyCnEVKYFxFn1xF1UPaW50ZXJ2YWxfbGVuZ3RocRhHQBQAAAAAAABzfXEZKFUIdGltZXpvbmVxGmgMKGgNTehxSwBVA0xNVHEbdFJxHFUIaW50ZXJ2YWxxHWNkYXRldGltZQp0aW1lZGVsdGEKcR5LAEsFSwCHUnEfVQpzdGFydF9kYXRlcSBoC1UKB98GCxIHIQwpSGgPhlJxIVUIZW5kX2RhdGVxIk51hmJVCGNvYWxlc2NlcSOJVQd2ZXJzaW9ucSRLAVUGa3dhcmdzcSV9cSZ1Lg==")</div><div class="line">&#125;</div><div class="line">&#123;</div><div class="line">  "_id" : "55ca54ee4bb744f8a5ab08cc4319bc24",</div><div class="line">  "next_run_time" : 1434017278.797,</div><div class="line">  "job_state" : new BinData(0, "gAJ9cQEoVQRhcmdzcQIpVQhleGVjdXRvcnEDVQdkZWZhdWx0cQRVDW1heF9pbnN0YW5jZXNxBUsDVQRmdW5jcQZVD19fbWFpbl9fOm15X2pvYnEHVQJpZHEIVSA1NWNhNTRlZTRiYjc0NGY4YTVhYjA4Y2M0MzE5YmMyNHEJVQ1uZXh0X3J1bl90aW1lcQpjZGF0ZXRpbWUKZGF0ZXRpbWUKcQtVCgffBgsSBzoMKUhjcHl0egpfcApxDChVDUFzaWEvU2hhbmdoYWlxDU2AcEsAVQNDU1RxDnRScQ+GUnEQVQRuYW1lcRFVBm15X2pvYnESVRJtaXNmaXJlX2dyYWNlX3RpbWVxE0sBVQd0cmlnZ2VycRRjYXBzY2hlZHVsZXIudHJpZ2dlcnMuaW50ZXJ2YWwKSW50ZXJ2YWxUcmlnZ2VyCnEVKYFxFn1xF1UPaW50ZXJ2YWxfbGVuZ3RocRhHQBQAAAAAAABzfXEZKFUIdGltZXpvbmVxGmgMKGgNTehxSwBVA0xNVHEbdFJxHFUIaW50ZXJ2YWxxHWNkYXRldGltZQp0aW1lZGVsdGEKcR5LAEsFSwCHUnEfVQpzdGFydF9kYXRlcSBoC1UKB98GCxIHIQwpSGgPhlJxIVUIZW5kX2RhdGVxIk51hmJVCGNvYWxlc2NlcSOJVQd2ZXJzaW9ucSRLAVUGa3dhcmdzcSV9cSZ1Lg==")</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="操作作业"><a href="#操作作业" class="headerlink" title="操作作业"></a>操作作业</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"> <span class="comment"># 添加作业:</span></div><div class="line"><span class="meta"> @sched.scheduled_job('cron', id='my_job_id', day='last sun')</span></div><div class="line"> <span class="function"><span class="keyword">def</span> <span class="title">some_decorated_task</span><span class="params">()</span>:</span></div><div class="line">	 <span class="keyword">pass</span></div><div class="line">job.remove()</div><div class="line">scheduler.remove_job(<span class="string">'my_job_id'</span>)</div><div class="line"><span class="comment"># 暂停作业:</span></div><div class="line">apscheduler.job.Job.pause()</div><div class="line">apscheduler.schedulers.base.BaseScheduler.pause_job()</div><div class="line"><span class="comment"># 恢复作业:</span></div><div class="line">apscheduler.job.Job.resume()</div><div class="line">apscheduler.schedulers.base.BaseScheduler.resume_job()</div><div class="line"><span class="comment"># 获得job列表</span></div><div class="line">get_jobs()</div><div class="line">print_jobs()</div><div class="line"><span class="comment"># 修改作业</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">some_decorated_task</span><span class="params">()</span>:</span></div><div class="line">    print(<span class="string">"I am printed at 00:00:00 on the last Sunday of every month!"</span>)</div><div class="line"><span class="comment"># 关闭作业</span></div><div class="line">scheduler.shutdown()</div><div class="line">scheduler.shutdown(wait=<span class="keyword">False</span>)</div><div class="line"><span class="comment"># 作业运行的控制</span></div><div class="line"><span class="comment"># add_job的第二个参数是trigger，</span></div><div class="line"><span class="comment"># 它管理着作业的调度方式。</span></div><div class="line"><span class="comment"># 它可以为date, interval或者cron。对于不同的trigger，对应的参数也相同。</span></div><div class="line"></div><div class="line">(<span class="number">1</span>). cron定时调度</div><div class="line">year (int|str) – <span class="number">4</span>-digit year</div><div class="line">month (int|str) – month (<span class="number">1</span><span class="number">-12</span>)</div><div class="line">day (int|str) – day of the (<span class="number">1</span><span class="number">-31</span>)</div><div class="line">week (int|str) – ISO week (<span class="number">1</span><span class="number">-53</span>)</div><div class="line">day_of_week (int|str) – number <span class="keyword">or</span> name of weekday (<span class="number">0</span><span class="number">-6</span> <span class="keyword">or</span> mon,tue,wed,thu,fri,sat,sun)</div><div class="line">hour (int|str) – hour (<span class="number">0</span><span class="number">-23</span>)</div><div class="line">minute (int|str) – minute (<span class="number">0</span><span class="number">-59</span>)</div><div class="line">second (int|str) – second (<span class="number">0</span><span class="number">-59</span>)</div><div class="line">start_date (datetime|str) – earliest possible date/time to trigger on (inclusive)</div><div class="line">end_date (datetime|str) – latest possible date/time to trigger on (inclusive)</div><div class="line">timezone (datetime.tzinfo|str) – time zone to use <span class="keyword">for</span> the date/time calculations (defaults to scheduler timezone)</div><div class="line">和Linux的Crontab一样，它的值格式为：</div><div class="line"></div><div class="line">几个例子如下：</div><div class="line"></div><div class="line"></div><div class="line">sched.add_job(job_function, <span class="string">'cron'</span>, month=<span class="string">'6-8,11-12'</span>, day=<span class="string">'3rd fri'</span>, hour=<span class="string">'0-3'</span>)</div><div class="line">sched.add_job(job_function, <span class="string">'cron'</span>, day_of_week=<span class="string">'mon-fri'</span>, hour=<span class="number">5</span>, minute=<span class="number">30</span>, end_date=<span class="string">'2014-05-30'</span>)</div><div class="line">sched.add_job(job_function, <span class="string">'cron'</span>, month=<span class="string">'6-8,11-12'</span>, day=<span class="string">'3rd fri'</span>, hour=<span class="string">'0-3'</span>)</div><div class="line">sched.add_job(job_function, <span class="string">'cron'</span>, day_of_week=<span class="string">'mon-fri'</span>, hour=<span class="number">5</span>, minute=<span class="number">30</span>, end_date=<span class="string">'2014-05-30'</span>)</div><div class="line">(<span class="number">2</span>). interval 间隔调度</div><div class="line">它的参数如下：</div><div class="line">weeks (int) – number of weeks to wait</div><div class="line">days (int) – number of days to wait</div><div class="line">hours (int) – number of hours to wait</div><div class="line">minutes (int) – number of minutes to wait</div><div class="line">seconds (int) – number of seconds to wait</div><div class="line">start_date (datetime|str) – starting point <span class="keyword">for</span> the interval calculation</div><div class="line">end_date (datetime|str) – latest possible date/time to trigger on</div><div class="line">timezone (datetime.tzinfo|str) – time zone to use <span class="keyword">for</span> the date/time calculations</div><div class="line">例子：</div><div class="line"></div><div class="line">sched.add_job(job_function, <span class="string">'interval'</span>, hours=<span class="number">2</span>)</div><div class="line">sched.add_job(job_function, <span class="string">'interval'</span>, hours=<span class="number">2</span>)</div><div class="line">(<span class="number">3</span>). date 定时调度</div><div class="line">最基本的一种调度，作业只会执行一次。它的参数如下：</div><div class="line">run_date (datetime|str) – the date/time to run the job at</div><div class="line">timezone (datetime.tzinfo|str) – time zone <span class="keyword">for</span> run_date <span class="keyword">if</span> it doesn’t have one already</div><div class="line">例子：</div><div class="line">sched.add_job(my_job, <span class="string">'date'</span>, run_date=date(<span class="number">2009</span>, <span class="number">11</span>, <span class="number">6</span>), args=[<span class="string">'text'</span>])</div><div class="line">sched.add_job(my_job, <span class="string">'date'</span>, run_date=datetime(<span class="number">2009</span>, <span class="number">11</span>, <span class="number">6</span>, <span class="number">16</span>, <span class="number">30</span>, <span class="number">5</span>), args=[<span class="string">'text'</span>])</div><div class="line">^^</div></pre></td></tr></table></figure>
+<p>Ref:</p>
+<blockquote>
+<p><a href="http://apscheduler.readthedocs.org/en/latest/modules/triggers" target="_blank" rel="external">http://apscheduler.readthedocs.org/en/latest/modules/triggers</a><br><a href="http://apscheduler.readthedocs.org/en/3.0/userguide.html" target="_blank" rel="external">http://apscheduler.readthedocs.org/en/3.0/userguide.html</a></p>
+</blockquote>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/APSchedule/">APSchedule</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

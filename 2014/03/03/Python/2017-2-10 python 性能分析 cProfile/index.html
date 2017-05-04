@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python 性能分析 cProfile | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,cProfile">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="python 性能分析 cProfile"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>python 性能分析 cProfile</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/03/Python/2017-2-10 python 性能分析 cProfile/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-03T11:07:43.000Z">
+          2014/03/03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h4 id="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile-profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。"><a href="#Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile-profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。" class="headerlink" title="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。"></a>Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。</h4><h3 id="这三个性能分析模块的介绍如下："><a href="#这三个性能分析模块的介绍如下：" class="headerlink" title="这三个性能分析模块的介绍如下："></a>这三个性能分析模块的介绍如下：</h3><blockquote>
+<p>cProfile：基于lsprof的用C语言实现的扩展应用，运行开销比较合理，适合分析运行时间较长的程序，推荐使用这个模块；</p>
+<p>profile：纯Python实现的性能分析模块，接口和cProfile一致。但在分析程序时增加了很大的运行开销。不过，如果你想扩展profiler的功能，可以通过继承这个模块实现；</p>
+<p>hotshot：一个试验性的C模块，减少了性能分析时的运行开销，但是需要更长的数据后处理的次数。目前这个模块不再被维护，有可能在新版本中被弃用。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="内置cProfile"><a href="#内置cProfile" class="headerlink" title="内置cProfile"></a>内置cProfile</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_num</span><span class="params">(max_num)</span>:</span></div><div class="line">    total = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(max_num):</div><div class="line">        total += i</div><div class="line">    <span class="keyword">return</span> total</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line">    total = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">40000</span>):</div><div class="line">        total += i</div><div class="line"></div><div class="line">    t1 = sum_num(<span class="number">100000</span>)</div><div class="line">    t2 = sum_num(<span class="number">400000</span>)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> total</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    <span class="keyword">import</span> cProfile</div><div class="line"></div><div class="line">    <span class="comment"># 直接把分析结果打印到控制台</span></div><div class="line">    cProfile.run(<span class="string">"test()"</span>)</div><div class="line">    <span class="comment"># 把分析结果保存到文件中</span></div><div class="line">    cProfile.run(<span class="string">"test()"</span>, filename=<span class="string">"result.out"</span>)</div><div class="line">    <span class="comment"># 增加排序方式</span></div><div class="line">    cProfile.run(<span class="string">"test()"</span>, filename=<span class="string">"result.out"</span>, sort=<span class="string">"cumulative"</span>)</div></pre></td></tr></table></figure>
+<pre><code>      6 function calls in 0.028 seconds
+
+Ordered by: standard name
+
+ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     2    0.024    0.012    0.024    0.012 &lt;ipython-input-2-691327147ef5&gt;:1(sum_num)
+     1    0.003    0.003    0.028    0.028 &lt;ipython-input-2-691327147ef5&gt;:8(test)
+     1    0.000    0.000    0.028    0.028 &lt;string&gt;:1(&lt;module&gt;)
+     1    0.000    0.000    0.028    0.028 {built-in method builtins.exec}
+     1    0.000    0.000    0.000    0.000 {method &apos;disable&apos; of &apos;_lsprof.Profiler&apos; objects}
+</code></pre><h1 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h1><h2 id="使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单："><a href="#使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单：" class="headerlink" title="使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单："></a>使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> pstats</div><div class="line"></div><div class="line"><span class="comment"># 创建Stats对象</span></div><div class="line">p = pstats.Stats(<span class="string">"result.out"</span>)</div><div class="line"></div><div class="line"><span class="comment"># strip_dirs(): 去掉无关的路径信息</span></div><div class="line"><span class="comment"># sort_stats(): 排序，支持的方式和上述的一致</span></div><div class="line"><span class="comment"># print_stats(): 打印分析结果，可以指定打印前几行</span></div><div class="line"></div><div class="line"><span class="comment"># 和直接运行cProfile.run("test()")的结果是一样的</span></div><div class="line">p.strip_dirs().sort_stats(<span class="number">-1</span>).print_stats()</div><div class="line"></div><div class="line"><span class="comment"># 按照函数名排序，只打印前3行函数的信息, 参数还可为小数,表示前百分之几的函数信息</span></div><div class="line">p.strip_dirs().sort_stats(<span class="string">"name"</span>).print_stats(<span class="number">3</span>)</div><div class="line"></div><div class="line"><span class="comment"># 按照运行时间和函数名进行排序</span></div><div class="line">p.strip_dirs().sort_stats(<span class="string">"cumulative"</span>, <span class="string">"name"</span>).print_stats(<span class="number">0.5</span>)</div><div class="line"></div><div class="line"><span class="comment"># 如果想知道有哪些函数调用了sum_num</span></div><div class="line">p.print_callers(<span class="number">0.5</span>, <span class="string">"sum_num"</span>)</div><div class="line"></div><div class="line"><span class="comment"># 查看test()函数中调用了哪些函数</span></div><div class="line">p.print_callees(<span class="string">"test"</span>)</div></pre></td></tr></table></figure>
+<pre><code>Fri Feb 10 17:27:19 2017    result.out
+
+         6 function calls in 0.021 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        2    0.020    0.010    0.020    0.010 &lt;ipython-input-2-691327147ef5&gt;:1(sum_num)
+        1    0.001    0.001    0.021    0.021 &lt;ipython-input-2-691327147ef5&gt;:8(test)
+        1    0.000    0.000    0.021    0.021 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.021    0.021 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method &apos;disable&apos; of &apos;_lsprof.Profiler&apos; objects}
+
+
+Fri Feb 10 17:27:19 2017    result.out
+
+         6 function calls in 0.021 seconds
+
+   Ordered by: function name
+   List reduced from 5 to 3 due to restriction &lt;3&gt;
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.021    0.021 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method &apos;disable&apos; of &apos;_lsprof.Profiler&apos; objects}
+        1    0.000    0.000    0.021    0.021 &lt;string&gt;:1(&lt;module&gt;)
+
+
+Fri Feb 10 17:27:19 2017    result.out
+
+         6 function calls in 0.021 seconds
+
+   Ordered by: cumulative time, function name
+   List reduced from 5 to 3 due to restriction &lt;0.5&gt;
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.021    0.021 {built-in method builtins.exec}
+        1    0.000    0.000    0.021    0.021 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.001    0.001    0.021    0.021 &lt;ipython-input-2-691327147ef5&gt;:8(test)
+
+
+   Ordered by: cumulative time, function name
+   List reduced from 5 to 1 due to restriction &lt;&apos;test&apos;&gt;
+
+Function                                called...
+                                            ncalls  tottime  cumtime
+&lt;ipython-input-2-691327147ef5&gt;:8(test)  -&gt;       2    0.020    0.020  &lt;ipython-input-2-691327147ef5&gt;:1(sum_num)
+
+
+
+
+
+
+
+&lt;pstats.Stats at 0x7f204c476518&gt;
+</code></pre>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/cProfile/">cProfile</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

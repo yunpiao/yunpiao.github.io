@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Django 自建过滤器 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="Django， python">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Django 自建过滤器"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Django 自建过滤器</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/Python/Django 自建过滤器/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.199Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p> 在前端显示的时候遇到了时间格式转换的问题, 由于Djang内置格式化时间工具不支持float 类型的时间戳， 所以需要自建一个格式化函数</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="建立文件目录"><a href="#建立文件目录" class="headerlink" title="建立文件目录"></a>建立文件目录</h2><h3 id="文件目录如下"><a href="#文件目录如下" class="headerlink" title="文件目录如下"></a>文件目录如下</h3><p>│   ├── static<br>│   │   ├── bootstrap.css<br>│   │   ├── bootstrap.js<br>│   │   ├── bootstrap.min.css<br>│   │   ├── bootstrap.min.js<br>│   │   ├── jquery.js<br>│   │   └── pagination.min.js<br>│   ├── templatetags<br>│   │   ├── <strong>init</strong>.py<br>│   │   └── timetags.py<br>│   ├── tests.py<br>│   └── views.py</p>
+<h3 id="在timetag里面-注册函数"><a href="#在timetag里面-注册函数" class="headerlink" title="在timetag里面 注册函数"></a>在timetag里面 注册函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> django <span class="keyword">import</span> template</div><div class="line"><span class="keyword">import</span> datetime</div><div class="line">register = template.Library()</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ddata</span><span class="params">(timestamp)</span>:</span></div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        ts = float(timestamp)</div><div class="line">    <span class="keyword">except</span> ValueError:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">return</span> datetime.datetime.fromtimestamp(ts).strftime(<span class="string">'%y-%m-%d %H:%M:%S'</span>);</div><div class="line"></div><div class="line">register.filter(ddata)</div></pre></td></tr></table></figure>
+<h3 id="在需要用自用过滤器的模板里面-引用"><a href="#在需要用自用过滤器的模板里面-引用" class="headerlink" title="在需要用自用过滤器的模板里面 引用"></a>在需要用自用过滤器的模板里面 引用</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">### 使用</div><div class="line"></div><div class="line">```&#123;&#123; 时间戳|ddata&#125;&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/Django，-python/">Django， python</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

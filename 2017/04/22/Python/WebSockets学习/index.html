@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>WebSockets学习 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,WebSockets,server,brower">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="WebSockets学习"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>WebSockets学习</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/Python/WebSockets学习/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.187Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h1 id="WebSockets基本"><a href="#WebSockets基本" class="headerlink" title="WebSockets基本"></a>WebSockets基本</h1><p>一个 WebSocket 连接允许在客户端和服务端之间进行全双工通讯，从而每一端都可以通过建立的连接向另一端推送数据。 WebSocket，以及与其相关的 服务端发送事件 (SSE) 及 WebRTC 数据通路 等技术之所以重要的原因是：HTTP不能打开并一直保持连接，不能在服务端和 Web 浏览器之间进行频繁的数据推送。</p>
+<p><img src="https://www.github.com/yunpiao/md/raw/img/1487335303764.jpg" alt="enter description here" title="1487335303764.jpg"></p>
+<a id="more"></a>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>Web 浏览器和服务端都必须要实现 WebSocket 协议，以便建立和维护连接。因为 WebSocket 的连接是持续连通的，</p>
+<h3 id="JavaScript-客户端库"><a href="#JavaScript-客户端库" class="headerlink" title="JavaScript 客户端库"></a>JavaScript 客户端库</h3><blockquote>
+<p>Socket.io 的客户端 JavaScript 库能与实现了 WebSocket 的服务端进行连接。</p>
+<p>web-socket-js 是一个基于 Flash 的客户端 WebSocket 实现。</p>
+</blockquote>
+<h3 id="Python-实现"><a href="#Python-实现" class="headerlink" title="Python 实现"></a>Python 实现</h3><blockquote>
+<p>Autobahn 使用 Twisted 或 asyncio 来实现 WebSocket 协议。</p>
+<p>Crossbar.io 构建于 Autobahn 之上，并且包含一个独立的服务器， 如果 Web 应用开发者需要的话，可以用它来对 WebSocket 连接进行单独处理。</p>
+</blockquote>
+<h1 id="Todo-Nginx-WebSocket-代理"><a href="#Todo-Nginx-WebSocket-代理" class="headerlink" title="Todo Nginx WebSocket 代理"></a>Todo Nginx WebSocket 代理</h1><h1 id="WebSockets-Go-语言的实现"><a href="#WebSockets-Go-语言的实现" class="headerlink" title="WebSockets Go 语言的实现"></a>WebSockets Go 语言的实现</h1><h2 id="Go-后台"><a href="#Go-后台" class="headerlink" title="Go 后台"></a>Go 后台</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line">    <span class="keyword">import</span> (</div><div class="line">        <span class="string">"golang.org/x/net/websocket"</span></div><div class="line">        <span class="string">"fmt"</span></div><div class="line">        <span class="string">"log"</span></div><div class="line">        <span class="string">"net/http"</span></div><div class="line">    )</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">Echo</span><span class="params">(ws *websocket.Conn)</span></span> &#123;</div><div class="line">        <span class="keyword">var</span> err error</div><div class="line"></div><div class="line">        <span class="keyword">for</span> &#123;</div><div class="line">            <span class="keyword">var</span> reply <span class="keyword">string</span></div><div class="line"></div><div class="line">            <span class="keyword">if</span> err = websocket.Message.Receive(ws, &amp;reply); err != <span class="literal">nil</span> &#123;</div><div class="line">                fmt.Println(<span class="string">"Can't receive"</span>)</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line"></div><div class="line">            fmt.Println(<span class="string">"Received back from client: "</span> + reply)</div><div class="line"></div><div class="line">            msg := <span class="string">"Received:  "</span> + reply</div><div class="line">            fmt.Println(<span class="string">"Sending to client: "</span> + msg)</div><div class="line"></div><div class="line">            <span class="keyword">if</span> err = websocket.Message.Send(ws, msg); err != <span class="literal">nil</span> &#123;</div><div class="line">                fmt.Println(<span class="string">"Can't send"</span>)</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">        http.Handle(<span class="string">"/"</span>, websocket.Handler(Echo))</div><div class="line"></div><div class="line">        <span class="keyword">if</span> err := http.ListenAndServe(<span class="string">":1234"</span>, <span class="literal">nil</span>); err != <span class="literal">nil</span> &#123;</div><div class="line">            log.Fatal(<span class="string">"ListenAndServe:"</span>, err)</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="前端html"><a href="#前端html" class="headerlink" title="前端html"></a>前端html</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="javascript"></span></div><div class="line">            <span class="keyword">var</span> sock = <span class="literal">null</span>;</div><div class="line">            <span class="keyword">var</span> wsuri = <span class="string">"ws://127.0.0.1:1234"</span>;</div><div class="line"></div><div class="line">            <span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">                <span class="built_in">console</span>.log(<span class="string">"onload"</span>);</div><div class="line"></div><div class="line">                sock = <span class="keyword">new</span> WebSocket(wsuri);</div><div class="line"></div><div class="line">                sock.onopen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">"connected to "</span> + wsuri);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                sock.onclose = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">"connection closed ("</span> + e.code + <span class="string">")"</span>);</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                sock.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">"message received: "</span> + e.data);</div><div class="line">                &#125;</div><div class="line">            &#125;;</div><div class="line"></div><div class="line">            <span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"></span>) </span>&#123;</div><div class="line">                <span class="keyword">var</span> msg = <span class="built_in">document</span>.getElementById(<span class="string">'message'</span>).value;</div><div class="line">                sock.send(msg);</div><div class="line">            &#125;;</div><div class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>WebSocket Echo Test<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">form</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span></div><div class="line">                Message: <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">"message"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">value</span>=<span class="string">"Hello, world!"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">form</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">"send();"</span>&gt;</span>Send Message<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/WebSockets/">WebSockets</a><a href="/tags/server/">server</a><a href="/tags/brower/">brower</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

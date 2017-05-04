@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Grequest 记录 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,greques">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Grequest 记录"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Grequest 记录</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2014/03/03/Python/2017-2-10 grequest 记录/" rel="bookmark">
+        <time class="entry-date published" datetime="2014-03-03T11:07:43.000Z">
+          2014/03/03
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h1 id="Grequest-记录"><a href="#Grequest-记录" class="headerlink" title="Grequest 记录"></a>Grequest 记录</h1><p>GRequests: Asynchronous Requests</p>
+<p>GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.<br>异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。</p>
+<a id="more"></a>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>pip install grequests</p>
+</blockquote>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 这种写法会造成程序崩溃</span></div><div class="line">rs = (grequests.get(url) <span class="keyword">for</span> url <span class="keyword">in</span> url_chunk)</div><div class="line">res_items = grequests.map(rs, timeout=<span class="number">10</span>s) <span class="comment"># this is the item that times out</span></div><div class="line"></div><div class="line"><span class="comment"># 这样写可以优化性能</span></div><div class="line">rs = (grequests.get(u, timeout=<span class="number">3</span>, proxies=proxies) <span class="keyword">for</span> u <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> grequests.imap(rs, size=<span class="number">200</span>):</div><div class="line">    print(r.content)</div></pre></td></tr></table></figure>
+<h2 id="事例"><a href="#事例" class="headerlink" title="事例"></a>事例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 爬取url 中的 url</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> grequests</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url</span><span class="params">(html)</span>:</span></div><div class="line">    m = re.findall(<span class="string">r'(https|http?:\/\/[^\s]+.com|cn|org)'</span>, html)</div><div class="line">    <span class="keyword">return</span> (m)</div><div class="line"></div><div class="line">html= requests.get(<span class="string">"http://www.best918.com/"</span>).text</div><div class="line">urls = get_url(html)</div><div class="line">gen = (grequests.get(i, proxies=proxies, timeout=<span class="number">3</span>)  <span class="keyword">for</span> i <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> grequests.imap(gen, size=<span class="number">200</span>):</div><div class="line">    print(i.url)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> get_url(i.text):</div><div class="line">        urls.append(k)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/greques/">greques</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

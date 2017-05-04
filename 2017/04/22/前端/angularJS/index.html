@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>angularJS | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="angularJS,前端">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="angularJS"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>angularJS</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/前端/angularJS/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.175Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>前端angularJS 控制器，　绑定，　　broadcast，　emit</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="hello"><a href="#hello" class="headerlink" title="hello"></a>hello</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!doctype html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">ng-app</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://code.angularjs.org/angular-1.0.1.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">        Your name: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"yourname"</span> <span class="attr">placeholder</span>=<span class="string">"World"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">hr</span>&gt;</span></div><div class="line">        Hello &#123;&#123;yourname || 'World'&#125;&#125;!</div><div class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><h3 id="AngularJS应用的解析"><a href="#AngularJS应用的解析" class="headerlink" title="AngularJS应用的解析"></a>AngularJS应用的解析</h3><p>本节描述AngularJS应用程序的三个组成部分，并解释它们如何映射到模型-视图-控制器设计模式：</p>
+<h3 id="模板（Templates）"><a href="#模板（Templates）" class="headerlink" title="模板（Templates）"></a>模板（Templates）</h3><p>模板是您用HTML和CSS编写的文件，展现应用的视图。 您可给HTML添加新的元素、属性标记，作为AngularJS编译器的指令。 AngularJS编译器是完全可扩展的，这意味着通过AngularJS您可以在HTML中构建您自己的HTML标记！</p>
+<h3 id="应用程序逻辑（Logic）和行为（Behavior）"><a href="#应用程序逻辑（Logic）和行为（Behavior）" class="headerlink" title="应用程序逻辑（Logic）和行为（Behavior）"></a>应用程序逻辑（Logic）和行为（Behavior）</h3><p>应用程序逻辑和行为是您用JavaScript定义的控制器。AngularJS与标准AJAX应用程序不同，您不需要另外编写侦听器或DOM控制器，因为它们已经内置到AngularJS中了。这些功能使您的应用程序逻辑很容易编写、测试、维护和理解。</p>
+<h3 id="模型数据（Data）"><a href="#模型数据（Data）" class="headerlink" title="模型数据（Data）"></a>模型数据（Data）</h3><p>模型是从AngularJS作用域对象的属性引申的。模型中的数据可能是Javascript对象、数组或基本类型，这都不重要，重要的是，他们都属于AngularJS作用域对象。</p>
+<p>AngularJS通过作用域来保持数据模型与视图界面UI的双向同步。一旦模型状态发生改变，AngularJS会立即刷新反映在视图界面中，反之亦然。</p>
+<h3 id="此外，AngularJS还提供了一些非常有用的服务特性："><a href="#此外，AngularJS还提供了一些非常有用的服务特性：" class="headerlink" title="此外，AngularJS还提供了一些非常有用的服务特性："></a>此外，AngularJS还提供了一些非常有用的服务特性：</h3><p>底层服务包括依赖注入，XHR、缓存、URL路由和浏览器抽象服务。<br>您还可以扩展和添加自己特定的应用服务。<br>这些服务可以让您非常方便的编写WEB应用。</p>
+<h2 id="Event-事件"><a href="#Event-事件" class="headerlink" title="Event 事件"></a>Event 事件</h2><p>事件是解耦良器，angularjs提供了很方便的事件机构。 发送事件可以用</p>
+<pre><code>$scope.$emit(&apos;name&apos;, &apos;args&apos;);    
+</code></pre><p>或者是</p>
+<pre><code>$scope.$broadcast(&apos;name&apos;, &apos;args&apos;);    
+</code></pre><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">	<span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"ParentCtrl"</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"SelfCtrl"</span>&gt;</span></div><div class="line"></div><div class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"btn"</span> <span class="attr">ng-click</span>=<span class="string">"click()"</span>&gt;</span>click me<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">     <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"ChildCtrl"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"BroCtrl"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>这里我们有四个controller, 层级关系如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ParentCtrl</div><div class="line">    -&gt; SelfCtrl (*)</div><div class="line">        -&gt; ChildCtrl</div><div class="line">    -&gt; BroCtrl</div></pre></td></tr></table></figure></p>
+<h3 id="broadcast"><a href="#broadcast" class="headerlink" title="broadcast"></a>broadcast</h3><h4 id="事件发送的方法："><a href="#事件发送的方法：" class="headerlink" title="事件发送的方法："></a>事件发送的方法：</h4><h5 id="broadcast译为广播，即上级传递下级。"><a href="#broadcast译为广播，即上级传递下级。" class="headerlink" title="broadcast译为广播，即上级传递下级。"></a>broadcast译为广播，即上级传递下级。</h5><pre><code>$scope.$broadcast
+</code></pre><p>值得注意的是发送的主语是 $scope， 因为所有的事件其实都是作用在scope上的。</p>
+<p>broadcast 是从发送者向他的子scope发送时间的一个方法。 这里就是SelfCtrl发送， SelfCtrl 和 ChildCtrl 会接受到, 而ParentCtrl是不会收到的</p>
+<h5 id="emit译为发射，即下级传递上级。"><a href="#emit译为发射，即下级传递上级。" class="headerlink" title="emit译为发射，即下级传递上级。"></a>emit译为发射，即下级传递上级。</h5><pre><code>$scope.$emit        
+</code></pre><h4 id="事件的接受只有一个方法"><a href="#事件的接受只有一个方法" class="headerlink" title="事件的接受只有一个方法:"></a>事件的接受只有一个方法:</h4><pre><code>$scope.$on
+</code></pre><h3 id="angular-选择"><a href="#angular-选择" class="headerlink" title="angular　选择"></a>angular　选择</h3><pre><code>angular.element(&apos;#log&apos;).val(id + &apos;: &apos; + val)    
+</code></pre><h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://code.angularjs.org/angular-1.0.1.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">ng-app</span>=<span class="string">"TestApp"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"ParentCtrl"</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"SelfCtrl"</span>&gt;</span></div><div class="line"></div><div class="line">     <span class="tag">&lt;<span class="name">a</span> <span class="attr">class</span>=<span class="string">"btn"</span> <span class="attr">ng-click</span>=<span class="string">"click()"</span>&gt;</span>click me<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">     <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"ChildCtrl"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line">   <span class="tag">&lt;<span class="name">div</span> <span class="attr">ng-controller</span>=<span class="string">"BroCtrl"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">    angular.module(<span class="string">'TestApp'</span>, [<span class="string">'ng'</span>])</div><div class="line">.controller(<span class="string">'ParentCtrl'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$scope</span>) </span>&#123;</div><div class="line"> $scope.$on(<span class="string">'to-parent'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e, d</span>) </span>&#123;</div><div class="line">   <span class="built_in">console</span>.log(<span class="string">'i am parent'</span>);</div><div class="line"> &#125;);</div><div class="line">&#125;)</div><div class="line">.controller(<span class="string">'SelfCtrl'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$scope</span>) </span>&#123;</div><div class="line">  $scope.click = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    $scope.$broadcast(<span class="string">'to-child'</span>, <span class="string">'haha'</span>);</div><div class="line">    $scope.$emit(<span class="string">'to-parent'</span>, <span class="string">'hehe'</span>);</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line">.controller(<span class="string">'ChildCtrl'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$scope</span>)</span>&#123;</div><div class="line">  $scope.$on(<span class="string">'to-child'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e, d</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'I\' the child, I got it'</span>, d);</div><div class="line">  &#125;);</div><div class="line">&#125;)</div><div class="line">.controller(<span class="string">'BroCtrl'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$scope</span>)</span>&#123;</div><div class="line">  $scope.$on(<span class="string">'to-child'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e, d</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'关我毛事'</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;)</div><div class="line">;</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/angularJS/">angularJS</a><a href="/tags/前端/">前端</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

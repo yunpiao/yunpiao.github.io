@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>redis-python  操作 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="python,redis">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="redis-python  操作"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>redis-python  操作</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/Python/redis-python  操作/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.203Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h2 id="安装pyredis"><a href="#安装pyredis" class="headerlink" title="安装pyredis"></a>安装pyredis</h2><p>首先安装pip<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install python-pip</div><div class="line">pip install --proxy=http://172.1.2.6:8080 redis</div></pre></td></tr></table></figure></p>
+<h2 id="简单的redis操作"><a href="#简单的redis操作" class="headerlink" title="简单的redis操作"></a>简单的redis操作</h2><a id="more"></a>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> redis</div><div class="line"></div><div class="line">a = redis.Redis(db=<span class="number">0</span>)</div><div class="line">a.set(<span class="string">"user"</span>, <span class="string">"yunpiao"</span>)</div></pre></td></tr></table></figure>
+<pre><code>True
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.get(<span class="string">"user"</span>)</div></pre></td></tr></table></figure>
+<pre><code>b&apos;yunpiao&apos;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.keys()</div></pre></td></tr></table></figure>
+<pre><code>[b&apos;monitor.run_times&apos;, b&apos;user&apos;, b&apos;monitor.jobs&apos;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.dbsize()</div></pre></td></tr></table></figure>
+<pre><code>3
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.delete(<span class="string">"user"</span>)</div></pre></td></tr></table></figure>
+<pre><code>0
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.keys()</div></pre></td></tr></table></figure>
+<pre><code>[b&apos;monitor.run_times&apos;, b&apos;monitor.jobs&apos;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.save()</div></pre></td></tr></table></figure>
+<pre><code>True
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a.flushdb()</div></pre></td></tr></table></figure>
+<pre><code>True
+</code></pre><h3 id="管道命令"><a href="#管道命令" class="headerlink" title="管道命令"></a>管道命令</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">p = a.pipeline()</div><div class="line"><span class="comment"># 写命令</span></div><div class="line">p.set(<span class="string">"user"</span>, <span class="string">"yunpiao"</span>)</div><div class="line">p.sadd(<span class="string">"user1"</span>, <span class="string">"yunpiao2"</span>)</div><div class="line">p.incr(<span class="string">"password"</span>)</div><div class="line">p.set(<span class="string">"user"</span>, <span class="string">"yunpiao"</span>).incr(<span class="string">"add"</span>)</div><div class="line"><span class="comment"># 执行</span></div><div class="line">p.execute()</div></pre></td></tr></table></figure>
+<pre><code>[True, 0, 21, True, 2]
+</code></pre><h3 id="使用hash-保存多样化数据"><a href="#使用hash-保存多样化数据" class="headerlink" title="使用hash 保存多样化数据"></a>使用hash 保存多样化数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a.hset(<span class="string">"user:yunpiao"</span>,<span class="string">"email"</span>, <span class="string">"yunpiao@qq.com"</span>)</div><div class="line">a.hset(<span class="string">"user:yunpiao"</span>, <span class="string">"visit"</span>, <span class="number">10</span>)</div><div class="line">a.hincrby(<span class="string">"user:yunpiao"</span>, <span class="string">"visit"</span>)</div><div class="line">a.hgetall(<span class="string">"user:yunpiao"</span>)</div></pre></td></tr></table></figure>
+<pre><code>{b&apos;email&apos;: b&apos;yunpiao@qq.com&apos;, b&apos;visit&apos;: b&apos;11&apos;}
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">a.sadd(<span class="string">"lol:game"</span>, <span class="string">"user:yunpiao"</span>)</div><div class="line">a.sadd(<span class="string">"lol:game"</span>, <span class="string">"user:yunpiao1"</span>)</div><div class="line"></div><div class="line">a.sadd(<span class="string">"loq:game"</span>, <span class="string">"user:yunpiao"</span>)</div><div class="line">a.sadd(<span class="string">"loq:game"</span>, <span class="string">"user:yunpiao2"</span>)</div><div class="line">a.smembers(<span class="string">"lol:game"</span>)</div><div class="line"><span class="comment"># 有相同属性</span></div><div class="line">a.sinter(<span class="string">"lol:game"</span>, <span class="string">"loq:game"</span>)</div><div class="line"><span class="comment"># 关联</span></div><div class="line">a.sunion(<span class="string">"lol:game"</span>, <span class="string">"loq:game"</span>)</div></pre></td></tr></table></figure>
+<pre><code>{b&apos;user:sadad&apos;, b&apos;user:yunpiao&apos;, b&apos;user:yunpiao1&apos;, b&apos;user:yunpiao2&apos;}
+</code></pre><h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">from</span> redis <span class="keyword">import</span> Redis</div><div class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</div><div class="line">ONLINE_LAST_MINUTES=<span class="number">5</span></div><div class="line">redis=Redis()</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">mark_online</span><span class="params">(user_id)</span>:</span><span class="comment">#将一个用户标记为online</span></div><div class="line">    now=int(time.time())<span class="comment">#当前的UNIX时间戳</span></div><div class="line">    expires=now+(app.config[<span class="string">'ONLINE_LAST_MINUTES'</span>]*<span class="number">60</span>)+<span class="number">10</span><span class="comment">#过期的UNIX时间戳</span></div><div class="line">    all_users_key=<span class="string">'online-users/%d'</span>%(now/<span class="number">60</span>)<span class="comment">#集合名，包含分钟信息</span></div><div class="line">    user_key=<span class="string">'user-activity/%s'</span>%user_id</div><div class="line">    p=redis.pipeline()</div><div class="line">    p.sadd(all_users_key,user_id)<span class="comment">#将用户id插入到包含分钟信息的集合中</span></div><div class="line">    p.set(user_key,now)<span class="comment">#记录用户的标记时间</span></div><div class="line">    p.expireat(all_users_key,expires)<span class="comment">#设定集合的过期时间为UNIX的时间戳</span></div><div class="line">    p.expireat(user_key,expires)</div><div class="line">    p.execute()</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_user_last_activity</span><span class="params">(user_id)</span>:</span><span class="comment">#获得用户的最后活跃时间</span></div><div class="line">    last_active = redis.get(<span class="string">'user-activity/%s'</span>%user_id)<span class="comment">#如果获取不到，则返回None</span></div><div class="line">    <span class="keyword">if</span> last_active <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line">    <span class="keyword">return</span> datetime.utcfromtimestamp(int(last_active))</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_online_users</span><span class="params">()</span>:</span><span class="comment">#获得当前online用户的列表</span></div><div class="line">    current=int(time.time())//<span class="number">60</span></div><div class="line">    minutes=xrange(app.config[<span class="string">'ONLINE_LAST_MINUTES'</span>])</div><div class="line">    <span class="keyword">return</span> redis.sunion([<span class="string">'online-users/%d'</span>%(current-x) <span class="keyword">for</span> x <span class="keyword">in</span> minutes])</div><div class="line"></div><div class="line"><span class="comment"># http://blog.csdn.net/vv_demon/article/details/7676384</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/python/">python</a><a href="/tags/redis/">redis</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

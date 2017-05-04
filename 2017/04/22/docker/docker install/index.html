@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>docker 安装 备份 恢复 | 偷得浮生半日闲 | yunpiao&#39;s Blog</title>
+
+  
+  <meta name="author" content="yunpiao">
+  
+
+  
+  <meta name="description" content="转行程序员">
+  
+
+  
+  
+  <meta name="keywords" content="docker,instal,备份l">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="docker 安装 备份 恢复"/>
+
+  <meta property="og:site_name" content="偷得浮生半日闲"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="偷得浮生半日闲" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+</head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">偷得浮生半日闲</a>
+    </h1>
+    <p class="site-description">yunpiao&#39;s Blog</p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>docker 安装 备份 恢复</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2017/04/22/docker/docker install/" rel="bookmark">
+        <time class="entry-date published" datetime="2017-04-22T04:49:06.127Z">
+          2017/04/22
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <blockquote>
+<p>docker  学习手册</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="透過Docker-套件庫安裝最新版本"><a href="#透過Docker-套件庫安裝最新版本" class="headerlink" title="透過Docker 套件庫安裝最新版本"></a>透過Docker 套件庫安裝最新版本</h3><p>要安裝最新的 Docker 版本，首先需要安裝 apt-transport-https 支援，之後透過新增套件庫來安裝。<br>$ sudo apt-get install apt-transport-https<br>$ sudo apt-key adv –keyserver hkp://keyserver.ubuntu.com:80 –recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9<br>$ sudo bash -c “echo deb <a href="https://get.docker.io/ubuntu" target="_blank" rel="external">https://get.docker.io/ubuntu</a> docker main &gt; /etc/apt/sources.list.d/docker.list”<br>$ sudo apt-get update<br>$ sudo apt-get install -y lxc-docker</p>
+<h3 id="快速安裝法-建議使用"><a href="#快速安裝法-建議使用" class="headerlink" title="快速安裝法(建議使用)"></a>快速安裝法(建議使用)</h3><p>$ curl -sSL  <a href="https://get.docker.com/" target="_blank" rel="external">https://get.docker.com/</a> | sudo sh</p>
+<h2 id="备份与恢复"><a href="#备份与恢复" class="headerlink" title="备份与恢复"></a>备份与恢复</h2><h3 id="docker-备份img-恢复img"><a href="#docker-备份img-恢复img" class="headerlink" title="docker 备份img 恢复img"></a>docker 备份img 恢复img</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">┌─[✗]─[yunpiao@parrot]─[~/Project/B<span class="built_in">log</span>]</div><div class="line">└──╼ <span class="variable">$sudo</span> docker images</div><div class="line">REPOSITORY                             TAG                 IMAGE ID            CREATED             VIRTUAL SIZE</div><div class="line">10.108.115.90:5040/benchmark_secores   1.1                 64980445abc7        5 months ago        1.486 GB</div><div class="line">10.108.115.90:5040/remnux-metasploit   2.2                 ef09bbc5f2e5        6 months ago        1.767 GB</div><div class="line"></div><div class="line">&gt; docker save ef09bbc5f2e5&gt; remnux.tar</div><div class="line">&gt; docker save -o ./a.tar ef09bbc5f2e5</div><div class="line">&gt; docker images</div><div class="line"></div><div class="line">REPOSITORY                             TAG                 IMAGE ID            CREATED             VIRTUAL SIZE</div><div class="line">celery_worker                          latest              4c11f755f992        2 weeks ago         1.313 GB</div><div class="line">***/benchmark_secores   1.1                 64980445abc7        5 months ago        1.486 GB</div><div class="line">***/remnux-metasploit   2.2                 ef09bbc5f2e5        6 months ago        1.767 GB</div></pre></td></tr></table></figure>
+<h3 id="docker-备份容器-恢复容器"><a href="#docker-备份容器-恢复容器" class="headerlink" title="docker 备份容器 恢复容器"></a>docker 备份容器 恢复容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&gt; sudo docker ps <span class="_">-a</span></div><div class="line"></div><div class="line">CONTAINER ID        IMAGE                                      COMMAND                  CREATED             STATUS              PORTS                            NAMES</div><div class="line">33c7ca6f8f18      ***/benchmark_secores:1.1   <span class="string">"./run.sh"</span>               4 hours ago         Up 59 minutes       0.0.0.0:5030-&gt;5030/tcp, 22/tcp   desperate_brahmagupta</div><div class="line">01881694502b       ***/remnux-metasploit:2.2   <span class="string">"/usr/local/bin/init."</span>   4 hours ago         Up 59 minutes       0.0.0.0:55552-&gt;55552/tcp         amazing_liskov</div><div class="line"></div><div class="line">&gt; sudo docker <span class="built_in">export</span> 01881694502b &gt;./mate.tar </div><div class="line">&gt; cat /home/export.tar | sudo docker import - busybox-1-export:latest</div></pre></td></tr></table></figure>
+<h2 id="docker-网络相关"><a href="#docker-网络相关" class="headerlink" title="docker 网络相关"></a>docker 网络相关</h2><h3 id="docker-镜像加速"><a href="#docker-镜像加速" class="headerlink" title="docker 镜像加速"></a>docker 镜像加速</h3><h4 id="网易加速"><a href="#网易加速" class="headerlink" title="网易加速"></a>网易加速</h4><blockquote>
+<p> sudo echo “DOCKER_OPTS=\”\$DOCKER_OPTS –registry-mirror=<a href="http://hub-mirror.c.163.com\" target="_blank" rel="external">http://hub-mirror.c.163.com\</a>“” &gt;&gt; /etc/default/docker</p>
+<p>service docker restart</p>
+</blockquote>
+<h3 id="docker-代理设置"><a href="#docker-代理设置" class="headerlink" title="docker 代理设置"></a>docker 代理设置</h3><h4 id="在启动时设置好代理更方便"><a href="#在启动时设置好代理更方便" class="headerlink" title="在启动时设置好代理更方便"></a>在启动时设置好代理更方便</h4><p>``` plain</p>
+<blockquote>
+<p>https_proxy=https://<ip>:<port>  docker -d<br>``` plain</port></ip></p>
+</blockquote>
+<h4 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h4><blockquote>
+<p>sudo echo “DOCKER_OPTS=\”\$DOCKER_OPTS –registry-mirror=<a href="http://hub-mirror.c.163.com\" target="_blank" rel="external">http://hub-mirror.c.163.com\</a>“” &gt;&gt; /etc/default/docker</p>
+</blockquote>
+<p>eg.<br><code>``bash
+ http_proxy=http://10.108.115.167:1080  docker -d --insecure-registry 10.0.1.44:5000 --registry-mirror=http://hub-mirror.c.163.com\
+\</code>`` plain</p>
+<h2 id="docker-镜像操作"><a href="#docker-镜像操作" class="headerlink" title="docker 镜像操作"></a>docker 镜像操作</h2><h3 id="docker-镜像-搜索"><a href="#docker-镜像-搜索" class="headerlink" title="docker 镜像 搜索"></a>docker 镜像 搜索</h3><blockquote>
+<p>docker search ubuntu<br>docker search <ip>:<port>/ubuntu</port></ip></p>
+</blockquote>
+<h3 id="docker-img-改名"><a href="#docker-img-改名" class="headerlink" title="docker img 改名"></a>docker img 改名</h3><h4 id="修改镜像名-TAG"><a href="#修改镜像名-TAG" class="headerlink" title="修改镜像名 + TAG"></a>修改镜像名 + TAG</h4><blockquote>
+<p>docker tag 原镜像名 自义定名：自定义TAG名  //实际上是新建了镜像</p>
+<p>docker tag IMAGE_ID 自义定名：自定义TAG名  //实际上是新建了镜像</p>
+</blockquote>
+<p>注：如果镜像已经有了名称和tag，那么这条命令就会新建一个相同IMAGE ID的镜像；<br>注：模板导入的镜像没有tag，所以使用docker tag添加名称和tag，参考模板导入，不会新建镜像；</p>
+<h2 id="docker-坑"><a href="#docker-坑" class="headerlink" title="docker 坑"></a>docker 坑</h2><h3 id="1-时间同步问题"><a href="#1-时间同步问题" class="headerlink" title="1. 时间同步问题"></a>1. 时间同步问题</h3><blockquote>
+<p>-v /etc/localtime:/etc/localtime:ro</p>
+</blockquote>
+<h3 id="附之前博文"><a href="#附之前博文" class="headerlink" title="附之前博文"></a>附之前博文</h3><h4 id="1-安装"><a href="#1-安装" class="headerlink" title="1 安装"></a>1 安装</h4><p>```bash<br>sudo    apt-get    install    apt-transport-https    ca-certificates</p>
+<p>sudo    apt-key    adv    –keyserver    hkp://p80.pool.sks-keyservers.net<br>:80    –recv-keys    58118E89F3A912897C070ADBF76221572C52609D</p>
+<p>sudo    cat    &lt;<eof>    /etc/apt/sources.list.d/docker.list<br>deb    <a href="https://apt.dockerproject.org/repo" target="_blank" rel="external">https://apt.dockerproject.org/repo</a>    ubuntu-trusty    main<br>EOF</eof></p>
+<p>sudo    apt-get    update</p>
+<p>sudo    apt-get    install    -y    linux-image-extra-$(uname    -r)</p>
+<p>sudo    apt-get    install    apparmor</p>
+<p>sudo    apt-get install -y  docker-engine<br>``` plain</p>
+<h4 id="2、镜像"><a href="#2、镜像" class="headerlink" title="2、镜像"></a>2、镜像</h4><p><code>``bash
+sudo    docker  pull    ubuntu:12.04
+sudo    docker  run -t  -i  ubuntu:12.04    /bin/bash
+sudo    docker  images
+sudo    docker  run -t  -i  training/sinatra    /bin/bash
+sudo    docker  commit  -m  &quot;Added  json    gem&quot;    -a  &quot;Docker Newbee&quot;
+sudo    docker  save    -o  ubuntu_14.04.tar    ubuntu:14.04
+sudo    docker  load    --input ubuntu_14.04.tar
+sudo    docker  rmi training/sinatra
+\</code>`` plain</p>
+<h4 id="3、容器"><a href="#3、容器" class="headerlink" title="3、容器"></a>3、容器</h4><p>```bash<br>sudo    docker  run ubuntu:14.04    /bin/echo   ‘Hello  world’<br>sudo    docker  run -t -i  -p80:80 –name test ubuntu:14.04    /bin/bash   top</p>
+<h2 id="t-分配伪终端"><a href="#t-分配伪终端" class="headerlink" title="-t 分配伪终端"></a>-t 分配伪终端</h2><h2 id="i-标准输入保持打开"><a href="#i-标准输入保持打开" class="headerlink" title="-i 标准输入保持打开"></a>-i 标准输入保持打开</h2><h2 id="d-后台运行"><a href="#d-后台运行" class="headerlink" title="-d 后台运行"></a>-d 后台运行</h2><p>sudo    docker run -idt ubuntu:14.04<br>sudo docker ps<br>sudo docker attach <name><br>sudo docker export <id> &gt;ubnutu.tar<br>sudo docker import - test/ubnutu:v1.1<br>sudo docker rm test/ubunut<br>sudo docker ps -a<br>sudo docker rm $(docker ps -a -q )<br>``` plain</id></name></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/docker/">docker</a><a href="/tags/instal/">instal</a><a href="/tags/备份l/">备份l</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2017 yunpiao
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>
