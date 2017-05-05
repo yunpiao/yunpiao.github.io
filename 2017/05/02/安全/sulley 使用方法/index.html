@@ -1,0 +1,1255 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+<meta name="baidu-site-verification" content="8008uQ2bZH" />
+  <meta name="google-site-verification" content="" />
+<meta name="google-site-verification" content="REcM5CBlfsNh3z5-OVHQj3Y8ealQwzDRIAQhkSys7vs" />
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="yunpiao,," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="sulley 是一款模糊测试框架，可以使用 sulley 进行协议Fuzzing。Sulley（以作者的观点来看）所具有的能力超过了以前所发布的大多数模糊测试技术，包括商业工具和那些在公开领域中可用的工具。该框架的目标是不仅要简化数据的表示，而且还要简化数据的传输以及对目标的监视。Sulley从Monsters,Inc创建之后就被亲切的命名 ，因为它是模糊化的工具。现在sulley 已经停止更新">
+<meta name="keywords" content="yunpiao,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sulley 使用方法">
+<meta property="og:url" content="http://yunpiao.github.io/2017/05/02/安全/sulley 使用方法/index.html">
+<meta property="og:site_name" content="偷得浮生半日闲">
+<meta property="og:description" content="sulley 是一款模糊测试框架，可以使用 sulley 进行协议Fuzzing。Sulley（以作者的观点来看）所具有的能力超过了以前所发布的大多数模糊测试技术，包括商业工具和那些在公开领域中可用的工具。该框架的目标是不仅要简化数据的表示，而且还要简化数据的传输以及对目标的监视。Sulley从Monsters,Inc创建之后就被亲切的命名 ，因为它是模糊化的工具。现在sulley 已经停止更新">
+<meta property="og:image" content="http://yunpiao.github.io/2017/05/02/安全/sulley%20使用方法/images/1493778904249.jpg">
+<meta property="og:updated_time" content="2017-05-05T02:11:04.718Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sulley 使用方法">
+<meta name="twitter:description" content="sulley 是一款模糊测试框架，可以使用 sulley 进行协议Fuzzing。Sulley（以作者的观点来看）所具有的能力超过了以前所发布的大多数模糊测试技术，包括商业工具和那些在公开领域中可用的工具。该框架的目标是不仅要简化数据的表示，而且还要简化数据的传输以及对目标的监视。Sulley从Monsters,Inc创建之后就被亲切的命名 ，因为它是模糊化的工具。现在sulley 已经停止更新">
+<meta name="twitter:image" content="http://yunpiao.github.io/2017/05/02/安全/sulley%20使用方法/images/1493778904249.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yunpiao.github.io/2017/05/02/安全/sulley 使用方法/"/>
+
+
+
+
+
+  <title>sulley 使用方法 | 偷得浮生半日闲</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'REcM5CBlfsNh3z5-OVHQj3Y8ealQwzDRIAQhkSys7vs', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">偷得浮生半日闲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yunpiao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/haha" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2017/05/02/安全/sulley 使用方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">sulley 使用方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T09:52:16+08:00">
+                2017/05/02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>sulley 是一款模糊测试框架，可以使用 sulley 进行协议Fuzzing。Sulley（以作者的观点来看）所具有的能力超过了以前所发布的大多数模糊测试技术，包括商业工具和那些在公开领域中可用的工具。该框架的目标是不仅要简化数据的表示，而且还要简化数据的传输以及对目标的监视。Sulley从Monsters,Inc创建之后就被亲切的命名 ，因为它是模糊化的工具。现在sulley 已经停止更新，不在维护。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="1、sulley-用法"><a href="#1、sulley-用法" class="headerlink" title="1、sulley 用法"></a>1、sulley 用法</h2><p>1.数据表示：这是使用任何模糊器所需要执行的第一个步骤。运行你的目标应用，并且当拦截包时处理某些接口。将协议分解为单独的请求，并使用Sulley将它们表示为块。</p>
+<p>2.会话：将所开发的请求进行连接以形成一个会话，并将其关联到不同的可用的Sulley监视代理（socket,调试器等等），然后开始执行模糊测试。</p>
+<p>3.事后工作：对生成的数据以及所监视的结果进行评审。重放单独的测试用例。</p>
+<h2 id="２、sulley-目录结构"><a href="#２、sulley-目录结构" class="headerlink" title="２、sulley 目录结构"></a>２、sulley 目录结构</h2><blockquote>
+<p>在Sulley的目录结构中存在着一些技巧。对目录结构进行维护将可以确保当你使用用户定义的复杂类型、请求以及工具对模糊器进行扩展时，目录中的所有内容仍然是有组织的。下面的层次关系指出了你需要了解的有关目录结构的一些内容：</p>
+</blockquote>
+<ul>
+<li><p>archived_fuzzies：这是一个自由格式的目录，由模糊测试目标应用的名字进行组织，以存储已存档的模糊器以及从模糊测试会话中所生成的数据。</p>
+</li>
+<li><p>trend_server_protect_5168：包含将在本文档后面的单步遍历中被引用的已执行完毕的模糊测试。</p>
+</li>
+<li><p>trillian_jabber：包含文档将引用的另外一个已执行完毕的模糊测试。</p>
+</li>
+<li><p>audits：针对活动的模糊测试会话所记录的PCAP、崩溃的二进制文件、代码覆盖以及分析图等应当被保存到这个目录中。一旦模糊测试执行完毕，应当将所记录的数据转移到archived_fuzzies目录中。</p>
+</li>
+<li><p>docs：该目录包含相关文档以及所生成的Epydoc API引用。</p>
+</li>
+<li><p>requests：该目录是Sulley请求库。每个目标应用都应当获得其自己的文件，该文件可以被用来存储多个请求。</p>
+</li>
+<li><p>_REQUESTS_html：这个文件包含针对所存储的请求分类的描述，并且列出了单个的类型。它是按照字母顺序来进行维护的。</p>
+</li>
+<li><p>http.py：表示不同的Web服务器模糊测试请求。</p>
+</li>
+<li><p>trend.py：包含与本文档后面所讨论的完整的模糊测试走查相关联的请求。</p>
+</li>
+<li><p>sulley：该目录是模糊器的框架。除非你想要扩展该框架，否则的话不要触及这些文件。</p>
+</li>
+<li><p>legos：包含用户所定义的复杂原始类型。</p>
+</li>
+<li><p>ber.py：包含ASN.1/BER原始类型。</p>
+</li>
+<li><p>dcerpc.py：包含微软的RPC NDR原始类型。</p>
+</li>
+<li><p>misc.py：包含多种不同的未分类的复杂原始类型，如邮件地址和主机名等。</p>
+</li>
+<li><p>xdr.py：包含XDR类型。</p>
+</li>
+<li><p>pgraph：该目录包含Python图形抽象库。在构建会话时使用。</p>
+</li>
+<li><p>utils：包含不同的帮助例程。</p>
+</li>
+<li><p>dcerpc.py：微软的RPC帮助例程，例如实现绑定到一个接口或者生成一个请求。</p>
+</li>
+<li><p>misc.py：包含不同的未分类例程，比如CRC－16以及UUID操纵例程。</p>
+</li>
+<li><p>scada.py：包含一个DNP3块编码器的特定于SCADA的帮助例程。</p>
+</li>
+<li><p>_init<em>py：这里定义了在创建请求时所使用的不同的s</em>别名。</p>
+</li>
+<li><p>blocks.py：这里定义了块以及块的帮助例程。</p>
+</li>
+<li><p>pedrpc.py：这个文件定义了Sulley所使用的在不同的代理与主模糊器之间进行通信的客户端和服务器类。</p>
+</li>
+<li><p>primitives.py：该文件定义了不同的模糊器原始类型，包括静态类型、随机类型、字符串类型以及整数类型等。</p>
+</li>
+<li><p>sessions.py：这个文件包含构建以及执行一个会话所需要的功能。</p>
+</li>
+<li><p>sex.py：包含Sulley的定制异常处理类。</p>
+</li>
+<li><p>unit_tests：该目录包含Sulley的单元测试套件。</p>
+</li>
+<li><p>utils：包含多种不同的单机版工具。</p>
+</li>
+<li><p>Crashbin_explorer.py：包含用于研究存储在序列化的崩溃bin文件中的结果的命令行工具。</p>
+</li>
+<li><p>pcap_cleaner.py：包含用于清除一个PCAP目录中与错误不相关的所有条目的命令行工具。</p>
+</li>
+<li><p>network_monitor.py：包含PedRPC驱动的网络监视代理。</p>
+</li>
+<li><p>process_monitor.py：包含PedRPC驱动的、基于调试器的目标监视代理。</p>
+</li>
+<li><p>unit_test.py：Sulley的单元测试套件。</p>
+</li>
+<li><p>vmcontrol.py：包含PedRPC驱动的VMWare控制代理。</p>
+</li>
+</ul>
+<h2 id="３、sulley-数据表示"><a href="#３、sulley-数据表示" class="headerlink" title="３、sulley 数据表示"></a>３、sulley 数据表示</h2><h3 id="3-1-静态和随机的原始类型"><a href="#3-1-静态和随机的原始类型" class="headerlink" title="3.1  静态和随机的原始类型"></a>3.1  静态和随机的原始类型</h3><p>num_mutations(整数值，默认值是25)：在恢复到默认值之前要进行的变异的数量。</p>
+<p>fuzzable(布尔值，默认值是True)：将对此原始类型的模糊测试设置为使能或者不使能。</p>
+<p>name(字符串值，默认值是None)：在所有Sulley对象中，指定一个名字就可以在整个请求中直接访问该原始类型。</p>
+<p>num_mutations关键字参数指定了在该原始类型被认为用完之前，应当被重新显示多少次。为了用随机数据填充一个静态大小的字段，可以将’min_length’和’max_length’的值设置为相同值。</p>
+<h3 id="3-2整数类型"><a href="#3-2整数类型" class="headerlink" title="3.2整数类型"></a>3.2整数类型</h3><p>一个字节：s_byte(),s_char()</p>
+<p>两个字节：s_word(),s_short()</p>
+<p>四个字节：s_dword(),s_long(),s_int()</p>
+<p>八个字节：s_qword(),s_double()</p>
+<p>每个整数类型至少接受一个单一的参数，即默认的整数值。另外，下面的可选的关键字参数也可以被指定：</p>
+<p>endian(字符型，默认值为’&lt;’)：位字段的存放顺序。将低位字节先存放在低地址处的顺序指定为&lt;，将高位字节先存放在低地址处的顺序指定为&gt;。</p>
+<p>format(字符串型，默认值是”binary”)：将输出格式指定为”binary”或者”ascii”，用以控制整数原始类型的显示格式。例如，值100以ASCII格式显示为”100”，而以二进制格式则显示为”\x64”。</p>
+<p>signed(布尔型，默认值是False)：将大小设置为有符号的或者无符号的，只有当输出格式设定为”ascii”时才可应用该类型。</p>
+<p>full_range(布尔型，默认值是False)：如果其值为真，那么该原始类型将变异所有可能的值（稍后将对该类型进行更加详细的介绍）。</p>
+<p>fuzzable(布尔型，默认值是True)：将对该原始类型的模糊测试设置为使能或者不使能。</p>
+<p>name(字符串型，默认值是None)：在所有的Sulley对象中，指定一个名字就可以在整个请求中直接访问该原始类型。</p>
+<p>full_range修饰符在上述这些类型中是特别有趣的一个。考虑你想要对一个DWORD值进行模糊测试，总共有4294967295个可能的值。以每秒钟执行10个测试用例的速度来计算，它将会耗费13年的时间完成对这个单一的原始类型的模糊测试。为了减少巨大的输入空间，Sulley在默认情况下只尝试那些”智能”值。这包括对0周围的10个边界测试用例加上或减去适当的值，最大的整数值（MAX_VAL），MAX_VAL/2，MAX_VAL/3，MAX_VAL/4，MAX_VAL/8，MAX_VAL/16，MAX_VAL/32。缩减后的输入空间只包含141个测试用例，而执行这些测试用例只需要几秒钟的时间。</p>
+<h3 id="3-3-字符串和分隔符"><a href="#3-3-字符串和分隔符" class="headerlink" title="3.3 字符串和分隔符"></a>3.3 字符串和分隔符</h3><p>size(整数值，默认值是－1)：该字符串的静态大小。为了指定动态大小，将该值设置为－1。</p>
+<p>padding(字符型，默认值是’\x00’)：如果一个显式大小被指定，并且所生成的字符串要小于该大小，那么就使用该值将字段变为等于大小值。</p>
+<p>encoding(字符串型，默认值是”ascii”)：编码以为字符串所用。有效选项包括Python str.encode()例程可以接受的任何内容。对于微软的Unicode字符串而言，将其指定为”utf_16_le”。</p>
+<p>fuzzable(布尔值，默认值是True)：将对该原始类型的模糊测试设置为使能或者不使能。</p>
+<p>name(字符串型，默认值是None)：在所有的Sulley对象中，指定一个名字就可以在整个请求中直接访问该原始类型。</p>
+<p>通过使用分隔符，字符串经常被解析为子字段。例如，空格字符在HTTP请求GET/index.html HTTP/1.0中就被用做一个分隔符。在这个请求当中，前面的斜线（/）和点（.）字符同样也是分隔符。当在Sulley中定义一个协议时，要确保使用s_delim()原始类型来表示分隔符。同其它的原始类型一样，第一个参数是强制使用的，并且被用来指定默认值。同样，与其它原始类型一样，s_delim()也接受可选的’fuzzable’和’name’关键字参数。针对分隔符的变异包括重复、替换和删除。作为一个完整的例子，考虑针对HTML主体标签进行模糊测试的原始类型序列。</p>
+<h3 id="3-4-块"><a href="#3-4-块" class="headerlink" title="3.4 块"></a>3.4 块</h3><p>group(字符串型，默认值是None)：该块所关联的群组的名字（稍后将对此进行更加详细的介绍）。</p>
+<p>encoder(函数指针，默认值是None)：指向一个函数的指针，该函数在返回所显示的数据之前显示该数据。</p>
+<p>dep(字符串型，默认值是None)：可选的原始类型，该块依赖于该类型的特定值。</p>
+<p>dep_value(混合类型，默认值是None)：为了能够显示块，dep字段必须要包含的值。</p>
+<p>dep_value(混合类型的列表，默认值是[])：为了能够显示块，dep字段可能将包含的值。</p>
+<p>dep_compare(字符串型，默认值是”==”)：应用于依赖的比较方法。有效的选项包括==,!=,&gt;,&gt;=,&lt;以及&lt;=。</p>
+<p>分组、编码和依赖是在其它的大多数框架中所没有的功能强大的特性，因此值得对它们进行深入的研究。</p>
+<h3 id="3-5-群组"><a href="#3-5-群组" class="headerlink" title="3.5 群组"></a>3.5 群组</h3><p>分组允许你将一个块关联到一个群组原始类型，以指定该块应当为群组内部的每个值来循环遍历所有可能的变异。例如，群组原始类型对于表示带有相似参数结构的有效操作码或动词的一个列表是非常有用的。原始类型s_group()定义了一个群组，并且接受两个强制使用的参数。第一个参数指定了群组的名字，第二个参数指定了将要遍历的、可能的原始值的列表。作为一个简单的例子，考这个完整的Sulley请求，该请求被设计为对一个Web服务器进行模糊测试。</p>
+<p>在该脚本的开始，首先导入了Sulley的所有构件。接下来，初始化了一个新的请求，并且将其命名为HTTP BASIC。在后面可以通过引用这个名字来直接访问该请求。然后定义了一个群组，其名字为verbs，所包含的可能的字符串值为GET,HEAD,POST以及TRACE。接着启动了一个新块，其名字为body，并且通过可选的group关键字参数将其关联到前面所定义的群组原始类型。注意s_block_start()将一直返回True，这就允许你可以使用一个简单的if语句来识别出其所包含的原始类型。同时注意到s_block_end()的name参数也是可选的。这些框架的设计决定纯粹是出于美观的目的而做出的。接着，在body块的内部定义了一系列基本的分隔符和字符串原始类型，然后将该块关闭。当将这个被定义的请求加载到一个Sulley会话中时，模糊器将为该块生成并传递所有可能的值，每次为群组中定义的每个动词生成并传递值。</p>
+<h3 id="3-6-编码器"><a href="#3-6-编码器" class="headerlink" title="3.6 编码器"></a>3.6 编码器</h3><p>编码器是一个简单而又功能强大的块修饰符。可以指定一个函数并将其关联到一个块，以在通过网络返回和传输之前，来修改所显示的该块的内容。使用一个现实世界中的例子可以更好的对此进行解释。来自于Trend微控制管理器的DcsProcessor.exe daemon程序在TCP端口20901进行监听，并且期望接收被私有的XOR编码例程所格式化的数据。通过对解码器实施逆向工程，开发了XOR编码例程。</p>
+<p>Sulley编码器包含一个单一的参数，即将要编码的数据，并且返回被编码的数据。现在可以将这个定义的编码器关联到包含可模糊化原始类型的一个块，并且允许模糊器的开发者继续工作就好像不存在这个小的障碍一样。</p>
+<h3 id="3-7-依赖"><a href="#3-7-依赖" class="headerlink" title="3.7 依赖"></a>3.7 依赖</h3><p>依赖允许你将一个条件应用于一个完整块的显示中。其实现过程如下，首先使用可选的dep关键字参数将一个块与它将要依赖的原始类型相连接。当Sulley准备显示依赖块时，它将会检查所连接的原始类型的值并相应的采取行为。可以使用dep_value关键字参数来指定一个依赖值。另外，可以使用dep_values关键字参数来指定依赖值的一个列表。最后，可以通过使用dep_compare关键字参数来修改实际的条件比较。例如，考虑这样一个情形，取决于一个整数的值而期望得到不同的数据。</p>
+<p>可以采用多种方法将块依赖串接起来，以构成功能更加强大（但也更为复杂）的组合。</p>
+<h3 id="3-8-块帮助函数"><a href="#3-8-块帮助函数" class="headerlink" title="3.8 块帮助函数"></a>3.8 块帮助函数</h3><p>为了有效的利用Sulley，你必须要熟悉的关于数据生成的一个重要方面就是块帮助函数。这些函数包括大小计算函数（sizers）、校验和函数(checksums)和重复函数(repeaters)等。</p>
+<h3 id="3-9-大小计算函数"><a href="#3-9-大小计算函数" class="headerlink" title="3.9 大小计算函数"></a>3.9 大小计算函数</h3><p>SPIKE的用户将会对块帮助函数s_sizer()（或s_size()）非常熟悉。该帮助函数使用块的名字来度量第一个参数的大小，并且接受如下的额外关键字参数：</p>
+<p>endian(字符型，默认值为’&lt;’)：位字段的存放顺序。将低位字节先存放在低地址处的顺序指定为&lt;，将高位字节先存放在低地址处的顺序指定为&gt;。</p>
+<p>format(字符串型，默认值是”binary”)：将输出格式指定为”binary”或者”ascii”，用以控制整数原始类型的显示格式。</p>
+<p>inclusive(布尔型，默认值是False)：大小计算函数应当计算其自己的长度吗？</p>
+<p>signed(布尔型，默认值是False)：将大小设置为有符号的或者无符号的，只有当输出格式设定为”ascii”时才可应用该类型。</p>
+<p>fuzzable(布尔型，默认值是False)：将对该原始类型的模糊测试设置为使能或者不使能。</p>
+<p>name(字符串型，默认值是None)：在所有的Sulley对象中，指定一个名字就可以在整个请求中直接访问该原始类型。</p>
+<p>大小计算函数是数据生成中的一个重要构件，它允许表示诸如XDR符号和ASN.1等的复杂协议。当显示大小计算函数时，Sulley将会动态的计算所关联块的长度。在默认情况下，Sulley将不会对size字段进行模糊测试。在许多情况下我们需要进行这样的处理，然而，如果不想这样处理，那么就将可模糊化标志设置为使能。</p>
+<h3 id="3-10-校验和"><a href="#3-10-校验和" class="headerlink" title="3.10 校验和"></a>3.10 校验和</h3><p>类似于大小计算函数，s_checksum()帮助函数使用块的名字来计算第一个参数的校验和。同时也可以指定下面的可选的关键字参数：</p>
+<p>algorithm(字符串型或者是函数指针，默认值是”crc32”)：应用于目标块的校验和算法（crc32,adler32,md5,sha1）。</p>
+<p>endian(字符型，默认值为’&lt;’)：位字段的存放顺序。将低位字节先存放在低地址处的顺序指定为&lt;，将高位字节先存放在低地址处的顺序指定为&gt;。</p>
+<p>length(整数值，默认值是0)：校验和的长度，其值为0时表示自动计算。</p>
+<p>name(字符串型，默认值是None)：在所有的Sulley对象中，指定一个名字就可以在整个请求中直接访问该原始类型。</p>
+<p>该算法的参数可以是crc32,adler32,md5或者sha1中的一个。另外，你还可以为该参数指定一个函数指针，以应用一个定制的校验和算法。</p>
+<h3 id="3-11-重复函数"><a href="#3-11-重复函数" class="headerlink" title="3.11 重复函数"></a>3.11 重复函数</h3><p>可以使用s_repeat()（或者s_repeater()函数）对一个块重复可变数量的次数。例如，当对带有多个元素的表中的溢出进行测试时，该函数是非常有用的。该帮助函数包含三个强制使用的参数：将要被重复的块的名字，重复的最小次数以及重复的最大次数。另外，也可以指定下面的可选的关键字参数：</p>
+<p>step(整数值，默认值是1)：在最小重复次数和最大重复次数之间的单步计数。</p>
+<p>fuzzable(布尔型，默认值是False)：将对该原始类型的模糊测试设置为使能或者不使能。</p>
+<p>name(字符串型，默认值是None)：在所有的Sulley对象中，指定一个名字就可以在整个请求中直接访问该原始类型。</p>
+<p>考虑下面的例子，它将所介绍的三个帮助函数连接到了一起。我们正在对包含一个字符串表的协议的一部分进行模糊测试。该表中的每个条目包含以下内容：一个两字节字符串类型的字段，一个两字节长度字段，一个字符串字段，最后是一个对字符串字段进行计算的CRC32校验和字段。由于我们不知道这些类型字段的有效值是什么，因此我们将使用随机数据对它们进行模糊测试。</p>
+<p>这个Sulley脚本将不仅对表条目的解析过程进行模糊测试，而且还可能会在对超长表的处理中发现一个错误。</p>
+<h3 id="3-12-Legos"><a href="#3-12-Legos" class="headerlink" title="3.12 Legos"></a>3.12 Legos</h3><p>Sulley利用legos来表示用户定义的构件，如邮件地址、主机名以及在微软的RPC ,XDR,ASN.1以及其它标准中所使用的协议原始类型。在ASN.1/BER中，字符串被表示为[0x04][0x84][双字长度][字符串]的序列。当对一个基于ASN.1的协议进行模糊测试时，在每个字符串的前面加上长度和类型前缀将是非常繁琐的。取而代之，我们可以定义一个lego，并对其进行引用。</p>
+<p>几乎所有的lego都遵循着一个类似的格式，而其中的一个例外情形是可选的options关键字参数，它是特定于单个的lego的。作为一个简单的例子，考虑如下的对tag lego的定义，它有助于对XMLish协议进行模糊测试。</p>
+<p>这个示例lego简单的将所需要的标签作为一个字符串来接受，并且将其封装到适当的分隔符中。它是通过下面的操作来实现这一点的，即将块类进行扩展，并且通过self.push()来手工的将标签分隔符和用户提供的字符串添加到块中。</p>
+<p>这里还有另外一个例子，它生成一个简单的lego以在Sulley中表示ASN.1/BER 整数。采用最低层次的通用命名符将所有的整数表示为四字节整数，其格式如下：[0x02][0x04][双字]，其中0x02指明了整数的类型，0x04指定了该整数的长度为四字节，双字表示我们正在解析的实际整数值。下面是摘自于sulley\legos\ber.py的示例定义。</p>
+<h2 id="４、会话"><a href="#４、会话" class="headerlink" title="４、会话"></a>４、会话</h2><blockquote>
+<p>一旦你已经定义了许多的请求，那么就可以将它们在一个会话中连接起来。同其它的模糊测试框架相比，Sulley所具有的一个主要的优越性在于，它具备对协议进行深层次模糊测试的能力。这一功能是通过在一个图中将请求连接在一起来实现的。在下面的例子中，一系列的请求被连接到了一起，并且利用pgraph库以uDraw格式将图形加以显示，而会话和请求类都是从pgraph库扩展而来的。</p>
+</blockquote>
+<p>当实例化一个会话时，可以指定如下所示的可选的关键字参数：</p>
+<ul>
+<li><p>sessio_filename(字符串型，默认值是None)：序列化持久数据的文件名。指定一个文件名将允许你停止并重新启动模糊器。</p>
+</li>
+<li><p>skip(整数值，默认值是0)：将要被略过的测试用例数。</p>
+</li>
+<li><p>sleep_time(浮点数，默认值是1.0):在传输测试用例之间的休眠时间。</p>
+</li>
+<li><p>log_level(整数值，默认值是2)：设置日志级别，一个更大的数字表示将包含更多的日志消息。</p>
+</li>
+<li><p>proto(字符串型，默认值是”tcp”)：通信协议。</p>
+</li>
+<li><p>timeout(浮点数，默认值是5.0):在超时之前等待send()或recv()返回的秒数。</p>
+</li>
+</ul>
+<p>Sulley所具备的另外一个高级特性是，它可以在协议图结构中所定义的每条边上记录回调函数。这就允许我们在节点传输之间记录一个将调用的函数，以实现诸如挑战响应系统这样的功能。回调方法必须要采用的原型加以定义。</p>
+<h2 id="5-、实例"><a href="#5-、实例" class="headerlink" title="5 、实例"></a>5 、实例</h2><h3 id="5-1-FTP协议测试"><a href="#5-1-FTP协议测试" class="headerlink" title="5.1 FTP协议测试"></a>5.1 FTP协议测试</h3><p>Fuzzing对象: FTP服务器<br>环境:host:windows xpsp2,虚拟机<br>工具:sulley framework + ollydbg</p>
+<p>首先了解要fuzzing的对象,对fuzzing对象协议的熟悉程度对fuzzing的结果有很大影响<br>FTP的配置就无需多说,21端口,若干FTP命令,因为我对python不是很熟悉,就只能简单构造一些用来fuzz数据</p>
+<h4 id="第一步：创建一个FTP-py的文件，内容如下"><a href="#第一步：创建一个FTP-py的文件，内容如下" class="headerlink" title="第一步：创建一个FTP.py的文件，内容如下"></a>第一步：创建一个FTP.py的文件，内容如下</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ftp.py 2008-12-17</span></div><div class="line"><span class="comment"># we use this moduie to generate fuzzing data</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="keyword">from</span> sulley <span class="keyword">import</span> *</div><div class="line"><span class="comment">#########################################################</span></div><div class="line">s_initialize(<span class="string">"War-FTP"</span>)</div><div class="line">s_group(<span class="string">"verbs"</span>,values=[<span class="string">"USER"</span>,<span class="string">"PASSWORD"</span>])</div><div class="line"><span class="keyword">if</span> s_block_start(<span class="string">"body"</span>,group = <span class="string">"verbs"</span>):</div><div class="line"><span class="comment">#以verbs形成报文的头</span></div><div class="line">    s_delim(<span class="string">" "</span>)</div><div class="line">    s_string(<span class="string">"A"</span>*<span class="number">1000</span>)</div><div class="line">    s_static(<span class="string">"\r"</span>)</div><div class="line">s_block_end()</div><div class="line"><span class="comment">#上面的代码片断形成一个如 "USER AAAAAAA...\r"\"PASSWORD AAAAAAAA...."的数据报文,</span></div><div class="line">s_initialize()等函数在sulley\__init__.py模块中定义,是作者自己写的形成请求数据的函数</div><div class="line">s_delim(<span class="string">" "</span>)加入一个空格分隔符</div><div class="line">s_string(<span class="string">"A"</span>*<span class="number">1000</span>),由<span class="number">1000</span>个A组成的字符串</div><div class="line">s_static(<span class="string">"\r"</span>),回车字符</div></pre></td></tr></table></figure>
+<p>将ftp.py文件放入/requests目录下,作为fuzzing的数据模块调用,读者可以自行扩展,这样就粗糙的完成了构造fuzzing数据的工作.</p>
+<h4 id="第二步-按照自己的要求完成一个会话-命名为example-py"><a href="#第二步-按照自己的要求完成一个会话-命名为example-py" class="headerlink" title="第二步,按照自己的要求完成一个会话,命名为example.py"></a>第二步,按照自己的要求完成一个会话,命名为example.py</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#sulley module test</span></div><div class="line"><span class="comment">#example.py</span></div><div class="line"></div><div class="line"><span class="keyword">from</span> sulley <span class="keyword">import</span> *</div><div class="line"><span class="comment">#from primitives import *</span></div><div class="line"><span class="keyword">from</span> requests <span class="keyword">import</span> ftp</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">bind</span><span class="params">(target)</span>:</span></div><div class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">    s.connect(target)</div><div class="line">    s.send(<span class="string">"USER anonymous\n"</span>)</div><div class="line">    s.recv(buff,<span class="number">100</span>)</div><div class="line">    s.send(<span class="string">"anonymous\n"</span>)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">do_fuzz</span><span class="params">()</span>:</span></div><div class="line">    sess   = sessions.session(session_filename =<span class="string">"tmp.log"</span>)</div><div class="line">    target = sessions.target(<span class="string">"192.168.15.22"</span>,<span class="number">21</span>)</div><div class="line"></div><div class="line">    <span class="comment">#使用procmon监控fuzzing</span></div><div class="line">    target.procmon = pedrpc.client(<span class="string">"192.168.15.22"</span>,<span class="number">26002</span>)</div><div class="line"></div><div class="line">    target.procmon_options = \</div><div class="line">                           &#123;</div><div class="line">                               <span class="string">"proc_name"</span>:<span class="string">"War-ftpd.exe"</span></div><div class="line">                               &#125;</div><div class="line">    sess.add_target(target)</div><div class="line">	<span class="comment"># 首先启动 process_monitor.py -c audits\war-ftp.crashbin -p war-ftpd.exe</span></div><div class="line">    <span class="comment">#sess.pre_send = bind</span></div><div class="line">    sess.connect(s_get(<span class="string">"War-FTP"</span>))</div><div class="line">    sess.fuzz()</div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"done fuzzing..."</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> <span class="number">1</span>:</div><div class="line">    do_fuzz()</div></pre></td></tr></table></figure>
+<h4 id="第三步-运行我们建立好的example-py"><a href="#第三步-运行我们建立好的example-py" class="headerlink" title="第三步 运行我们建立好的example.py"></a>第三步 运行我们建立好的example.py</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">E:\Hack_tools\FUZZTOOL\Fuzz_FrameWork\sulley&gt;example.py</div><div class="line">[10:53.43] current fuzz path:  -&gt; War-FTP</div><div class="line">[10:53.43] fuzzed 0 of 2244 total cases</div><div class="line">[10:53.43] fuzzing 4 of 2244</div><div class="line">[10:53.45] xmitting: [1.4]</div><div class="line">[10:53.46] fuzzing 5 of 2244</div><div class="line">[10:53.46] xmitting: [1.5]</div><div class="line">[10:53.54] procmon detected access violation on test case #5</div><div class="line">[10:53.54] primitive lacks a name, type: delim, default value:</div><div class="line">[10:53.54] [INVALID]:41414141 Unable to disassemble at 41414141 from thread 1500</div><div class="line"> caused access violation</div><div class="line">[10:53.54] restarting target process</div><div class="line"></div><div class="line">监控程序窗口出现连接的信息，说明已经开始工作了</div><div class="line">10:53.43] updating target process name to 'War-ftpd.exe'</div><div class="line">10:53.43] debugger thread-1229655223 looking for process name: War-ftpd.exe</div><div class="line">10:53.43] debugger thread-1229655223 found match on pid 3676</div><div class="line">10:53.54] debugger thread-1229655223 caught access violation: '[INVALID]:414141</div><div class="line">1 Unable to disassemble at 41414141 from thread 1500 caused access violation'</div><div class="line">10:53.54] debugger thread-1229655223 exiting</div><div class="line">10:53.54] starting target process</div></pre></td></tr></table></figure>
+<h3 id="5-2-私有协议-SecuRemote-模糊测试"><a href="#5-2-私有协议-SecuRemote-模糊测试" class="headerlink" title="5.2 私有协议 SecuRemote 模糊测试"></a>5.2 私有协议 SecuRemote 模糊测试</h3><h4 id="SecuRemote协议结构"><a href="#SecuRemote协议结构" class="headerlink" title="SecuRemote协议结构"></a>SecuRemote协议结构</h4><p><img src="./images/1493778904249.jpg" alt="enter description here" title="SecuRemote 协议"></p>
+<h4 id="模糊测试逻辑"><a href="#模糊测试逻辑" class="headerlink" title="模糊测试逻辑"></a>模糊测试逻辑</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="keyword">from</span> sulley <span class="keyword">import</span> *</div><div class="line">SLEEP_TIME=<span class="number">0.5</span>TIMEOUT=<span class="number">3</span>CRASH_THRESHOLD=<span class="number">3</span><span class="comment"># The function Sulley will run prior to sending each mutation.  We leverage</span></div><div class="line"><span class="comment"># it to setup the target system with the initial packets and response in the</span></div><div class="line"><span class="comment"># protocol exchange prior to our target packet.</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">preconn</span><span class="params">(sock)</span>:</span></div><div class="line">    sock.send(<span class="string">"\x51\x00\x00\x00"</span>)    time.sleep(<span class="number">0.5</span>)</div><div class="line">    sock.send(<span class="string">"\x00\x00\x00\x21"</span>)</div><div class="line"></div><div class="line"></div><div class="line">    <span class="comment"># Set a socket timeout on the recv so we aren&amp;#039;t waiting indefinitely if</span></div><div class="line">    <span class="comment"># the server crashed from a previous test case.</span></div><div class="line">    sock.settimeout(<span class="number">5</span>)    response = sock.recv(<span class="number">4</span>)</div><div class="line">    <span class="keyword">print</span> <span class="string">"Setup response: "</span>,    <span class="keyword">for</span> i <span class="keyword">in</span> response:</div><div class="line">        <span class="keyword">print</span> <span class="string">"%02x"</span> % ord(i),</div><div class="line">    <span class="keyword">print</span></div><div class="line"></div><div class="line"></div><div class="line">s_initialize(<span class="string">"SecuRemote-Simple-String"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Create a size field, which is based on the content of the named block</span></div><div class="line"><span class="comment"># Sulley uses "&gt;" to indicate big-endian values, "&lt;" is little-endian</span></div><div class="line">s_size(<span class="string">"client-name-string"</span>, length=<span class="number">4</span>, endian=<span class="string">"&gt;"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># This is the block of data used for filling in the s_sizeif s_block_start("client-name-string"):</span></div><div class="line">    <span class="comment"># "securemote" is the default string</span></div><div class="line">    s_string(<span class="string">"securemote"</span>)</div><div class="line">    <span class="comment"># constant null terminator</span></div><div class="line">    s_byte(<span class="string">"\x00"</span>)</div><div class="line">s_block_end()</div><div class="line"></div><div class="line"></div><div class="line">sess = sessions.session(session_filename=<span class="string">"Securemote-Simple-string.sess"</span>, sleep_time=SLEEP_TIME, timeout=TIMEOUT, crash_threshold=CRASH_THRESHOLD)</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment"># Call preconn() before each mutation is sent to setup the target</span></div><div class="line">sess.pre_send = preconn</div><div class="line"></div><div class="line"></div><div class="line">sess.connect(s_get(<span class="string">"SecuRemote-Simple-String"</span>))</div><div class="line">target = sessions.target(<span class="string">"127.0.0.1"</span>, <span class="number">264</span>)</div><div class="line">sess.add_target(target)</div><div class="line">sess.fuzz()</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/yunpiao/" rel="tag"># yunpiao,</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/02/安全/ref_Scapy 使用教程/" rel="next" title="ref_Scapy 使用教程">
+                <i class="fa fa-chevron-left"></i> ref_Scapy 使用教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/25/安全/中间人攻击/" rel="prev" title="中间人攻击">
+                中间人攻击 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="yunpiao" />
+          <p class="site-author-name" itemprop="name">yunpiao</p>
+           
+              <p class="site-description motion-element" itemprop="description">转行程序员</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、sulley-用法"><span class="nav-number">1.</span> <span class="nav-text">1、sulley 用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#２、sulley-目录结构"><span class="nav-number">2.</span> <span class="nav-text">２、sulley 目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#３、sulley-数据表示"><span class="nav-number">3.</span> <span class="nav-text">３、sulley 数据表示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-静态和随机的原始类型"><span class="nav-number">3.1.</span> <span class="nav-text">3.1  静态和随机的原始类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2整数类型"><span class="nav-number">3.2.</span> <span class="nav-text">3.2整数类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-字符串和分隔符"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 字符串和分隔符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-块"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-群组"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 群组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-编码器"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 编码器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-依赖"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-块帮助函数"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 块帮助函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-9-大小计算函数"><span class="nav-number">3.9.</span> <span class="nav-text">3.9 大小计算函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-10-校验和"><span class="nav-number">3.10.</span> <span class="nav-text">3.10 校验和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-11-重复函数"><span class="nav-number">3.11.</span> <span class="nav-text">3.11 重复函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-12-Legos"><span class="nav-number">3.12.</span> <span class="nav-text">3.12 Legos</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#４、会话"><span class="nav-number">4.</span> <span class="nav-text">４、会话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-、实例"><span class="nav-number">5.</span> <span class="nav-text">5 、实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-FTP协议测试"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 FTP协议测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步：创建一个FTP-py的文件，内容如下"><span class="nav-number">5.1.1.</span> <span class="nav-text">第一步：创建一个FTP.py的文件，内容如下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步-按照自己的要求完成一个会话-命名为example-py"><span class="nav-number">5.1.2.</span> <span class="nav-text">第二步,按照自己的要求完成一个会话,命名为example.py</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三步-运行我们建立好的example-py"><span class="nav-number">5.1.3.</span> <span class="nav-text">第三步 运行我们建立好的example.py</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-私有协议-SecuRemote-模糊测试"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 私有协议 SecuRemote 模糊测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SecuRemote协议结构"><span class="nav-number">5.2.1.</span> <span class="nav-text">SecuRemote协议结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模糊测试逻辑"><span class="nav-number">5.2.2.</span> <span class="nav-text">模糊测试逻辑</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunpiao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (search_path.endsWith("json")) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

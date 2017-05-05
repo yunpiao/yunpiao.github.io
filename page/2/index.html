@@ -307,6 +307,803 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2017/04/25/安全/中间人攻击/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/25/安全/中间人攻击/" itemprop="url">中间人攻击</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-25T11:44:27+08:00">
+                2017/04/25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>中间人攻击总结</p>
+</blockquote>
+<h1 id="中间人攻击-MITM"><a href="#中间人攻击-MITM" class="headerlink" title="中间人攻击(MITM)"></a>中间人攻击(MITM)</h1><h2 id="1-原理"><a href="#1-原理" class="headerlink" title="1. 原理"></a>1. 原理</h2><h3 id="APR-欺骗"><a href="#APR-欺骗" class="headerlink" title="APR 欺骗"></a>APR 欺骗</h3><h4 id="三种方式"><a href="#三种方式" class="headerlink" title="三种方式"></a>三种方式</h4><pre>1. 攻击者仅仅欺骗被攻击主机(单向):
+主机C向主机B发送伪造的ARP回应包，声称自己的MAC地址就是网关对应的IP，这样，主机B就会将所有的流量发送主机C(攻击者)，主机C开启ip_forward路由转发功能将数据包进行转发
+</pre>
+![enter description here][1]
+<pre>
+2. 攻击者仅仅欺骗被攻击主机、同时在本地进行Iptable NAT转发(双向)
+主机C向主机B发送伪造的ARP回应包，声称自己的MAC地址就是网关对应的IP，这样，主机B就会将所有的流量发送主机C(攻击者)，同时，攻击者在本地使用Iptables进行NAT转换，这样就可以
+接收到网关返回的数据包，完成双向流量窃取的目的
+</pre>
+![enter description here][2]
+<pre>
+3. 攻击者同时欺骗被攻击主机和网关(双向)
+主机C同时欺骗主机B和网关，实现数据中转，并监听到所有主机B的数据(双向)
+主机C向网关发送ARP回应包，声称自己是主机B，同时向主机B发送ARP回应包，声称自己是网关，这样，网关和主机B两边的流量都会发往主机C，主机C并不需要使用Iptables做特殊的转发，只
+需要打开ip_forward路由开关(即打开转发功能)，是主机C具有数据包转发的功能即可，就可以成功劫持主机B的流量数据</pre>
+![enter description here][3]
+
+
+### SSL证书伪造
+#### 伪造过程
+<pre>
+1. 攻击者对目标客户端和网关发送ARP投毒攻击，污染它们的ARP缓存表
+2. 客户端在浏览器中输入"https://mail.google.com/"的网址，浏览器会尝试和"https://mail.google.com/"的443端口建立SSL连接，但是因为客户端受到了ARP投毒攻击，原本发往
+网关的数据包被发往了攻击者的主机
+3. 攻击者在本机使用iptables将接收到的443目的端口的数据包重定向到本机的IP地址
+4. 这样，受攻击者客户端的浏览器就只会和攻击者主机进行SSL连接
+5. 攻击者在本机使用监听443端口，并且伪造一个假的SSL证书，用于和客户端的连接，同时，提取客户端发送的数据包的原始目的IP地址，用于和客户端原始请求的服务器建立另一个SSL连接
+6. 中间人攻击者在双向的SSL Socket通信都建立完成后，对两边的socket进行数据读写同步，将数据通道打通，使客户端的浏览器能够正常访问(受攻击者不会察觉到已经收到SSL中间人攻击)
+6. 在数据同步的同时，记录下明文数据，达到SSL中间人攻击的目的
+</pre>
+![enter description here][4]
+
+### SSL卸载
+#### 卸载过程
+<pre>1. ARP欺骗，使得攻击者能截获所有目标主机的网络流量
+2. 攻击者利用用户对于地址栏中HTTPS与HTTP的疏忽，将所有的HTTPS连接都用HTTP来代替
+3. 同时，与目标服务器建立正常的HTTPS连接
+4. 由于HTTP通信是明文传输，攻击者能轻松实施嗅探
+5. 受攻击客户端与原始请求服务器之间的全部通信经过了代理转发。 
+6. 其中，出现的图标被替换成为用户熟悉的"小黄锁"图标，以建立信任。 
+7. 这样，中间人攻击就成功骗取了密码、账号等信息，而受害者一无所知</pre>
+8. ![enter description here][5]
+#### 原因
+<pre>1. 大部分使用SSL的网站并非"全站加密"，仅对部分重要的网页使用SSL，这就给攻击者以可乘之机。可以简单地理解为:
+网站在普通页面、非机密页面都是采用HTTP方式访问的，而在进入登录页面的时候才会采用HTTPS加密处理
+
+2. 大多数网站为了保证用户习惯的兼容性，都同时支持HTTP、HTTPS的访问，大多数情况下，这两种访问方式并没有太大的安全问题，但是当用户访问的页面是涉及机密信息的登录页面时，
+服务端往往会采用"重定向"的方式，"强制"用户的浏览器以HTTPS的方式来访问登录页面，为的是保证密钥信息的安全传输</pre>
+
+<h3 id="基于中间人攻击的DNS劫持"><a href="#基于中间人攻击的DNS劫持" class="headerlink" title="基于中间人攻击的DNS劫持"></a>基于中间人攻击的DNS劫持</h3><pre>1\. 数据包嗅探
+    1) 明文嗅探
+    2) 借助中间人代理进行密文嗅探
+2\. 数据注入
+    1) CRIME中在数据包中注入javascript代码实现攻击目的
+3\. 数据流量劫持
+    1) 使用iptables工具对数据包的IP地址进行强制重定向
+4\. 数据包篡改
+    1) DNS劫持中篡改DNS返回数据包的IP地址，达到DNS劫持的目的</pre>
+
+
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2017/04/24/安全/peach Fuzz/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/04/24/安全/peach Fuzz/" itemprop="url">peach Fuzz</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-24T16:08:16+08:00">
+                2017/04/24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>开源Fuzz框架。</p>
+</blockquote>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Michael Eddington等人开发的Peach是一个遵守MIT开源许可证的模糊测试框架，最初采用Python语言编写，发布于2004年，第二版于2007年发布，最新的第三版使用C#重写了整个框架。</p>
+<p>Peach支持对文件格式、ActiveX、网络协议、API等进行Fuzz测试；Peach Fuzz的关键是编写Peach Pit配置文件。</p>
+<p>Windows下使用Peach3需要预先安装.net 4和windbg；Linux、OS X下需要安装Mono .net开发框架。</p>
+<p>peach中最重要一部分就是peach Pit配置文件。Peach Pit文件包含以下内容：</p>
+<pre><code>1、General Configuration(通用配置）
+2、Data Modeling（数据模型）
+3、State Modeling（状态模型）
+4、Agents and Monitors（代理和监视）    
+5、Test Configuration（测试配置）
+</code></pre><p>具体文件结构如下：</p>
+<pre><code>&lt;?xml 版本，编码之类?&gt;
+&lt;Peach 创建时间，地址，作者等等&gt;
+&lt;Include 包含外部文件 /&gt;
+&lt;DataModel&gt; 类型信息，关系（大小，计数，偏移）、可嵌套等&lt;\DataMode&gt;
+&lt;StateModel&gt;测试逻辑，状态转换&lt;/StateModel&gt;
+&lt;Agent&gt;监视被测目标的情况，崩溃信息等&lt;/Agent&gt;
+&lt;Test&gt;指定使用哪个StateModel，Agent，Publisher、Strategy、Logger等&lt;/Test&gt;
+&lt;/Peach&gt;
+</code></pre><h2 id="一、-数据模型（data-modeling）"><a href="#一、-数据模型（data-modeling）" class="headerlink" title="一、 数据模型（data modeling）"></a>一、 数据模型（data modeling）</h2><h3 id="1-1-Data-Model"><a href="#1-1-Data-Model" class="headerlink" title="1.1 Data Model"></a>1.1 Data Model</h3><p>（1）属性：</p>
+<ul>
+<li>Name—必须的。当引用模型或者调试时，友好的DataModel名字是非常有用的。</li>
+<li>Ref—可选的。引用一个DataModel模板。</li>
+<li>Mutable—可选的，默认为真。该元素是否可变异。</li>
+<li>Constraint—可选的。确定一个表达式，它帮助Peach确定数据元素是否已被适当的消耗。</li>
+</ul>
+<p>（2）子元素：</p>
+<ul>
+<li>Block、</li>
+<li>Choice、</li>
+<li>Custom、</li>
+<li>Flag、</li>
+<li>Flags、</li>
+<li>Number、</li>
+<li>Padding、</li>
+<li>String、</li>
+<li>XmlAttribute、</li>
+<li>XmlElement、</li>
+<li>Relation、</li>
+<li>Fixup、</li>
+<li>Transformer、</li>
+<li>Placement</li>
+</ul>
+<p>（3）例子：</p>
+<p><img src="./images/1493038838246.jpg" alt="DataModel例子" title="DataModel例子"></p>
+<p><img src="./images/1493038717603.jpg" alt="引用冲突例子" title="引用冲突例子"></p>
+<p>当一个DataModel被解析时，自定义DataModel看起来像是两个数据模型的组合，如下所示：</p>
+<p><img src="./images/1493038975493.jpg" alt="冲突时真实解析格式" title="冲突时真实解析格式"><br>一个Peach文件中可以指定任意多个DataModel元素，但每个DataModel的名字必须唯一。通过DataModel可以将复杂的格式按照逻辑分解为更小的模型，使数据模型更易阅读、调试和重用。一个名字为“HelloWorld”的DataModel包含一个字符串和输出“Hello World！”如下所示：</p>
+<h3 id="1-2、-Blob"><a href="#1-2、-Blob" class="headerlink" title="1.2、 Blob"></a>1.2、 Blob</h3><p>Blob元素是DataModel或Block的一个子元素。Blob元素常常用于代表缺少类型定义或格式的数据。如下所示：</p>
+<h4 id="（1）属性（除非声明，所有的属性都是可选的）："><a href="#（1）属性（除非声明，所有的属性都是可选的）：" class="headerlink" title="（1）属性（除非声明，所有的属性都是可选的）："></a>（1）属性（除非声明，所有的属性都是可选的）：</h4><ul>
+<li>Name—必须的。Blob的名字。</li>
+<li>Value—含有Blob的默认值。</li>
+<li>Length—Blob的大小，单位为字节。</li>
+<li>Ref—引用一个数据模型来作为Blob的模板。</li>
+<li>valueType—默认格式的值，hex，string，或者literal，默认为string。</li>
+<li>minOccurs—该Blob元素必须发生变化的最小次数，默认为1。</li>
+<li>maxOccurs—该Blob元素能够发生变化的最大次数，默认为1。</li>
+<li>Token—当解析时该元素应该作为一个令牌来信任，默认是假。</li>
+<li>lengthType—长度的类型，指定长度。</li>
+<li>Constraint—一个约束的形式表达，用于数据破解。</li>
+<li>Mutable—Blob元素是否可变异（是否能被fuzzing），默认为真。<h4 id="（2）子元素："><a href="#（2）子元素：" class="headerlink" title="（2）子元素："></a>（2）子元素：</h4></li>
+<li>Anayzers</li>
+</ul>
+<h4 id="（3）例子："><a href="#（3）例子：" class="headerlink" title="（3）例子："></a>（3）例子：</h4><p>一个简单的Blob。这个Blob中，任何类型或长度的数据能破解。<br><img src="./images/1493039197835.jpg" alt="任意长度的数据" title="Blob例子"></p>
+<h3 id="1-3、-Block"><a href="#1-3、-Block" class="headerlink" title="1.3、  Block"></a>1.3、  Block</h3><p>与DataModel 类似<br>Block是DataModel或Block元素的子元素。Block用于在一个逻辑结构中将一个或者多个数据元素（Number或String）组织在一起，它和Datamodel非常相似，仅有的差异是它们的位置。DataModel是个顶层元素，Block是DataModel的一个子元素，它们都可以作为其他Block或DataModel的模板。</p>
+<h4 id="（1）属性（除非声明，所有的属性都是可选的）：-1"><a href="#（1）属性（除非声明，所有的属性都是可选的）：-1" class="headerlink" title="（1）属性（除非声明，所有的属性都是可选的）："></a>（1）属性（除非声明，所有的属性都是可选的）：</h4><ul>
+<li>Name—Block的名字。</li>
+<li>Ref—引用一个数据模型来作为Block的模板。。</li>
+<li>minOccurs—该Block必须发生变化的最小次数。</li>
+<li>maxOccurs–该Block可以发生变化的最大次数。</li>
+<li>Mutable—元素是否可变异，默认为真。<h4 id="（2）子元素：-1"><a href="#（2）子元素：-1" class="headerlink" title="（2）子元素："></a>（2）子元素：</h4>Blob、 block、 Choice、 Custom、 Fixup、 Flag、 Flags、 Number、 Padding、Placement、 Relation、Seek、 String、 Transformer、 XmlAttribute、 XmlElement。</li>
+</ul>
+<h4 id="（3）例子：-1"><a href="#（3）例子：-1" class="headerlink" title="（3）例子："></a>（3）例子：</h4><p>嵌套的Block。Block可以根据需要多层的嵌套，它可以帮助创建逻辑结构而不改变数据包含的内容。<br><img src="./images/1493039409395.jpg" alt="Block嵌套" title="Block多重嵌套例子"><br>这个嵌套的Block定义产生的输出为：1 2 3 4 。</p>
+<p>引用属性允许构建健壮的模板，如下所示模板的名字为“Key”，值为“\r\n”。<br><img src="./images/1493039518872.jpg" alt="enter description here" title="构建Block模板"><br>使用该模板作为一个引用<br><img src="./images/1493039523065.jpg" alt="enter description here" title="引用Block"><br>输出为：<br><img src="./images/1493039526399.jpg" alt="enter description here" title="输出"></p>
+<p>两个关键字符串在这里发生冲突。当解析时，自定义的Block将代替它的DataModel模板的结构。添加字符串值“：\r\n”。同时“customized”将覆盖String元素的“Key”和“Value”的值，用“Content-Length”和55代替。最终的DataModel将被解析如下：<br><img src="./images/1493039609176.jpg" alt="enter description here" title="1493039609176"></p>
+<h3 id="1-4、-Choice"><a href="#1-4、-Choice" class="headerlink" title="1.4、 Choice"></a>1.4、 Choice</h3><p>Choice是DataModel或者Block元素的的子元素之一。Choice元素用于指示任何子元素是有效的，但是只应选择一个，很像编程语言中的switch语句。</p>
+<h4 id="（1）属性（除非声明，所有的属性都是可选的）：-2"><a href="#（1）属性（除非声明，所有的属性都是可选的）：-2" class="headerlink" title="（1）属性（除非声明，所有的属性都是可选的）："></a>（1）属性（除非声明，所有的属性都是可选的）：</h4><ul>
+<li>Name—choice元素的名字。</li>
+<li>minOccurs—该Choice必须发生改变的最小次数。</li>
+<li>maxOccurs—该Choice能发生改变的最大次数。</li>
+<li>Occurs—该choice能发生改变的迭代次数。<h4 id="（2）子元素：-2"><a href="#（2）子元素：-2" class="headerlink" title="（2）子元素："></a>（2）子元素：</h4>Block、Choice、String、Number、Blob、Flags、Fixup、Transformer、XmlAttribute、XmlElement。<h4 id="（3）例子：-2"><a href="#（3）例子：-2" class="headerlink" title="（3）例子："></a>（3）例子：</h4>一个基本的Choice。这个例子将破解或消耗1,2,3类型的数据，很像一个需要在令牌上做出决定的常规切换语句。它的前8个字节是1，剩下的数据被视为一个32位数字。如果前8位是2，剩下的数据被视为一个255字节的二进制数据。如果前8位是3，剩下的数据被视为一个8字节字符串。当fuzzing时，Peach将选择其中的1个类型并进行fuzzing，它的输出为一个8位数字，后跟相应的类型。Peach将会尝试所有的3个类型。<br><img src="./images/1493039851919.jpg" alt="enter description here" title="1493039851919"><br>一系列的Choice。第一个例子适合构建单个Choice，但如果有许多Type1 、Type2和Type3块都是彼此跟随的，该怎么做呢？。通过设置minoccurs、maxoccurs或者occurs属性，可以指定Choice应该被重复。这个例子尝试来破解至少3个，最多6不同的Choice。<br><img src="./images/1493039859648.jpg" alt="enter description here" title="1493039859648"></li>
+</ul>
+<h3 id="1-5、-Flags"><a href="#1-5、-Flags" class="headerlink" title="1.5、 Flags"></a>1.5、 Flags</h3><p>Flags定义了一组Flag的大小。</p>
+<h4 id="（1）属性："><a href="#（1）属性：" class="headerlink" title="（1）属性："></a>（1）属性：</h4><ul>
+<li>Name—可选的。元素的名字。</li>
+<li>Size—必须的。大小，以位为单位。</li>
+<li>Mutable—可选的。元素是否可以变异，默认为真。<h4 id="（2）子元素：-3"><a href="#（2）子元素：-3" class="headerlink" title="（2）子元素："></a>（2）子元素：</h4></li>
+<li>Fixup、Flag、Placement、Relation、Transformer。<h4 id="（３）例子"><a href="#（３）例子" class="headerlink" title="（３）例子"></a>（３）例子</h4><img src="./images/1493040374857.jpg" alt="enter description here" title="1493040374857"></li>
+</ul>
+<h3 id="1-6、-Number"><a href="#1-6、-Number" class="headerlink" title="1.6、 Number"></a>1.6、 Number</h3><p>该元素定义了长度为8,16,24,32，或64位长度的二进制数。它是DataModel、Block或者Choice的子元素。</p>
+<h4 id="（1）属性：-1"><a href="#（1）属性：-1" class="headerlink" title="（1）属性："></a>（1）属性：</h4><ul>
+<li>Name—必须的。Number的名字。</li>
+<li>Size—必须的。Number的大小，以位为单位。有效值为1到64。</li>
+<li>Value—分配给Number的默认值。</li>
+<li>valueType—可选的。value的表现方式。有效选项为string（字符串）和hex（十进制）。</li>
+<li>Token—当解析的时候，该元素被视为一个令牌，默认值为假。有效选项为真和假。</li>
+<li>Endian—Number的字节顺序。默认为小端。有效选项为大端、小端和网络。网络一样是大端。</li>
+<li>Signed—Number是否为有符号数据。默认为真。有效选项为真和假。</li>
+<li>Constraint—一个以Python表达式为形式的约束。用于数据破解。</li>
+<li>Mutable—元素是否可改变（fuzzing时是否可变异），默认为真。有效选项为真和假。</li>
+<li>minOccurs—Number必须发生改变的最小次数，默认为1。有效选项为正整数值。</li>
+<li>maxOcuurs—Number能够发生改变的最大次数，没有默认值。有效选项为正整数值。<h4 id="（2）有效子元素："><a href="#（2）有效子元素：" class="headerlink" title="（2）有效子元素："></a>（2）有效子元素：</h4></li>
+<li>Anayzers、Fixup、Relation、Transformer、Hint。<h4 id="（3）例子：-3"><a href="#（3）例子：-3" class="headerlink" title="（3）例子："></a>（3）例子：</h4></li>
+</ul>
+<p>有符号。为了表明这是一个无符号数据元素，设置signed属性等于“false”。默认为真。<br><img src="./images/1493040571879.jpg" alt="enter description here" title="1493040571879"></p>
+<p>Value类型。值类型定义了怎么解释Value的属性。有效选项为string和hex，默认为string。将值1000分配给Hi5。<br><img src="./images/1493040675580.jpg" alt="enter description here" title="1493040675580"><br>将43981以十六进制形式分配给Hi5。<br><img src="./images/1493040679063.jpg" alt="enter description here" title="1493040679063"></p>
+<p>小端。为了改变Number的字节顺序，请设置endian属性。<br><img src="./images/1493040684008.jpg" alt="enter description here" title="1493040684008"><br>    上图将产生如下字节顺序：AB CD。<br><img src="./images/1493040690838.jpg" alt="enter description here" title="1493040690838"><br>    上图将产生如下字节顺序：CD AB。</p>
+<h3 id="1-7、Padding"><a href="#1-7、Padding" class="headerlink" title="1.7、Padding"></a>1.7、Padding</h3><p>Padding元素用来填充大小变化的块或数据模型。</p>
+<h4 id="（1）属性：-2"><a href="#（1）属性：-2" class="headerlink" title="（1）属性："></a>（1）属性：</h4><ul>
+<li>Name—必须的。Number元素的名字。</li>
+<li>Aligned—将父元素对齐到8字节边界，默认为假。</li>
+<li>Alignment—对齐到这个位边界，比如（8、16等），默认为8。</li>
+<li>alignedTo—基于我们要填充的元素名字。</li>
+<li>Lengthcalc—计算结果为整数的脚本表达式。</li>
+<li>Constraint—一个以Python表达式形式的约束。用于数据破解。</li>
+<li>Mutable—元素是否可变异，默认为真，有效选项为真和假。<h4 id="（2）有效子元素：-1"><a href="#（2）有效子元素：-1" class="headerlink" title="（2）有效子元素："></a>（2）有效子元素：</h4></li>
+<li>Fixup、Relation、Transformer、Hint。<h4 id="（3）例子：-4"><a href="#（3）例子：-4" class="headerlink" title="（3）例子："></a>（3）例子：</h4><img src="./images/1493040786958.jpg" alt="enter description here" title="1493040786958"></li>
+</ul>
+<h3 id="1-8、-String"><a href="#1-8、-String" class="headerlink" title="1.8、 String"></a>1.8、 String</h3><p>该元素定义了一个单字节或者双字节的字符串，它是DataModel或者Block的子元素。为了指定这是一个数值的字符串，请用 NumericalString元素。</p>
+<h4 id="（1）属性：-3"><a href="#（1）属性：-3" class="headerlink" title="（1）属性："></a>（1）属性：</h4><ul>
+<li>Name—可选的，数据模型的名字。</li>
+<li>Length—可选的，字符串的长度。</li>
+<li>lengthType—可选的，Length属性的单位。</li>
+<li>Type—可选的。字符编码类型，默认为“ASCII”，有效选项为ASCII、utf7、utf8、utf6、utf6be、utf32。</li>
+<li>nullTerminated—可选的。是否为以空字节结尾的字符串（真或者假）。</li>
+<li>padCharacter—可选的。根据length参数填充字符串的字符，默认为（0x00）。</li>
+<li>Token—可选的。当解析的时候，该元素应该被视为一个令牌，默认为假。</li>
+<li>Constraint—一个脚本表达式形式的约束。用于数据破解。</li>
+<li>Mutable—可选的。元素是否可变异，默认为真。</li>
+<li>Minoccurs—可选的。这个块必须发生改变的最小次数，默认为1。</li>
+<li>Maxoccurs—可选的。这个块会发生改变的最大次数，默认为1。<h4 id="（2）有效子元素：-2"><a href="#（2）有效子元素：-2" class="headerlink" title="（2）有效子元素："></a>（2）有效子元素：</h4>Analyzer、Fixup、Relation、Transformer、Hint。<h4 id="（3）NumericalString："><a href="#（3）NumericalString：" class="headerlink" title="（3）NumericalString："></a>（3）NumericalString：</h4><img src="./images/1493040968504.jpg" alt="enter description here" title="1493040968504"><br>该元素只能用于String来说明它的值是一个数字。当使用这个提示时，它激活所有的数字突变以及标准的字符串突变。请注意：如果默认情况下一个字符串的值是数字，NumericalString元素被自动添加。<br><img src="./images/1493040874809.jpg" alt="enter description here" title="1493040874809"><h3 id="1-9、-Relation"><a href="#1-9、-Relation" class="headerlink" title="1.9、 Relation"></a>1.9、 Relation</h3>Peach允许构建数据间的关系。关系是类似这样的东西“X是Y的大小”、“X是Y的数量”、或者“X是y的偏移（字节单位）”。<h4 id="（1）大小关系："><a href="#（1）大小关系：" class="headerlink" title="（1）大小关系："></a>（1）大小关系：</h4><img src="./images/1493041068222.jpg" alt="enter description here" title="1493041068222"></li>
+</ul>
+<p>在这个例子中，我们将提供两个python表达式，它允许在获取或设置size属性的时候修改它的大小，有两个变量可用，分别为self和size。Self是Number元素的一个引用，size是一个整数。获取操作和设置操作应该是彼此的数学逆操作。在破解过程中应用获取操作，在发布过程中应用设置操作。<br>expressionGet—该表达式的结果用于内部，它确定名字为TheValue的String元素读取多少字节。如果Peach取10，它将在内部存储一个5，然后Peach将读取5个字节到String中。<br>ExpressionSet—为 publisher生成一个值。 在以下示例中，为TheValue存储的Size的值“5”（TheValue的长度），因此Peach通过publisher输出的值将为“5 * 2”或10。<br><img src="./images/1493041094060.jpg" alt="enter description here" title="1493041094060"></p>
+<h4 id="（2）数量关系："><a href="#（2）数量关系：" class="headerlink" title="（2）数量关系："></a>（2）数量关系：</h4><p>在这个例子中，Number将会说明String列表的数目。<br><img src="./images/1493041352609.jpg" alt="enter description here" title="1493041352609"><br>在这个例子中，我们将提供两个python表达式，它允许在获取或设置size属性的时候修改它的大小。有两个变量可用，分别为self和count。Self是Number元素的一个引用，count是一个整数。这里的让count可用与前面的表达式不同。虽然self在表达式对中始终可用，但其他可用的变量的名字是Relation元素type属性的值。<br>expressionGet—该表达式的结果用于内部，它确定String元素将扩展到多少项。maxOccurs 是Peach循环计算中遇到的最大值，由于maxOccurs = 1024的限制，Peach在CountIndicator元素中破解时遇到的最大值是2048。<br>ExpressionSet—设置要生成的值。 以下示例中，count根据读入的String元素数目确定。<br><img src="./images/1493041360183.jpg" alt="enter description here" title="1493041360183"></p>
+<h4 id="（3）偏移关系："><a href="#（3）偏移关系：" class="headerlink" title="（3）偏移关系："></a>（3）偏移关系：</h4><p>todo</p>
+<h2 id="Todo"><a href="#Todo" class="headerlink" title="Todo"></a>Todo</h2><p>Fixup<br>Transformers<br>Placement</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2017/03/29/安全/私有协议/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/29/安全/私有协议/" itemprop="url">工控私有加密协议</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-29T10:35:26+08:00">
+                2017/03/29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p> 加密协议 安全性 工控 ICS</p>
+</blockquote>
+<h2 id="协议分类"><a href="#协议分类" class="headerlink" title="协议分类"></a>协议分类</h2><ul>
+<li>标准协议: Modbus DNP3 IEC104 IEC61850</li>
+<li>私有协议: Omron FINS协议, 三菱melsec协议 </li>
+<li>私有不公开协议: s7 协议,西门子PPI协议, GE SRTP.</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/29/安全/私有协议/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2017/03/24/安全/openvas调研报告/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/24/安全/openvas调研报告/" itemprop="url">OpenVas 调研报告</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-24T04:23:10+08:00">
+                2017/03/24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<h1 id="1、openvas-简介"><a href="#1、openvas-简介" class="headerlink" title="1、openvas 简介"></a>1、openvas 简介</h1><p>Nessus是其中一个最流行的和有强力的漏洞扫描器,尤其是对UNIX系统。它最初是自由和开放源码,但他们在2005年关闭了源代码,在2008年取消了免费的“注册Feed”版本。现在每年花费1200美元。</p>
+<p>在Nessus的基础上发展了一个免费开源的分支，OpenVAS 用于管理目标系统的漏洞的同时也可以进行攻击渗透。</p>
+<h1 id="2、-整体结构"><a href="#2、-整体结构" class="headerlink" title="2、 整体结构"></a>2、 整体结构</h1><p><img src="img/1489109830456.jpg" alt="整体架构" title="1489109830456"></p>
+<h2 id="采用S-C模式"><a href="#采用S-C模式" class="headerlink" title="采用S/C模式"></a>采用S/C模式</h2><h2 id="Server-层（分为三部分）"><a href="#Server-层（分为三部分）" class="headerlink" title="Server 层（分为三部分）"></a>Server 层（分为三部分）</h2><blockquote>
+<p> 扫描器-openvas-scanner<br>  scanner监听端口为9391, 负责调用各种漏洞检测插件，完成实际的扫描操作。</p>
+<p>  管理器-openvas-manager<br>监听端口为9390, 负责分配扫描任务，并根据扫描结果生产评估报告。</p>
+<p> 管理者-openvas-administrator<br>administrator监听端 口为9393, 负责管理配置信息，用户授权等相关工作。</p>
+</blockquote>
+<h2 id="Client-层-任一都可以"><a href="#Client-层-任一都可以" class="headerlink" title="Client 层(任一都可以)"></a>Client 层(任一都可以)</h2><blockquote>
+<p>openvas-cli(命令行接口):<br>负责提供从命令行访问OpenVAS服务层程序。</p>
+<p>greenbone-security-assistant(安装助手):<br> 负责提供访问OpenVAS服务层的web接口，便于通过浏览器来执行扫描任务，是使用最简便的客户层组件。</p>
+<p>Greenbone-Desktop-Suite(桌面套件):<br> 负责提供访问OpenVAS服务层的图形程序界面，主要允许在Windows客户机中。</p>
+</blockquote>
+<h1 id="3-、OpenVas各组件"><a href="#3-、OpenVas各组件" class="headerlink" title="3 、OpenVas各组件"></a>3 、OpenVas各组件</h1><h3 id="安装辅助脚本"><a href="#安装辅助脚本" class="headerlink" title="安装辅助脚本"></a>安装辅助脚本</h3><ul>
+<li>openvas-setup:　　　　   执行安装</li>
+<li>openvas-check-setup:　　可以在配置之前使用该工具进行检查，看哪里有问题，有问题的时候根据提示进行fix</li>
+</ul>
+<h3 id="Server-组件"><a href="#Server-组件" class="headerlink" title="Server 组件"></a>Server 组件</h3><ul>
+<li>openvassd :　　扫描引擎</li>
+<li>openvasmd:　　管理引擎    可以添加用户等操作，详细查看help，</li>
+<li>openvasad　　  认证工具</li>
+</ul>
+<h3 id="漏洞库同步组件"><a href="#漏洞库同步组件" class="headerlink" title="漏洞库同步组件"></a>漏洞库同步组件</h3><ul>
+<li>openvas-nvt-sync　　　　同步nvt库（用于检测的脚本）</li>
+<li>openvas-scapdata-sync    同步scap数据库（后台采用sqlite）</li>
+<li>openvas-certdata-sync  同步 CERT 公告</li>
+</ul>
+<h1 id="4、安装"><a href="#4、安装" class="headerlink" title="4、安装"></a>4、安装</h1><h2 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h2><h3 id="详见Gitlib-安装"><a href="#详见Gitlib-安装" class="headerlink" title="详见Gitlib 安装"></a>详见Gitlib 安装</h3><p><a href="http://gitlab.buptnsrc.com/16new/openvas/blob/master/README.md" target="_blank" rel="external">http://gitlab.buptnsrc.com/16new/openvas/blob/master/README.md</a></p>
+<h1 id="5、漏洞数据（feed）"><a href="#5、漏洞数据（feed）" class="headerlink" title="5、漏洞数据（feed）"></a>5、漏洞数据（feed）</h1><p><img src="img/1489062782315.jpg" alt="同步数据" title="同步数据"></p>
+<h2 id="数据来源"><a href="#数据来源" class="headerlink" title="数据来源"></a>数据来源</h2><h3 id="NTVs-数据"><a href="#NTVs-数据" class="headerlink" title="NTVs 数据"></a>NTVs 数据</h3><p> OpenVas 包含了一个 NTVs（ Network Vulnerability Tests）的推送， 持续增长。所有检测方法都是通过NTVs 脚本进行检测的</p>
+<p>NTVs 所有分类 详见 主机扫描下的可扫描类型</p>
+<blockquote>
+<p>NTVs 采用 nasl脚本语言编写   nasl 示例<br><a href="http://wald.intevation.org/scm/viewvco.php/scripts/2008/deb_016_1.nasl" target="_blank" rel="external">http://wald.intevation.org/scm/viewvco.php/scripts/2008/deb_016_1.nasl</a></p>
+</blockquote>
+<h3 id="SCAP-数据"><a href="#SCAP-数据" class="headerlink" title="SCAP 数据"></a>SCAP 数据</h3><h4 id="主要包括"><a href="#主要包括" class="headerlink" title="主要包括"></a>主要包括</h4><ul>
+<li>CVE</li>
+<li>CPE</li>
+<li>OAVL<h3 id="CERT-公告数据"><a href="#CERT-公告数据" class="headerlink" title="CERT 公告数据"></a>CERT 公告数据</h3></li>
+<li>CERT-Bund 公告</li>
+<li>DFN-CERT 公告</li>
+</ul>
+<h2 id="数据数量（截止到2017-3-10）"><a href="#数据数量（截止到2017-3-10）" class="headerlink" title="数据数量（截止到2017.3.10）"></a>数据数量（截止到2017.3.10）</h2><ul>
+<li>NTVs  截止到2017年 3月 10号 有50391个测试脚本</li>
+<li>CVE数量 29346</li>
+<li>cpe 数量 164099</li>
+<li>OVAL定义数量 28175</li>
+<li>CERT-Bund 公告数量 5629</li>
+<li>DFN-CERT 公告数量 14226</li>
+</ul>
+<h2 id="更新方式"><a href="#更新方式" class="headerlink" title="更新方式"></a>更新方式</h2><h3 id="可以手动或自己编写脚本-在启动服务前更新漏洞库"><a href="#可以手动或自己编写脚本-在启动服务前更新漏洞库" class="headerlink" title="可以手动或自己编写脚本 在启动服务前更新漏洞库"></a>可以手动或自己编写脚本 在启动服务前更新漏洞库</h3><h3 id="openvas-做了一个更新限制-每天只能更新一次脚本"><a href="#openvas-做了一个更新限制-每天只能更新一次脚本" class="headerlink" title="openvas 做了一个更新限制 每天只能更新一次脚本"></a>openvas 做了一个更新限制 每天只能更新一次脚本</h3><p>采用增量更新、 采用更新脚本进行更新</p>
+<ul>
+<li>openvas-nvt-sync　　　　同步nvt库（用于检测的脚本）</li>
+<li>openvas-scapdata-sync    同步scap数据库（后台采用sqlite）</li>
+<li>openvas-certdata-sync  同步 CERT 公告</li>
+</ul>
+<p>NTVs 可以离线更新  更新地址为<br><a href="http://www.openvas.org/openvas-nvt-feed-current.tar.bz2" target="_blank" rel="external">http://www.openvas.org/openvas-nvt-feed-current.tar.bz2</a></p>
+<h2 id="更新频率"><a href="#更新频率" class="headerlink" title="更新频率"></a>更新频率</h2><p>漏洞库openvas feed端 更新频率大约一周一次</p>
+<h1 id="6、主机扫描"><a href="#6、主机扫描" class="headerlink" title="6、主机扫描"></a>6、主机扫描</h1><h2 id="NTV家族清单（可扫描类型）"><a href="#NTV家族清单（可扫描类型）" class="headerlink" title="NTV家族清单（可扫描类型）"></a>NTV家族清单（可扫描类型）</h2><ol>
+<li>AIX Local Security Checks</li>
+<li>Amazon Linux Local Security Checks<ol>
+<li>Brute force attacks</li>
+<li>Buffer overflow</li>
+<li>CISCO</li>
+<li>CentOS Local Security Checks</li>
+<li>Citrix Xenserver Local Security Checks</li>
+<li>Compliance</li>
+<li>Databases</li>
+<li>Debian Local Security Checks</li>
+<li>Default Accounts</li>
+<li>Denial of Service</li>
+<li>F5 Local Security Checks</li>
+<li>FTP</li>
+<li>Fedora Local Security Checks</li>
+<li>Finger abuses</li>
+<li>Firewalls</li>
+<li>FortiOS Local Security Checks</li>
+<li>FreeBSD Local Security Checks</li>
+<li>Gain a shell remotely</li>
+<li>General</li>
+<li>Gentoo Local Security Checks</li>
+<li>HP-UX Local Security Checks</li>
+<li>IT-Grundschutz</li>
+<li>IT-Grundschutz-10</li>
+<li>IT-Grundschutz-11</li>
+<li>IT-Grundschutz-12</li>
+<li>IT-Grundschutz-13</li>
+<li>JunOS Local Security Checks</li>
+<li>Mac OS X Local Security Checks</li>
+<li>Mageia Linux Local Security Checks</li>
+<li>Malware</li>
+<li>Mandrake Local Security Checks</li>
+<li>Netware</li>
+<li>Nmap NSE</li>
+<li>Nmap NSE net</li>
+<li>Oracle Linux Local Security Checks</li>
+<li>Peer-To-Peer File Sharing</li>
+<li>Policy</li>
+<li>Port scanners</li>
+<li>Privilege escalation</li>
+<li>Product detection</li>
+<li>RPC</li>
+<li>Red Hat Local Security Checks</li>
+<li>Remote file access</li>
+<li>SMTP problems</li>
+<li>SNMP</li>
+<li>Service detection</li>
+<li>Settings</li>
+<li>Slackware Local Security Checks</li>
+<li>Solaris Local Security Checks</li>
+<li>SuSE Local Security Checks</li>
+<li>Ubuntu Local Security Checks</li>
+<li>Useless services</li>
+<li>VMware Local Security Checks</li>
+<li>Web Servers</li>
+<li>Web application abuses</li>
+<li>Windows</li>
+<li>Windows : Microsoft Bulletins</li>
+</ol>
+</li>
+</ol>
+<h2 id="漏洞扫描结果示例（Apache-默认文件漏洞）"><a href="#漏洞扫描结果示例（Apache-默认文件漏洞）" class="headerlink" title="漏洞扫描结果示例（Apache 默认文件漏洞）"></a>漏洞扫描结果示例（Apache 默认文件漏洞）</h2><p><img src="img/1489132187650.jpg" alt="检测结果" title="结果示例"></p>
+<h1 id="7、结果导出"><a href="#7、结果导出" class="headerlink" title="7、结果导出"></a>7、结果导出</h1><h3 id="结果可以多种形式导出"><a href="#结果可以多种形式导出" class="headerlink" title="结果可以多种形式导出"></a>结果可以多种形式导出</h3><ul>
+<li>Anonymous XML</li>
+<li>ARF</li>
+<li>CPE</li>
+<li>CSV Hosts</li>
+<li>CSV Results</li>
+<li>HTML</li>
+<li>ITG</li>
+<li>LaTeX</li>
+<li>NBE</li>
+<li>PDF</li>
+<li>SVG</li>
+<li>TXT</li>
+<li>Verinice ISM</li>
+<li>Verinice ITG</li>
+<li>XML</li>
+</ul>
+<h1 id="8、-参考网址"><a href="#8、-参考网址" class="headerlink" title="8、 参考网址"></a>8、 参考网址</h1><p><a href="http://www.freebuf.com/articles/5474.html" target="_blank" rel="external">http://www.freebuf.com/articles/5474.html</a><br><a href="http://www.freebuf.com/articles/system/110027.html" target="_blank" rel="external">http://www.freebuf.com/articles/system/110027.html</a><br><a href="https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/28.html" target="_blank" rel="external">https://wizardforcel.gitbooks.io/daxueba-kali-linux-tutorial/content/28.html</a><br><a href="http://m.www.cnblogs.com/spacepirate/p/4113626.html" target="_blank" rel="external">http://m.www.cnblogs.com/spacepirate/p/4113626.html</a><br><a href="http://atic-tw.blogspot.com/2013/12/kali-openvas.html" target="_blank" rel="external">http://atic-tw.blogspot.com/2013/12/kali-openvas.html</a><br><a href="http://www.scap.org.cn/article_home_about-scap.html" target="_blank" rel="external">http://www.scap.org.cn/article_home_about-scap.html</a><br><a href="http://wiki.scap.org.cn/scap/overview" target="_blank" rel="external">http://wiki.scap.org.cn/scap/overview</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2017/02/14/Python/pip-技巧/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -378,355 +1175,6 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/02/14/Python/pip-技巧/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 Python 字符串/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 Python 字符串/" itemprop="url">Python 字符串 匹配</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="删除字符串中不需要的字符"><a href="#删除字符串中不需要的字符" class="headerlink" title="删除字符串中不需要的字符"></a>删除字符串中不需要的字符</h2><p>解决方案<br>strip() 方法能用于删除开始或结尾的字符。 lstrip() 和 rstrip() 分别从左和从右执行删除操作。 默认情况下，这些方法会去除空白字符，但是你也可以指定其他字符。比如：<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Python/2017-2-10 Python 字符串/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/闹人的linux 输入中文/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Fix/闹人的linux 输入中文/" itemprop="url">闹人的linux 输入中文</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p> parrot 更新后可能会出现界面变成英文 的现象<br> 这种现象可能是因为中文支持出现错误 谁知道呢<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/闹人的linux 输入中文/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/修复ubunut桌面/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Fix/修复ubunut桌面/" itemprop="url">修复ubunut桌面</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>，按下Ctrl+Alt+F2。这会让你进入一个命令行界面而不是默认的用户桌面界面。切换到命令行界面后，输入用户名和密码登录之后，使用下面的命令重装Unity桌面环境：</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/修复ubunut桌面/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -892,7 +1340,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/linux 命令/git 命令/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 grequest 记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -911,7 +1359,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/linux 命令/git 命令/" itemprop="url">git 命令</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 grequest 记录/" itemprop="url">Grequest 记录</a></h1>
         
 
         <div class="post-meta">
@@ -959,10 +1407,358 @@
 
       
         
-          <h2 id="git-操作命令"><a href="#git-操作命令" class="headerlink" title="git 操作命令"></a>git 操作命令</h2>
+          <h1 id="Grequest-记录"><a href="#Grequest-记录" class="headerlink" title="Grequest 记录"></a>Grequest 记录</h1><p>GRequests: Asynchronous Requests</p>
+<p>GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.<br>异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/linux 命令/git 命令/#more" rel="contents">
+            <a class="btn" href="/2014/03/03/Python/2017-2-10 grequest 记录/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 python生成器 迭代器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 python生成器 迭代器/" itemprop="url">python生成器 迭代器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
+                2014/03/03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列表生成式</span></div><div class="line">&gt;&gt;&gt; L = [x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(10)]</div><div class="line">&gt;&gt;&gt; L</div><div class="line">[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</div><div class="line"></div><div class="line"><span class="comment"># 生成器</span></div><div class="line">&gt;&gt;&gt; g = (x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(10))</div><div class="line">&gt;&gt;&gt; g</div><div class="line">&lt;generator object &lt;genexpr&gt; at 0x104feab40&gt;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/Django 分页功能的实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/03/Python/Django 分页功能的实现/" itemprop="url">Django 分页功能的实现</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
+                2014/03/03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Python/Django 分页功能的实现/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/Django 数据库版本迁移/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/03/Python/Django 数据库版本迁移/" itemprop="url">Django 数据库版本迁移</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
+                2014/03/03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Django-版本迁移"><a href="#Django-版本迁移" class="headerlink" title="Django 版本迁移"></a>Django 版本迁移</h1>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Python/Django 数据库版本迁移/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1124,7 +1920,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/Django 分页功能的实现/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/CrossOver 破解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -1143,7 +1939,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Python/Django 分页功能的实现/" itemprop="url">Django 分页功能的实现</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Fix/CrossOver 破解/" itemprop="url">CrossOver 破解</a></h1>
         
 
         <div class="post-meta">
@@ -1192,11 +1988,11 @@
       
         
           <blockquote>
-<p>Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。</p>
+<p>傻瓜式安装exe， Crossover 不是免费的 网上找到一份破解教程， </p>
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Python/Django 分页功能的实现/#more" rel="contents">
+            <a class="btn" href="/2014/03/03/Fix/CrossOver 破解/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1242,7 +2038,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 python生成器 迭代器/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -1261,7 +2057,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 python生成器 迭代器/" itemprop="url">python生成器 迭代器</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/" itemprop="url">dpkg 安装 deb 包 提示amd64 i386内核不符解决方法</a></h1>
         
 
         <div class="post-meta">
@@ -1309,123 +2105,14 @@
 
       
         
-          
-            <a id="more"></a>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列表生成式</span></div><div class="line">&gt;&gt;&gt; L = [x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(10)]</div><div class="line">&gt;&gt;&gt; L</div><div class="line">[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</div><div class="line"></div><div class="line"><span class="comment"># 生成器</span></div><div class="line">&gt;&gt;&gt; g = (x * x <span class="keyword">for</span> x <span class="keyword">in</span> range(10))</div><div class="line">&gt;&gt;&gt; g</div><div class="line">&lt;generator object &lt;genexpr&gt; at 0x104feab40&gt;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/Django 数据库版本迁移/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Python/Django 数据库版本迁移/" itemprop="url">Django 数据库版本迁移</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Django-版本迁移"><a href="#Django-版本迁移" class="headerlink" title="Django 版本迁移"></a>Django 版本迁移</h1>
+          <blockquote>
+<p>升级系统后提示 dpkg 安装 deb 包 提示amd64 i386内核不符解决方法 </p>
+</blockquote>
+<p>错误如下</p>
+<p>dpkg: 处理归档 teamviewer_12.0.71510_i386.deb (–install)时出错：<br> 软件包体系架构(i386)与本机系统体系结构(amd64)不符<br>在处理时有错误发生：<br> teamviewer_12.0.71510_i386.deb</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Python/Django 数据库版本迁移/#more" rel="contents">
+            <a class="btn" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1471,7 +2158,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 Pycurl 记录/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/python import mysql 出错/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -1490,7 +2177,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 Pycurl 记录/" itemprop="url">Pycurl 记录</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Fix/python import mysql 出错/" itemprop="url">python import mysql 出错</a></h1>
         
 
         <div class="post-meta">
@@ -1538,13 +2225,249 @@
 
       
         
-          
-            <a id="more"></a>
-<h1 id="Pycurl"><a href="#Pycurl" class="headerlink" title="Pycurl"></a>Pycurl</h1><p>Pycurl包是一个libcurl的Python接口，它是由C语言编写的。与urllib相比，它的速度要快很多。</p>
-<p>Libcurl 是一个支持FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 和 LDAP的客户端URL传输库.libcurl也支持HTTPS认证,HTTP POST,HTTP PUT,FTP上传,代理,Cookies,基本身份验证,FTP文件断点继传,HTTP代理通道等等。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pycurl</div><div class="line"><span class="keyword">import</span> StringIO</div><div class="line"></div><div class="line">c = pycurl.Curl() <span class="comment">#创建一个同libcurl中的CURL处理器相对应的Curl对象</span></div><div class="line"></div><div class="line">b = StringIO.StringIO()</div><div class="line"></div><div class="line"><span class="comment">#c.setopt(c.POST, 1)</span></div><div class="line"></div><div class="line">c.setopt(pycurl.URL, url) <span class="comment">#设置要访问的网址 url = "http://www.cnn.com"</span></div><div class="line"></div><div class="line"><span class="comment">#写的回调</span></div><div class="line">c.setopt(pycurl.WRITEFUNCTION, b.write)</div><div class="line">c.setopt(pycurl.FOLLOWLOCATION, <span class="number">1</span>) <span class="comment">#参数有1、2</span></div><div class="line"></div><div class="line"><span class="comment">#最大重定向次数,可以预防重定向陷阱</span></div><div class="line">c.setopt(pycurl.MAXREDIRS, <span class="number">5</span>)</div><div class="line"><span class="comment">#连接超时设置</span></div><div class="line">c.setopt(pycurl.CONNECTTIMEOUT, <span class="number">60</span>) <span class="comment">#链接超时</span></div><div class="line"><span class="comment"># c.setopt(pycurl.TIMEOUT, 300) #下载超时</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(pycurl.HEADER, True)</span></div><div class="line"><span class="comment"># c.setopt(c.HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded","X-Requested-With:XMLHttpRequest","Cookie:"+set_cookie[0]])</span></div><div class="line"><span class="comment">#模拟浏览器</span></div><div class="line">c.setopt(pycurl.USERAGENT, <span class="string">"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)"</span>)</div><div class="line"><span class="comment"># c.setopt(pycurl.AUTOREFERER,1)</span></div><div class="line"><span class="comment"># c.setopt(c.REFERER, url)</span></div><div class="line"></div><div class="line"><span class="comment"># cookie设置</span></div><div class="line"><span class="comment"># Option -b/--cookie &lt;name=string/file&gt; Cookie string or file to read cookies from</span></div><div class="line"><span class="comment"># Note: must be a string, not a file object.</span></div><div class="line"><span class="comment"># c.setopt(pycurl.COOKIEFILE, "cookie_file_name")</span></div><div class="line"></div><div class="line"><span class="comment"># Option -c/--cookie-jar Write cookies to this file after operation</span></div><div class="line"><span class="comment"># Note: must be a string, not a file object.</span></div><div class="line"><span class="comment"># c.setopt(pycurl.COOKIEJAR, "cookie_file_name")</span></div><div class="line"></div><div class="line"><span class="comment"># Option -d/--data HTTP POST data</span></div><div class="line">post_data_dic = &#123;<span class="string">"name"</span>:<span class="string">"value"</span>&#125;</div><div class="line">c.setopt(c.POSTFIELDS, urllib.urlencode(post_data_dic))</div><div class="line"></div><div class="line"><span class="comment">#设置代理</span></div><div class="line"><span class="comment"># c.setopt(pycurl.PROXY, ‘http://11.11.11.11:8080′)</span></div><div class="line"><span class="comment"># c.setopt(pycurl.PROXYUSERPWD, ‘aaa:aaa’)</span></div><div class="line"><span class="comment">#不明确作用</span></div><div class="line"><span class="comment"># c.setopt(pycurl.HTTPPROXYTUNNEL,1) #隧道代理</span></div><div class="line"><span class="comment"># c.setopt(pycurl.NOSIGNAL, 1)</span></div><div class="line"></div><div class="line"><span class="comment">#设置post请求， 上传文件的字段名 上传的文件</span></div><div class="line"><span class="comment">#post_file = "/home/ubuntu/avatar.jpg"</span></div><div class="line">c.setopt(c.HTTPPOST, [(<span class="string">"textname"</span>, (c.FORM_FILE, post_file))])</div><div class="line"></div><div class="line"><span class="comment"># 调试回调.调试信息类型是一个调试信 息的整数标示类型.在这个回调被调用时VERBOSE选项必须可用</span></div><div class="line"><span class="comment"># c.setopt(c.VERBOSE, 1) #verbose 详细</span></div><div class="line"><span class="comment"># c.setopt(c.DEBUGFUNCTION, test)</span></div><div class="line"></div><div class="line"><span class="comment"># f = open("body", "wb")</span></div><div class="line"><span class="comment"># c.setopt(c.WRITEDATA, f)</span></div><div class="line"><span class="comment"># h = open("header", "wb")</span></div><div class="line"><span class="comment"># c.setopt(c.WRITEHEADER, h)</span></div><div class="line"><span class="comment"># print "Header is in file 'header', body is in file 'body'"</span></div><div class="line"><span class="comment"># f.close()</span></div><div class="line"><span class="comment"># h.close()</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(c.NOPROGRESS, 0)</span></div><div class="line"><span class="comment"># c.setopt(c.PROGRESSFUNCTION, progress)</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(c.OPT_FILETIME, 1)</span></div><div class="line"></div><div class="line"><span class="comment">#访问,阻塞到访问结束</span></div><div class="line">c.perform() <span class="comment">#执行上述访问网址的操作</span></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"HTTP-code:"</span>, c.getinfo(c.HTTP_CODE) <span class="comment">#打印出 200(HTTP状态码)</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Total-time:"</span>, c.getinfo(c.TOTAL_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Download speed: %.2f bytes/second"</span> % c.getinfo(c.SPEED_DOWNLOAD)</div><div class="line"><span class="keyword">print</span> <span class="string">"Document size: %d bytes"</span> % c.getinfo(c.SIZE_DOWNLOAD)</div><div class="line"><span class="keyword">print</span> <span class="string">"Effective URL:"</span>, c.getinfo(c.EFFECTIVE_URL)</div><div class="line"><span class="keyword">print</span> <span class="string">"Content-type:"</span>, c.getinfo(c.CONTENT_TYPE)</div><div class="line"><span class="keyword">print</span> <span class="string">"Namelookup-time:"</span>, c.getinfo(c.NAMELOOKUP_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Redirect-time:"</span>, c.getinfo(c.REDIRECT_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Redirect-count:"</span>, c.getinfo(c.REDIRECT_COUNT)</div><div class="line"></div><div class="line"><span class="comment"># epoch = c.getinfo(c.INFO_FILETIME)</span></div><div class="line"><span class="comment">#print "Filetime: %d (%s)" % (epoch, time.ctime(epoch))</span></div><div class="line"></div><div class="line">html = b.getvalue()</div><div class="line">print(html)</div><div class="line"></div><div class="line">b.close()</div><div class="line">c.close()</div></pre></td></tr></table></figure></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> grequests</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">pattern = re.compile(<span class="string">r'((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'</span>)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url</span><span class="params">(html)</span>:</span></div><div class="line">    m = re.findall(<span class="string">r'(https|http?:\/\/[^\s]+.com|cn|org)'</span>, html)</div><div class="line">    <span class="comment"># m = re.findall(r'^https?://[\d\-a-zA-Z]+(\.[\d\-a-zA-Z]+)*/?$', html)</span></div><div class="line">    <span class="keyword">return</span> (m)</div><div class="line"></div><div class="line">html= requests.get(<span class="string">"http://www.best918.com/"</span>).text</div><div class="line">urls = get_url(html)</div><div class="line">gen = (grequests.get(i, proxies=proxies, timeout=<span class="number">3</span>)  <span class="keyword">for</span> i <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> grequests.imap(gen, size=<span class="number">200</span>):</div><div class="line">    print(i.url)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> get_url(i.text):</div><div class="line">        urls.append(k)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span>  grequests</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">start_time = time.time()</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">  <span class="string">"https"</span>: <span class="string">"https://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">urls = [</div><div class="line">        <span class="string">"http://www.baidu.com"</span>,</div><div class="line">        <span class="string">"http://www.google.com"</span>,</div><div class="line">    ]</div><div class="line"></div><div class="line">rs = (grequests.get(u, timeout=<span class="number">3</span>, proxies=proxies) <span class="keyword">for</span> u <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> grequests.imap(rs, size=<span class="number">200</span>):</div><div class="line">    print(r.content)</div><div class="line"></div><div class="line">duration = time.time() - start_time</div><div class="line"><span class="keyword">print</span> (<span class="string">'pycurl takes %s seconds  '</span> % (duration))</div></pre></td></tr></table></figure>
+          <blockquote>
+<p> 升级系统后 不知道怎么回事 import mysql突然提示<br> ImportError: libmysqlclient.so.16: cannot open shared object file: No such file or directory<br> 刚好这几天有事 这种感觉就像在挖坑</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Fix/python import mysql 出错/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/修复ubunut桌面/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/03/Fix/修复ubunut桌面/" itemprop="url">修复ubunut桌面</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
+                2014/03/03
+              </time>
+            
+
+            
+
+            
+          </span>
 
           
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>，按下Ctrl+Alt+F2。这会让你进入一个命令行界面而不是默认的用户桌面界面。切换到命令行界面后，输入用户名和密码登录之后，使用下面的命令重装Unity桌面环境：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Fix/修复ubunut桌面/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/闹人的linux 输入中文/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/03/Fix/闹人的linux 输入中文/" itemprop="url">闹人的linux 输入中文</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
+                2014/03/03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p> parrot 更新后可能会出现界面变成英文 的现象<br> 这种现象可能是因为中文支持出现错误 谁知道呢<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Fix/闹人的linux 输入中文/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1817,7 +2740,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/qqq/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 Python 字符串/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -1836,7 +2759,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Fix/qqq/" itemprop="url">NO_PUBKEY _error</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 Python 字符串/" itemprop="url">Python 字符串 匹配</a></h1>
         
 
         <div class="post-meta">
@@ -1884,127 +2807,10 @@
 
       
         
-          
-            <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>W: GPG error: <a href="https://mirrors.tuna.tsinghua.edu.cn/parrot" target="_blank" rel="external">https://mirrors.tuna.tsinghua.edu.cn/parrot</a> parrot InRelease: The following signatures couldn’t be verified because the public key is not available: NO_PUBKEY D7427F070F4FC7A6</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><blockquote>
-<p>apt-key adv –recv-keys –keyserver keys.gnupg.net xChiavePubblicax</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/python import mysql 出错/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Fix/python import mysql 出错/" itemprop="url">python import mysql 出错</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p> 升级系统后 不知道怎么回事 import mysql突然提示<br> ImportError: libmysqlclient.so.16: cannot open shared object file: No such file or directory<br> 刚好这几天有事 这种感觉就像在挖坑</p>
-</blockquote>
+          <h2 id="删除字符串中不需要的字符"><a href="#删除字符串中不需要的字符" class="headerlink" title="删除字符串中不需要的字符"></a>删除字符串中不需要的字符</h2><p>解决方案<br>strip() 方法能用于删除开始或结尾的字符。 lstrip() 和 rstrip() 分别从左和从右执行删除操作。 默认情况下，这些方法会去除空白字符，但是你也可以指定其他字符。比如：<br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/python import mysql 出错/#more" rel="contents">
+            <a class="btn" href="/2014/03/03/Python/2017-2-10 Python 字符串/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -2050,7 +2856,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 Pycurl 记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -2069,7 +2875,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/" itemprop="url">dpkg 安装 deb 包 提示amd64 i386内核不符解决方法</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 Pycurl 记录/" itemprop="url">Pycurl 记录</a></h1>
         
 
         <div class="post-meta">
@@ -2117,253 +2923,13 @@
 
       
         
-          <blockquote>
-<p>升级系统后提示 dpkg 安装 deb 包 提示amd64 i386内核不符解决方法 </p>
-</blockquote>
-<p>错误如下</p>
-<p>dpkg: 处理归档 teamviewer_12.0.71510_i386.deb (–install)时出错：<br> 软件包体系架构(i386)与本机系统体系结构(amd64)不符<br>在处理时有错误发生：<br> teamviewer_12.0.71510_i386.deb</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 grequest 记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 grequest 记录/" itemprop="url">Grequest 记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
+          
+            <a id="more"></a>
+<h1 id="Pycurl"><a href="#Pycurl" class="headerlink" title="Pycurl"></a>Pycurl</h1><p>Pycurl包是一个libcurl的Python接口，它是由C语言编写的。与urllib相比，它的速度要快很多。</p>
+<p>Libcurl 是一个支持FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 和 LDAP的客户端URL传输库.libcurl也支持HTTPS认证,HTTP POST,HTTP PUT,FTP上传,代理,Cookies,基本身份验证,FTP文件断点继传,HTTP代理通道等等。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pycurl</div><div class="line"><span class="keyword">import</span> StringIO</div><div class="line"></div><div class="line">c = pycurl.Curl() <span class="comment">#创建一个同libcurl中的CURL处理器相对应的Curl对象</span></div><div class="line"></div><div class="line">b = StringIO.StringIO()</div><div class="line"></div><div class="line"><span class="comment">#c.setopt(c.POST, 1)</span></div><div class="line"></div><div class="line">c.setopt(pycurl.URL, url) <span class="comment">#设置要访问的网址 url = "http://www.cnn.com"</span></div><div class="line"></div><div class="line"><span class="comment">#写的回调</span></div><div class="line">c.setopt(pycurl.WRITEFUNCTION, b.write)</div><div class="line">c.setopt(pycurl.FOLLOWLOCATION, <span class="number">1</span>) <span class="comment">#参数有1、2</span></div><div class="line"></div><div class="line"><span class="comment">#最大重定向次数,可以预防重定向陷阱</span></div><div class="line">c.setopt(pycurl.MAXREDIRS, <span class="number">5</span>)</div><div class="line"><span class="comment">#连接超时设置</span></div><div class="line">c.setopt(pycurl.CONNECTTIMEOUT, <span class="number">60</span>) <span class="comment">#链接超时</span></div><div class="line"><span class="comment"># c.setopt(pycurl.TIMEOUT, 300) #下载超时</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(pycurl.HEADER, True)</span></div><div class="line"><span class="comment"># c.setopt(c.HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded","X-Requested-With:XMLHttpRequest","Cookie:"+set_cookie[0]])</span></div><div class="line"><span class="comment">#模拟浏览器</span></div><div class="line">c.setopt(pycurl.USERAGENT, <span class="string">"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)"</span>)</div><div class="line"><span class="comment"># c.setopt(pycurl.AUTOREFERER,1)</span></div><div class="line"><span class="comment"># c.setopt(c.REFERER, url)</span></div><div class="line"></div><div class="line"><span class="comment"># cookie设置</span></div><div class="line"><span class="comment"># Option -b/--cookie &lt;name=string/file&gt; Cookie string or file to read cookies from</span></div><div class="line"><span class="comment"># <span class="doctag">Note:</span> must be a string, not a file object.</span></div><div class="line"><span class="comment"># c.setopt(pycurl.COOKIEFILE, "cookie_file_name")</span></div><div class="line"></div><div class="line"><span class="comment"># Option -c/--cookie-jar Write cookies to this file after operation</span></div><div class="line"><span class="comment"># <span class="doctag">Note:</span> must be a string, not a file object.</span></div><div class="line"><span class="comment"># c.setopt(pycurl.COOKIEJAR, "cookie_file_name")</span></div><div class="line"></div><div class="line"><span class="comment"># Option -d/--data HTTP POST data</span></div><div class="line">post_data_dic = &#123;<span class="string">"name"</span>:<span class="string">"value"</span>&#125;</div><div class="line">c.setopt(c.POSTFIELDS, urllib.urlencode(post_data_dic))</div><div class="line"></div><div class="line"><span class="comment">#设置代理</span></div><div class="line"><span class="comment"># c.setopt(pycurl.PROXY, ‘http://11.11.11.11:8080′)</span></div><div class="line"><span class="comment"># c.setopt(pycurl.PROXYUSERPWD, ‘aaa:aaa’)</span></div><div class="line"><span class="comment">#不明确作用</span></div><div class="line"><span class="comment"># c.setopt(pycurl.HTTPPROXYTUNNEL,1) #隧道代理</span></div><div class="line"><span class="comment"># c.setopt(pycurl.NOSIGNAL, 1)</span></div><div class="line"></div><div class="line"><span class="comment">#设置post请求， 上传文件的字段名 上传的文件</span></div><div class="line"><span class="comment">#post_file = "/home/ubuntu/avatar.jpg"</span></div><div class="line">c.setopt(c.HTTPPOST, [(<span class="string">"textname"</span>, (c.FORM_FILE, post_file))])</div><div class="line"></div><div class="line"><span class="comment"># 调试回调.调试信息类型是一个调试信 息的整数标示类型.在这个回调被调用时VERBOSE选项必须可用</span></div><div class="line"><span class="comment"># c.setopt(c.VERBOSE, 1) #verbose 详细</span></div><div class="line"><span class="comment"># c.setopt(c.DEBUGFUNCTION, test)</span></div><div class="line"></div><div class="line"><span class="comment"># f = open("body", "wb")</span></div><div class="line"><span class="comment"># c.setopt(c.WRITEDATA, f)</span></div><div class="line"><span class="comment"># h = open("header", "wb")</span></div><div class="line"><span class="comment"># c.setopt(c.WRITEHEADER, h)</span></div><div class="line"><span class="comment"># print "Header is in file 'header', body is in file 'body'"</span></div><div class="line"><span class="comment"># f.close()</span></div><div class="line"><span class="comment"># h.close()</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(c.NOPROGRESS, 0)</span></div><div class="line"><span class="comment"># c.setopt(c.PROGRESSFUNCTION, progress)</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(c.OPT_FILETIME, 1)</span></div><div class="line"></div><div class="line"><span class="comment">#访问,阻塞到访问结束</span></div><div class="line">c.perform() <span class="comment">#执行上述访问网址的操作</span></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"HTTP-code:"</span>, c.getinfo(c.HTTP_CODE) <span class="comment">#打印出 200(HTTP状态码)</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Total-time:"</span>, c.getinfo(c.TOTAL_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Download speed: %.2f bytes/second"</span> % c.getinfo(c.SPEED_DOWNLOAD)</div><div class="line"><span class="keyword">print</span> <span class="string">"Document size: %d bytes"</span> % c.getinfo(c.SIZE_DOWNLOAD)</div><div class="line"><span class="keyword">print</span> <span class="string">"Effective URL:"</span>, c.getinfo(c.EFFECTIVE_URL)</div><div class="line"><span class="keyword">print</span> <span class="string">"Content-type:"</span>, c.getinfo(c.CONTENT_TYPE)</div><div class="line"><span class="keyword">print</span> <span class="string">"Namelookup-time:"</span>, c.getinfo(c.NAMELOOKUP_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Redirect-time:"</span>, c.getinfo(c.REDIRECT_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Redirect-count:"</span>, c.getinfo(c.REDIRECT_COUNT)</div><div class="line"></div><div class="line"><span class="comment"># epoch = c.getinfo(c.INFO_FILETIME)</span></div><div class="line"><span class="comment">#print "Filetime: %d (%s)" % (epoch, time.ctime(epoch))</span></div><div class="line"></div><div class="line">html = b.getvalue()</div><div class="line">print(html)</div><div class="line"></div><div class="line">b.close()</div><div class="line">c.close()</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> grequests</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">pattern = re.compile(<span class="string">r'((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'</span>)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url</span><span class="params">(html)</span>:</span></div><div class="line">    m = re.findall(<span class="string">r'(https|http?:\/\/[^\s]+.com|cn|org)'</span>, html)</div><div class="line">    <span class="comment"># m = re.findall(r'^https?://[\d\-a-zA-Z]+(\.[\d\-a-zA-Z]+)*/?$', html)</span></div><div class="line">    <span class="keyword">return</span> (m)</div><div class="line"></div><div class="line">html= requests.get(<span class="string">"http://www.best918.com/"</span>).text</div><div class="line">urls = get_url(html)</div><div class="line">gen = (grequests.get(i, proxies=proxies, timeout=<span class="number">3</span>)  <span class="keyword">for</span> i <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> grequests.imap(gen, size=<span class="number">200</span>):</div><div class="line">    print(i.url)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> get_url(i.text):</div><div class="line">        urls.append(k)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span>  grequests</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">start_time = time.time()</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">  <span class="string">"https"</span>: <span class="string">"https://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">urls = [</div><div class="line">        <span class="string">"http://www.baidu.com"</span>,</div><div class="line">        <span class="string">"http://www.google.com"</span>,</div><div class="line">    ]</div><div class="line"></div><div class="line">rs = (grequests.get(u, timeout=<span class="number">3</span>, proxies=proxies) <span class="keyword">for</span> u <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> grequests.imap(rs, size=<span class="number">200</span>):</div><div class="line">    print(r.content)</div><div class="line"></div><div class="line">duration = time.time() - start_time</div><div class="line"><span class="keyword">print</span> (<span class="string">'pycurl takes %s seconds  '</span> % (duration))</div></pre></td></tr></table></figure>
 
           
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="Grequest-记录"><a href="#Grequest-记录" class="headerlink" title="Grequest 记录"></a>Grequest 记录</h1><p>GRequests: Asynchronous Requests</p>
-<p>GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.<br>异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Python/2017-2-10 grequest 记录/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/CrossOver 破解/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Fix/CrossOver 破解/" itemprop="url">CrossOver 破解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>傻瓜式安装exe， Crossover 不是免费的 网上找到一份破解教程， </p>
-</blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/CrossOver 破解/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
         
       
     </div>
@@ -2400,7 +2966,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2445,7 +3011,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2458,7 +3024,7 @@
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
