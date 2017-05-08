@@ -153,6 +153,16 @@
 </script>
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?GP0okr2wxX";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -307,126 +317,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="yunpiao">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="偷得浮生半日闲">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/" itemprop="url">dpkg 安装 deb 包 提示amd64 i386内核不符解决方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
-                2014/03/03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>升级系统后提示 dpkg 安装 deb 包 提示amd64 i386内核不符解决方法 </p>
-</blockquote>
-<p>错误如下</p>
-<p>dpkg: 处理归档 teamviewer_12.0.71510_i386.deb (–install)时出错：<br> 软件包体系架构(i386)与本机系统体系结构(amd64)不符<br>在处理时有错误发生：<br> teamviewer_12.0.71510_i386.deb</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/闹人的linux 输入中文/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -544,7 +434,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/python import mysql 出错/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 python 性能分析 cProfile/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -563,7 +453,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Fix/python import mysql 出错/" itemprop="url">python import mysql 出错</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 python 性能分析 cProfile/" itemprop="url">python 性能分析 cProfile</a></h1>
         
 
         <div class="post-meta">
@@ -611,12 +501,130 @@
 
       
         
-          <blockquote>
-<p> 升级系统后 不知道怎么回事 import mysql突然提示<br> ImportError: libmysqlclient.so.16: cannot open shared object file: No such file or directory<br> 刚好这几天有事 这种感觉就像在挖坑</p>
+          <h4 id="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile-profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。"><a href="#Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile-profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。" class="headerlink" title="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。"></a>Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。</h4><h3 id="这三个性能分析模块的介绍如下："><a href="#这三个性能分析模块的介绍如下：" class="headerlink" title="这三个性能分析模块的介绍如下："></a>这三个性能分析模块的介绍如下：</h3><blockquote>
+<p>cProfile：基于lsprof的用C语言实现的扩展应用，运行开销比较合理，适合分析运行时间较长的程序，推荐使用这个模块；</p>
+<p>profile：纯Python实现的性能分析模块，接口和cProfile一致。但在分析程序时增加了很大的运行开销。不过，如果你想扩展profiler的功能，可以通过继承这个模块实现；</p>
+<p>hotshot：一个试验性的C模块，减少了性能分析时的运行开销，但是需要更长的数据后处理的次数。目前这个模块不再被维护，有可能在新版本中被弃用。</p>
 </blockquote>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2014/03/03/Fix/python import mysql 出错/#more" rel="contents">
+            <a class="btn" href="/2014/03/03/Python/2017-2-10 python 性能分析 cProfile/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/修复ubunut桌面/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2014/03/03/Fix/修复ubunut桌面/" itemprop="url">修复ubunut桌面</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-03-03T19:07:43+08:00">
+                2014/03/03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>，按下Ctrl+Alt+F2。这会让你进入一个命令行界面而不是默认的用户桌面界面。切换到命令行界面后，输入用户名和密码登录之后，使用下面的命令重装Unity桌面环境：</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Fix/修复ubunut桌面/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -777,7 +785,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Python/2017-2-10 Plan 设置 crontab python 接口/">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.github.io/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yunpiao">
@@ -796,7 +804,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2014/03/03/Python/2017-2-10 Plan 设置 crontab python 接口/" itemprop="url">Plan 设置 crontab python 接口</a></h1>
+                <a class="post-title-link" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/" itemprop="url">dpkg 安装 deb 包 提示amd64 i386内核不符解决方法</a></h1>
         
 
         <div class="post-meta">
@@ -844,11 +852,18 @@
 
       
         
-          
-            <a id="more"></a>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> plan <span class="keyword">import</span> Plan</div><div class="line"></div><div class="line">cron = Plan()</div><div class="line"></div><div class="line">cron.command(<span class="string">'ls /tmp'</span>, every=<span class="string">'1.day'</span>, at=<span class="string">'12:00'</span>)</div><div class="line">cron.command(<span class="string">'pwd'</span>, every=<span class="string">'2.month'</span>)</div><div class="line">cron.command(<span class="string">'date'</span>, every=<span class="string">'weekend'</span>)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    cron.run()</div></pre></td></tr></table></figure>
-
-          
+          <blockquote>
+<p>升级系统后提示 dpkg 安装 deb 包 提示amd64 i386内核不符解决方法 </p>
+</blockquote>
+<p>错误如下</p>
+<p>dpkg: 处理归档 teamviewer_12.0.71510_i386.deb (–install)时出错：<br> 软件包体系架构(i386)与本机系统体系结构(amd64)不符<br>在处理时有错误发生：<br> teamviewer_12.0.71510_i386.deb</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2014/03/03/Fix/dpkg 安装 deb 包 提示amd64 i386内核不符解决方法/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
