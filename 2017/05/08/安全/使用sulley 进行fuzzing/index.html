@@ -92,17 +92,19 @@
 
 
 
-<meta name="description" content="使用 sulley 进行fuzzing测试  1. 使用sulley 进行 fuzzing测试 python .server Fuzzing 对象 : python 中的 http.server 模块 环境: deepin 15.4 工具: sulley 框架  第一步. 构造fuzz数据文件采用sulley 默认的http_get.py 数据文件进行 Fuzzing12345678910111">
+<meta name="description" content="使用 sulley 进行fuzzing测试  1. 使用sulley 进行 fuzzing测试 python .server  Fuzzing 对象 : python 中的 http.server 模块 环境: deepin 15.4 工具: sulley 框架  第一步. 构造fuzz数据文件采用sulley 默认的http_get.py 数据文件进行 Fuzzing1234567891011">
 <meta name="keywords" content="fuzzing,sulley">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用sulley 进行fuzzing">
 <meta property="og:url" content="http://yunpiao.github.io/2017/05/08/安全/使用sulley 进行fuzzing/index.html">
 <meta property="og:site_name" content="偷得浮生半日闲">
-<meta property="og:description" content="使用 sulley 进行fuzzing测试  1. 使用sulley 进行 fuzzing测试 python .server Fuzzing 对象 : python 中的 http.server 模块 环境: deepin 15.4 工具: sulley 框架  第一步. 构造fuzz数据文件采用sulley 默认的http_get.py 数据文件进行 Fuzzing12345678910111">
-<meta property="og:updated_time" content="2017-05-08T07:49:53.055Z">
+<meta property="og:description" content="使用 sulley 进行fuzzing测试  1. 使用sulley 进行 fuzzing测试 python .server  Fuzzing 对象 : python 中的 http.server 模块 环境: deepin 15.4 工具: sulley 框架  第一步. 构造fuzz数据文件采用sulley 默认的http_get.py 数据文件进行 Fuzzing1234567891011">
+<meta property="og:image" content="https://www.github.com/yunpiao/md/raw/img/1494247434821.jpg">
+<meta property="og:updated_time" content="2017-05-08T12:44:19.127Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用sulley 进行fuzzing">
-<meta name="twitter:description" content="使用 sulley 进行fuzzing测试  1. 使用sulley 进行 fuzzing测试 python .server Fuzzing 对象 : python 中的 http.server 模块 环境: deepin 15.4 工具: sulley 框架  第一步. 构造fuzz数据文件采用sulley 默认的http_get.py 数据文件进行 Fuzzing12345678910111">
+<meta name="twitter:description" content="使用 sulley 进行fuzzing测试  1. 使用sulley 进行 fuzzing测试 python .server  Fuzzing 对象 : python 中的 http.server 模块 环境: deepin 15.4 工具: sulley 框架  第一步. 构造fuzz数据文件采用sulley 默认的http_get.py 数据文件进行 Fuzzing1234567891011">
+<meta name="twitter:image" content="https://www.github.com/yunpiao/md/raw/img/1494247434821.jpg">
 
 
 
@@ -355,8 +357,9 @@
       
         <blockquote>
 <p>使用 sulley 进行fuzzing测试</p>
-</blockquote>
-<h2 id="1-使用sulley-进行-fuzzing测试-python-server"><a href="#1-使用sulley-进行-fuzzing测试-python-server" class="headerlink" title="1. 使用sulley 进行 fuzzing测试 python .server"></a>1. 使用sulley 进行 fuzzing测试 python .server</h2><ul>
+<p><img src="https://www.github.com/yunpiao/md/raw/img/1494247434821.jpg" alt="enter description here" title="测试结构图"></p>
+<h2 id="1-使用sulley-进行-fuzzing测试-python-server"><a href="#1-使用sulley-进行-fuzzing测试-python-server" class="headerlink" title="1. 使用sulley 进行 fuzzing测试 python .server"></a>1. 使用sulley 进行 fuzzing测试 python .server</h2></blockquote>
+<ul>
 <li>Fuzzing 对象 : python 中的 http.server 模块</li>
 <li>环境: deepin 15.4</li>
 <li>工具: sulley 框架</li>
@@ -373,6 +376,7 @@
 <h3 id="第五步-开始Fuzing"><a href="#第五步-开始Fuzing" class="headerlink" title="第五步: 开始Fuzing"></a>第五步: 开始Fuzing</h3><p><code>&gt; python session.py</code></p>
 <p>session 显示如下　表示已经开始 fuzzing </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[2017-05-08 15:16:12,396] [ERROR] -&gt; current fuzz path:  -&gt; HTTP VERBS</div><div class="line">[2017-05-08 15:16:12,396] [ERROR] -&gt; fuzzed 0 of 114866 total cases</div><div class="line">[2017-05-08 15:16:12,495] [ERROR] -&gt; fuzzing 11018 of 82491</div><div class="line">[2017-05-08 15:16:12,498] [ERROR] -&gt; xmitting: [1.11018]</div><div class="line">[2017-05-08 15:16:12,499] [WARNING] -&gt; sleeping <span class="keyword">for</span> 1.000000 seconds</div><div class="line">[2017-05-08 15:16:13,518] [ERROR] -&gt; fuzzing 11019 of 82491</div><div class="line">[2017-05-08 15:16:13,527] [ERROR] -&gt; xmitting: [1.11019]</div><div class="line">[2017-05-08 15:16:13,528] [WARNING] -&gt; sleeping <span class="keyword">for</span> 1.000000 seconds</div><div class="line">[2017-05-08 15:16:14,554] [ERROR] -&gt; fuzzing 11020 of 82491</div><div class="line">[2017-05-08 15:16:14,558] [ERROR] -&gt; xmitting: [1.11020]</div><div class="line">[2017-05-08 15:16:14,559] [WARNING] -&gt; sleeping <span class="keyword">for</span> 1.000000 seconds</div><div class="line">[2017-05-08 15:16:14,727] [CRITICAL] -&gt; SIGINT received ... exiting</div></pre></td></tr></table></figure>
+<h2 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h2><p><a href="http://blog.sina.com.cn/s/blog_714c124f0101548r.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_714c124f0101548r.html</a><br><a href="https://wizardforcel.gitbooks.io/grey-hat-python/content/36.html" target="_blank" rel="external">https://wizardforcel.gitbooks.io/grey-hat-python/content/36.html</a><br><a href="http://bbs.pediy.com/thread-135764.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-135764.htm</a><br><a href="http://www.xlgps.com/article/400245.html" target="_blank" rel="external">http://www.xlgps.com/article/400245.html</a></p>
 
       
     </div>
@@ -549,7 +553,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用sulley-进行-fuzzing测试-python-server"><span class="nav-number">1.</span> <span class="nav-text">1. 使用sulley 进行 fuzzing测试 python .server</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步-构造fuzz数据文件"><span class="nav-number">1.1.</span> <span class="nav-text">第一步. 构造fuzz数据文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#采用sulley-默认的http-get-py-数据文件进行-Fuzzing"><span class="nav-number">1.1.1.</span> <span class="nav-text">采用sulley 默认的http_get.py 数据文件进行 Fuzzing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步-构造session"><span class="nav-number">1.2.</span> <span class="nav-text">第二步. 构造session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步-启动用于-fuzzing测试的-http-server-程序"><span class="nav-number">1.3.</span> <span class="nav-text">第三步. 启动用于 fuzzing测试的 http.server 程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步-开启网络监控"><span class="nav-number">1.4.</span> <span class="nav-text">第四步. 开启网络监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五步-开始Fuzing"><span class="nav-number">1.5.</span> <span class="nav-text">第五步: 开始Fuzing</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用sulley-进行-fuzzing测试-python-server"><span class="nav-number">1.</span> <span class="nav-text">1. 使用sulley 进行 fuzzing测试 python .server</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步-构造fuzz数据文件"><span class="nav-number">1.1.</span> <span class="nav-text">第一步. 构造fuzz数据文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#采用sulley-默认的http-get-py-数据文件进行-Fuzzing"><span class="nav-number">1.1.1.</span> <span class="nav-text">采用sulley 默认的http_get.py 数据文件进行 Fuzzing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步-构造session"><span class="nav-number">1.2.</span> <span class="nav-text">第二步. 构造session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步-启动用于-fuzzing测试的-http-server-程序"><span class="nav-number">1.3.</span> <span class="nav-text">第三步. 启动用于 fuzzing测试的 http.server 程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步-开启网络监控"><span class="nav-number">1.4.</span> <span class="nav-text">第四步. 开启网络监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五步-开始Fuzing"><span class="nav-number">1.5.</span> <span class="nav-text">第五步: 开始Fuzing</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考网址"><span class="nav-number">2.</span> <span class="nav-text">参考网址</span></a></li></ol></div>
             
 
           </div>

@@ -477,8 +477,9 @@ CNAME    @    默认    yunpiao.github.io    --    10分钟        修改|暂停
           
             <blockquote>
 <p>使用 sulley 进行fuzzing测试</p>
-</blockquote>
-<h2 id="1-使用sulley-进行-fuzzing测试-python-server"><a href="#1-使用sulley-进行-fuzzing测试-python-server" class="headerlink" title="1. 使用sulley 进行 fuzzing测试 python .server"></a>1. 使用sulley 进行 fuzzing测试 python .server</h2><ul>
+<p><img src="https://www.github.com/yunpiao/md/raw/img/1494247434821.jpg" alt="enter description here" title="测试结构图"></p>
+<h2 id="1-使用sulley-进行-fuzzing测试-python-server"><a href="#1-使用sulley-进行-fuzzing测试-python-server" class="headerlink" title="1. 使用sulley 进行 fuzzing测试 python .server"></a>1. 使用sulley 进行 fuzzing测试 python .server</h2></blockquote>
+<ul>
 <li>Fuzzing 对象 : python 中的 http.server 模块</li>
 <li>环境: deepin 15.4</li>
 <li>工具: sulley 框架</li>
@@ -495,6 +496,7 @@ CNAME    @    默认    yunpiao.github.io    --    10分钟        修改|暂停
 <h3 id="第五步-开始Fuzing"><a href="#第五步-开始Fuzing" class="headerlink" title="第五步: 开始Fuzing"></a>第五步: 开始Fuzing</h3><p><code>&gt; python session.py</code></p>
 <p>session 显示如下　表示已经开始 fuzzing </p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[2017-05-08 15:16:12,396] [ERROR] -&gt; current fuzz path:  -&gt; HTTP VERBS</div><div class="line">[2017-05-08 15:16:12,396] [ERROR] -&gt; fuzzed 0 of 114866 total cases</div><div class="line">[2017-05-08 15:16:12,495] [ERROR] -&gt; fuzzing 11018 of 82491</div><div class="line">[2017-05-08 15:16:12,498] [ERROR] -&gt; xmitting: [1.11018]</div><div class="line">[2017-05-08 15:16:12,499] [WARNING] -&gt; sleeping <span class="keyword">for</span> 1.000000 seconds</div><div class="line">[2017-05-08 15:16:13,518] [ERROR] -&gt; fuzzing 11019 of 82491</div><div class="line">[2017-05-08 15:16:13,527] [ERROR] -&gt; xmitting: [1.11019]</div><div class="line">[2017-05-08 15:16:13,528] [WARNING] -&gt; sleeping <span class="keyword">for</span> 1.000000 seconds</div><div class="line">[2017-05-08 15:16:14,554] [ERROR] -&gt; fuzzing 11020 of 82491</div><div class="line">[2017-05-08 15:16:14,558] [ERROR] -&gt; xmitting: [1.11020]</div><div class="line">[2017-05-08 15:16:14,559] [WARNING] -&gt; sleeping <span class="keyword">for</span> 1.000000 seconds</div><div class="line">[2017-05-08 15:16:14,727] [CRITICAL] -&gt; SIGINT received ... exiting</div></pre></td></tr></table></figure>
+<h2 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h2><p><a href="http://blog.sina.com.cn/s/blog_714c124f0101548r.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_714c124f0101548r.html</a><br><a href="https://wizardforcel.gitbooks.io/grey-hat-python/content/36.html" target="_blank" rel="external">https://wizardforcel.gitbooks.io/grey-hat-python/content/36.html</a><br><a href="http://bbs.pediy.com/thread-135764.htm" target="_blank" rel="external">http://bbs.pediy.com/thread-135764.htm</a><br><a href="http://www.xlgps.com/article/400245.html" target="_blank" rel="external">http://www.xlgps.com/article/400245.html</a></p>
 
           
         
@@ -616,7 +618,7 @@ CNAME    @    默认    yunpiao.github.io    --    10分钟        修改|暂停
 <p>之后下载sulley目录<br>git clone <a href="https://github.com/Bit9/sulley.git" target="_blank" rel="external">https://github.com/Bit9/sulley.git</a> sulley<br>由于在linux 还需要相关依赖<br>所以下载<br><img src="./attachments/vdb_20120806.zip" alt="右键　另存为" title="vdb_20120806"></p>
 <p>解压vdb在sulley 的父目录下 即跟sulley 处于同一目录</p>
 <p>最后的目录结构 </p>
-<p>.<br>├── sulley<br>│   ├── archived_fuzzies<br>│   ├── AUTHORS.txt<br>│   ├── CONTRIBUTORS.txt<br>│   ├── docs<br>│   ├── E:\Python25\Sulley\audits\wftpserver.session<br>│   ├── ftp.py<br>│   ├── ftp.pyc<br>│   ├── ftp_session.py<br>│   ├── <strong>init</strong>.py<br>│   ├── installer<br>│   ├── INSTALL.txt<br>│   ├── LICENSE.txt<br>│   ├── network_monitor.py<br>│   ├── process_monitor.py<br>│   ├── README.md<br>│   ├── requests<br>│   ├── session_test.udg<br>│   ├── sulley<br>│   ├── unit_test.py<br>│   ├── unit_tests<br>│   ├── utils<br>│   ├── vmcontrol.py<br>│   └── wftpserver.session<br>└── vdb<br>    ├── cobra<br>    ├── docs<br>    ├── Elf<br>    ├── envi<br>    ├── mach<br>    ├── PE<br>    ├── README<br>    ├── scripts<br>    ├── vdb<br>    ├── vdbbin<br>    ├── visgraph<br>    ├── vqt<br>    ├── vstruct<br>    ├── vtrace<br>    └── vwidget</p>
+<p>.<br>├── sulley<br>│   ├── archived_fuzzies<br>│   ├── AUTHORS.txt<br>│   ├── CONTRIBUTORS.txt<br>│   ├── docs<br>│   ├── ftp_session.py<br>│   ├── <strong>init</strong>.py<br>│   ├── installer<br>│   ├── INSTALL.txt<br>│   ├── LICENSE.txt<br>│   ├── network_monitor.py<br>│   ├── process_monitor.py<br>│   ├── README.md<br>│   ├── requests<br>│   ├── session_test.udg<br>│   ├── sulley<br>│   ├── unit_test.py<br>│   ├── unit_tests<br>│   ├── utils<br>│   ├── vmcontrol.py<br>│   └── wftpserver.session<br>└── vdb<br>    ├── cobra<br>    ├── docs<br>    ├── Elf<br>    ├── envi<br>    ├── mach<br>    ├── PE<br>    ├── README<br>    ├── scripts<br>    ├── vdb<br>    ├── vdbbin<br>    ├── visgraph<br>    ├── vqt<br>    ├── vstruct<br>    ├── vtrace<br>    └── vwidget</p>
 <h2 id="安装python-环境"><a href="#安装python-环境" class="headerlink" title="安装python 环境"></a>安装python 环境</h2><p>python 环境下需要安装 distorm 包<br>pip install  distorm3<br>pip install pcapy<br>pip install </p>
 <h2 id="sulley-目录结构"><a href="#sulley-目录结构" class="headerlink" title="sulley 目录结构"></a>sulley 目录结构</h2><blockquote>
 <p>在Sulley的目录结构中存在着一些技巧。对目录结构进行维护将可以确保当你使用用户定义的复杂类型、请求以及工具对模糊器进行扩展时，目录中的所有内容仍然是有组织的。下面的层次关系指出了你需要了解的有关目录结构的一些内容：</p>
@@ -703,7 +705,7 @@ CNAME    @    默认    yunpiao.github.io    --    10分钟        修改|暂停
 <li><p>vmcontrol.py：包含PedRPC驱动的VMWare控制代理。</p>
 </li>
 </ul>
-<h4 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h4><p><a href="http://blog.163.com/wuzhiyong_430/blog/static/48883052201351310184631" target="_blank" rel="external">http://blog.163.com/wuzhiyong_430/blog/static/48883052201351310184631</a><br><a href="https://github.com/Bit9/sulley/blob/master/INSTALL.txt" target="_blank" rel="external">https://github.com/Bit9/sulley/blob/master/INSTALL.txt</a><br><a href="http://download.csdn.net/download/xiaoliyaqian/8402057" target="_blank" rel="external">http://download.csdn.net/download/xiaoliyaqian/8402057</a></p>
+<h4 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h4><p><a href="http://blog.163.com/wuzhiyong_430/blog/static/48883052201351310184631" target="_blank" rel="external">http://blog.163.com/wuzhiyong_430/blog/static/48883052201351310184631</a><br><a href="https://github.com/Bit9/sulley/blob/master/INSTALL.txt" target="_blank" rel="external">https://github.com/Bit9/sulley/blob/master/INSTALL.txt</a><br><a href="http://download.csdn.net/download/xiaoliyaqian/8402057" target="_blank" rel="external">http://download.csdn.net/download/xiaoliyaqian/8402057</a><br><a href="https://github.com/OpenRCE/sulley/issues/51" target="_blank" rel="external">https://github.com/OpenRCE/sulley/issues/51</a><br><a href="https://github.com/Bit9/sulley" target="_blank" rel="external">https://github.com/Bit9/sulley</a></p>
 
           
         
