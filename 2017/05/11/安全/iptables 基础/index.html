@@ -96,17 +96,20 @@
 
 
 
-<meta name="description" content="说明">
+<meta name="description" content="iptables 是一个配置Linux 内核防火墙 的命令行工具，是netfilter 项目的一部分。术语iptables 也经常代指该内核级防火墙">
 <meta name="keywords" content="安全,attach">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iptables 基础">
 <meta property="og:url" content="http://yunpiao.pub/2017/05/11/安全/iptables 基础/index.html">
 <meta property="og:site_name" content="偷得浮生半日闲">
-<meta property="og:description" content="说明">
-<meta property="og:updated_time" content="2017-05-11T14:23:28.371Z">
+<meta property="og:description" content="iptables 是一个配置Linux 内核防火墙 的命令行工具，是netfilter 项目的一部分。术语iptables 也经常代指该内核级防火墙">
+<meta property="og:image" content="https://www.github.com/yunpiao/md/raw/img/1494555382449.jpg">
+<meta property="og:image" content="http://man.lupaworld.com/content/network/iptables-tutorial-cn-1.1.19_files/tables_traverse.jpg">
+<meta property="og:updated_time" content="2017-05-12T02:59:27.511Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iptables 基础">
-<meta name="twitter:description" content="说明">
+<meta name="twitter:description" content="iptables 是一个配置Linux 内核防火墙 的命令行工具，是netfilter 项目的一部分。术语iptables 也经常代指该内核级防火墙">
+<meta name="twitter:image" content="https://www.github.com/yunpiao/md/raw/img/1494555382449.jpg">
 
 
 
@@ -358,9 +361,80 @@
 
       
         <blockquote>
-<p>说明</p>
+<p>iptables 是一个配置Linux 内核防火墙 的命令行工具，是netfilter 项目的一部分。术语iptables 也经常代指该内核级防火墙</p>
 </blockquote>
 <a id="more"></a>
+<p><img src="https://www.github.com/yunpiao/md/raw/img/1494555382449.jpg" alt="enter description here" title="1494555382449"><br>iptables 表（Tables）与链(Chains)</p>
+<p>iptables具有Filter,NAT,Mangle,Raw四种内建表。</p>
+<h3 id="1-filter表"><a href="#1-filter表" class="headerlink" title="1. filter表"></a>1. filter表</h3><p><code>Filter</code>表示iptables的默认表，它具有三种内建链：</p>
+<ul>
+<li>INPUT链 - 处理来自外部的数据。</li>
+<li>OUTPUT链 - 处理向外发送的数据。</li>
+<li>FORWARD链 - 将数据转发到本机的其他网卡设备上。</li>
+</ul>
+<h3 id="2-nat表"><a href="#2-nat表" class="headerlink" title="2. nat表"></a>2. nat表</h3><p><code>nat</code>表有三种内建链：</p>
+<ul>
+<li>PREROUTING链 - 处理刚到达本机并在路由转发前的数据包。它会转换数据包中的目标IP地址，通常用于<strong>DNAT</strong>。</li>
+<li>POSTROUTING链 - 处理即将离开本机的数据包。它会转换数据包中的源IP地址，通常用于<strong>SNAT</strong>。</li>
+<li>OUTPUT链 - 处理本机产生的数据包。</li>
+</ul>
+<h3 id="3-mangle表"><a href="#3-mangle表" class="headerlink" title="3. mangle表"></a>3. mangle表</h3><p><code>mangle</code>表用于指定如何处理数据包。它能改变TCP头中的QoS位。<code>mangle</code>表具有5个内建链。</p>
+<ul>
+<li>PREROUTING</li>
+<li>OUTPUT</li>
+<li>FORWARD</li>
+<li>INPUT</li>
+<li>POSTROUTING</li>
+</ul>
+<p>下面是iptables的三个内建表： </p>
+<h2 id="链的操作"><a href="#链的操作" class="headerlink" title="链的操作"></a>链的操作</h2><h3 id="1-mangle表"><a href="#1-mangle表" class="headerlink" title="1. mangle表"></a>1. mangle表</h3><p>强烈建议你<strong>不要在这个表里做任何过滤</strong>，不管是DNAT，SNAT或者Masquerade。<br>以下是mangle表中仅有的几种操作：</p>
+<ul>
+<li>TOS</li>
+<li>TTL</li>
+<li>MARK</li>
+</ul>
+<p><strong>TOS</strong>操作用来设置或改变数据包的<strong>服务类型域</strong>。这常用来设置网络上的数据包如何被路由等策略。它在Internet上还不能使用，而且很多路由器不会注意到这个域值。<br><strong>TTL</strong>操作用来改变数据包的<strong>生存时间域</strong>，我们可以让所有数据吧只有一个特殊的TTL。可以欺骗一些ISP。<br><strong>MARK</strong>用来给包设置特殊的标记。它并不改变包的内容，只是在内核中对相应的包加入标记。</p>
+<h3 id="2-nat表-1"><a href="#2-nat表-1" class="headerlink" title="2. nat表"></a>2. nat表</h3><p>此表仅用于NAT，也就是转换包的源或者目标地址。注意，只有流的第一个包会被这个链匹配，其后的包会被自动做相同的处理。实际操作分类：</p>
+<ul>
+<li>DNAT</li>
+<li>SNAT</li>
+<li>MASQUERADE</li>
+</ul>
+<p><strong>DNAT</strong>操作主要用在这样一种情况，你有一个合法的IP地址，要把对防火墙的访问重定向到其他的机子上。也就是说，我们改变的是数据包的目标地址，以使包能重路由到某台主机。<br><strong>SNAT</strong>改变包的源地址，这极大程度上可以隐藏你的本地网络。一个很好的例子是我们知道防火墙的外部地址，但必须用这个地址替换本地网络地址。如果使用类似192.168.0.0/24这样的地址，是不会从Internet得到任何回应的。<br><strong>MASQUERADE</strong>的作用如其名字一样，只是计算机的符合稍微多一点。因为对每个匹配的包，<strong>MASQUERADE</strong>都要查找可用的IP地址，而不是像SNAT用的IP地址是配置好的。当然，这也有好好处，就是我们可以通过PPP、PPPOE\SLIP等拨号得到的地址，这些地址可能是由ISP的DHCO随机分配的。</p>
+<h3 id="3-filter表"><a href="#3-filter表" class="headerlink" title="3. filter表"></a>3. filter表</h3><p>filter表用来过滤数据包，我们可以在任何时候匹配包并过滤它们。我们就是在这里根据包的内容对包做DROP或者ACCEPT的。当然，我们也可以预先在其他地方做些过滤，但是这个表才是设计用来过滤的。几乎所有的target都可以在这儿使用。</p>
+<h2 id="数据包流程"><a href="#数据包流程" class="headerlink" title="数据包流程"></a>数据包流程</h2><p><a href="http://man.lupaworld.com/content/network/iptables-tutorial-cn-1.1.19.html#HOWTOREAD" target="_blank" rel="external"><img src="http://man.lupaworld.com/content/network/iptables-tutorial-cn-1.1.19_files/tables_traverse.jpg" alt="数据包流程"></a></p>
+<h2 id="iptables-规则（Rules）"><a href="#iptables-规则（Rules）" class="headerlink" title="iptables 规则（Rules）"></a>iptables 规则（Rules）</h2><ul>
+<li>Rules包括一个条件和一个目标（Target）。</li>
+<li>如果满足条件，就执行目标中的规则或者待定值。</li>
+<li>如果不满足条件，就判断下一条规则。</li>
+</ul>
+<p><strong>目标值（Target Values）</strong></p>
+<p>下面是你可以在target里指定的特殊值： </p>
+<ul>
+<li>ACCEPT - 允许防火墙接收数据包 </li>
+<li>DROP - 防火墙丢弃包 </li>
+<li>QUEUE - 防火墙将数据包移交到用户空间 </li>
+<li>RETURN - 防火墙停止执行当前链中的后续Rules，并返回到调用链中</li>
+</ul>
+<p>如果你执行<code>iptables -t filter --list</code>你将看到防火墙上的可用规则。</p>
+<p>下面的例子说明当前系统没有定义防火墙。你可以看到，它显示了默认的filter表，以及表内默认的input链，forward链，output链。</p>
+<pre class="prettyprint linenums prettyprinted">
+
+1.  `# iptables -t filter –list`
+2.  `Chain INPUT (policy ACCEPT)`
+3.  `target    prot opt source              destination` 
+4.  `Chain FORWARD (policy ACCEPT)`
+5.  `target    prot opt source              destination`
+
+7.  `Chain OUTPUT (policy ACCEPT)`
+8.  `target    prot opt source              destination`
+
+</pre>
+
+<p>注意，如果不指定<code>-t</code>选项，默认就是<strong>filter</strong>表。</p>
+<p><strong>规则语法</strong></p>
+<p>书写规则的语法格式是：<br><code>iptables [-t table] command [match] [target/jump]</code></p>
+<p><strong>查看ip connenction信息</strong><br><code>cat /proc/net/ip_conntrack</code></p>
 
       
     </div>
@@ -404,6 +478,10 @@
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/15/安全/arpspoof 安装/" rel="next" title="arpspoof 安装">
+                <i class="fa fa-chevron-left"></i> arpspoof 安装
+              </a>
             
           </div>
 
@@ -471,8 +549,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -487,7 +574,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-count">55</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -500,7 +587,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">66</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -525,6 +612,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-filter表"><span class="nav-number">1.</span> <span class="nav-text">1. filter表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-nat表"><span class="nav-number">2.</span> <span class="nav-text">2. nat表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-mangle表"><span class="nav-number">3.</span> <span class="nav-text">3. mangle表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链的操作"><span class="nav-number"></span> <span class="nav-text">链的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-mangle表"><span class="nav-number">1.</span> <span class="nav-text">1. mangle表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-nat表-1"><span class="nav-number">2.</span> <span class="nav-text">2. nat表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-filter表"><span class="nav-number">3.</span> <span class="nav-text">3. filter表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包流程"><span class="nav-number"></span> <span class="nav-text">数据包流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iptables-规则（Rules）"><span class="nav-number"></span> <span class="nav-text">iptables 规则（Rules）</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

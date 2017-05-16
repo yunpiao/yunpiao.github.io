@@ -103,10 +103,12 @@
 <meta property="og:url" content="http://yunpiao.pub/2017/05/11/安全/Netfilterqueue的使用/index.html">
 <meta property="og:site_name" content="偷得浮生半日闲">
 <meta property="og:description" content="说明">
-<meta property="og:updated_time" content="2017-05-11T14:27:23.683Z">
+<meta property="og:image" content="https://www.github.com/yunpiao/md/raw/img/1494555351136.jpg">
+<meta property="og:updated_time" content="2017-05-12T02:54:42.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netfilterqueue的使用">
 <meta name="twitter:description" content="说明">
+<meta name="twitter:image" content="https://www.github.com/yunpiao/md/raw/img/1494555351136.jpg">
 
 
 
@@ -360,11 +362,12 @@
         <blockquote>
 <p>说明</p>
 </blockquote>
+<p><img src="https://www.github.com/yunpiao/md/raw/img/1494555351136.jpg" alt="enter description here" title="1494555351136"></p>
 <a id="more"></a>
 <h2 id="配置-iptables-规则"><a href="#配置-iptables-规则" class="headerlink" title="配置 iptables 规则"></a>配置 iptables 规则</h2><h3 id="列出所有的iptables规则"><a href="#列出所有的iptables规则" class="headerlink" title="列出所有的iptables规则"></a>列出所有的iptables规则</h3><p><code>iptables -L INPUT --line-numbers</code></p>
 <h3 id="删除iptables规则"><a href="#删除iptables规则" class="headerlink" title="删除iptables规则"></a>删除iptables规则</h3><p><code>iptable -D INPUT 3</code></p>
 <h3 id="删除所有规则"><a href="#删除所有规则" class="headerlink" title="删除所有规则"></a>删除所有规则</h3><p><code>iptables -F</code><br><code>iptables -X</code></p>
-<h2 id="使用-NFqueue-的时候需要配置iptables-绑定队列"><a href="#使用-NFqueue-的时候需要配置iptables-绑定队列" class="headerlink" title="使用　NFqueue 的时候需要配置iptables , 绑定队列"></a>使用　NFqueue 的时候需要配置iptables , 绑定队列</h2><p><code>sudo iptables -A OUTPUT -d 10.108.112.243 -p tcp -j NFQUEUE --queue-num 1</code><br>-A  OUTPUT 默认将所有的外发的包<br>-d 指定IP<br>-p 指定tcp<br>-j 回调NFQUEUE<br>–queue-num  指定队列</p>
+<h2 id="使用-NFqueue-的时候需要配置iptables-绑定队列"><a href="#使用-NFqueue-的时候需要配置iptables-绑定队列" class="headerlink" title="使用　NFqueue 的时候需要配置iptables , 绑定队列"></a>使用　NFqueue 的时候需要配置iptables , 绑定队列</h2><p><code>sudo iptables -A OUTPUT -d 10.108.112.243 -p tcp -j NFQUEUE --queue-num 1</code><br>-A  增加一条规则 (添加到最后)<br>-I 插入一条规则(插入到第一位)<br>-d 指定IP<br>-p 指定tcp<br>-j 回调NFQUEUE<br>–queue-num  指定队列</p>
 
       
     </div>
@@ -504,7 +507,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-count">55</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -517,7 +520,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">66</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
