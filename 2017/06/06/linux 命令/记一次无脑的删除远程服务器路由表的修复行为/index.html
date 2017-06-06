@@ -1,0 +1,810 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,ipv6," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="上次写了学校登录VPN后访问不了内网, 这段时间一直没有想到解决方法, 昨晚突发奇想想修改默认路由表, 于是就在远程主机操作了一下 , 由于提示default 重复 , 于是很自然的想删除重建, 于是 无脑行为开始了.">
+<meta name="keywords" content="linux,ipv6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次无脑的删除远程服务器路由表的修复行为">
+<meta property="og:url" content="http://yunpiao.pub/2017/06/06/linux 命令/记一次无脑的删除远程服务器路由表的修复行为/index.html">
+<meta property="og:site_name" content="偷得浮生半日闲">
+<meta property="og:description" content="上次写了学校登录VPN后访问不了内网, 这段时间一直没有想到解决方法, 昨晚突发奇想想修改默认路由表, 于是就在远程主机操作了一下 , 由于提示default 重复 , 于是很自然的想删除重建, 于是 无脑行为开始了.">
+<meta property="og:image" content="https://www.github.com/yunpiao/md/raw/img/1496731023594.jpg">
+<meta property="og:updated_time" content="2017-06-06T06:43:41.796Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次无脑的删除远程服务器路由表的修复行为">
+<meta name="twitter:description" content="上次写了学校登录VPN后访问不了内网, 这段时间一直没有想到解决方法, 昨晚突发奇想想修改默认路由表, 于是就在远程主机操作了一下 , 由于提示default 重复 , 于是很自然的想删除重建, 于是 无脑行为开始了.">
+<meta name="twitter:image" content="https://www.github.com/yunpiao/md/raw/img/1496731023594.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yunpiao.pub/2017/06/06/linux 命令/记一次无脑的删除远程服务器路由表的修复行为/"/>
+
+
+
+
+
+  <title>记一次无脑的删除远程服务器路由表的修复行为 | 偷得浮生半日闲</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98719558-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?eb6a0c09a5722869261ea7ab931e3a98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">偷得浮生半日闲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yunpiao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/haha" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.pub/2017/06/06/linux 命令/记一次无脑的删除远程服务器路由表的修复行为/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记一次无脑的删除远程服务器路由表的修复行为</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-06T14:04:45+08:00">
+                2017/06/06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>上次写了学校登录VPN后访问不了内网, 这段时间一直没有想到解决方法, 昨晚突发奇想想修改默认路由表, 于是就在远程主机操作了一下 , 由于提示default 重复 , 于是很自然的想删除重建, 于是 无脑行为开始了.</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="1-当时我看到的路由表是这样的"><a href="#1-当时我看到的路由表是这样的" class="headerlink" title="1. 当时我看到的路由表是这样的"></a>1. 当时我看到的路由表是这样的</h2><p><code>sudo route</code></p>
+<p>Kernel IP routing table<br>Destination     Gateway         Genmask         Flags Metric Ref    Use Iface<br>default         10.108.112.1    0.0.0.0         UG    100    0        0 eno1</p>
+<h2 id="2-我无脑的删除了这条记录"><a href="#2-我无脑的删除了这条记录" class="headerlink" title="2. 我无脑的删除了这条记录"></a>2. 我无脑的删除了这条记录</h2><p><code>sudo route del default</code></p>
+<h3 id="于是-我的ssh-断了…"><a href="#于是-我的ssh-断了…" class="headerlink" title="于是 我的ssh 断了…"></a>于是 我的ssh 断了…</h3><p>假设这有个瞠目结舌的表情包</p>
+<h2 id="3-开始想解决方法-我并不知道这个服务器在哪里"><a href="#3-开始想解决方法-我并不知道这个服务器在哪里" class="headerlink" title="3. 开始想解决方法(我并不知道这个服务器在哪里)"></a>3. 开始想解决方法(我并不知道这个服务器在哪里)</h2><h3 id="３-1-首先想到arp"><a href="#３-1-首先想到arp" class="headerlink" title="３.1 . 首先想到arp"></a>３.1 . 首先想到arp</h3><p><code>sudo ARP</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Address                  HWtype  HWaddress           Flags Mask            Iface</div><div class="line">10.108.112.137           ether   6c:ae:8b:29:36:da   CM                    eno1</div></pre></td></tr></table></figure></p>
+<h3 id="此处已知mac地址"><a href="#此处已知mac地址" class="headerlink" title="==此处已知mac地址=="></a>==此处已知mac地址==</h3><h3 id="3-2-想到ssh-能否用mac地址来连接"><a href="#3-2-想到ssh-能否用mac地址来连接" class="headerlink" title="3.2 . 想到ssh 能否用mac地址来连接"></a>3.2 . 想到ssh 能否用mac地址来连接</h3><p>google 发现<br>有人这样<br><code>sudo arp -s 192.168.1.200 00:35:cf:56:b2:2g temp &amp;&amp; ssh root@192.168.1.200 使用mac地址ssh</code></p>
+<p>测试后ssh 无动于衷 </p>
+<h3 id="失败"><a href="#失败" class="headerlink" title="==失败=="></a>==失败==</h3><h3 id="3-3-想到用-ipv6-扫描"><a href="#3-3-想到用-ipv6-扫描" class="headerlink" title="3.3 . 想到用 ipv6 扫描"></a>3.3 . 想到用 ipv6 扫描</h3><h4 id="看了下nmap-支持ipv6-于是-想着扫描-结果ipv6-是2的64-个扫描域"><a href="#看了下nmap-支持ipv6-于是-想着扫描-结果ipv6-是2的64-个扫描域" class="headerlink" title="看了下nmap 支持ipv6 于是 想着扫描, 结果ipv6 是2的64 个扫描域"></a>看了下nmap 支持ipv6 于是 想着扫描, 结果ipv6 是2的64 个扫描域</h4><h3 id="失败-1"><a href="#失败-1" class="headerlink" title="==失败=="></a>==失败==</h3><h3 id="3-4-Google中发现有-邻居发现协议NDP-救命稻草"><a href="#3-4-Google中发现有-邻居发现协议NDP-救命稻草" class="headerlink" title="3.4 . Google中发现有 邻居发现协议NDP(救命稻草)"></a>3.4 . Google中发现有 邻居发现协议NDP(救命稻草)</h3><h4 id="linux-下"><a href="#linux-下" class="headerlink" title="linux 下"></a>linux 下</h4><p><code>sudo ip neigh show</code><br><code>fe80::5639:dfff:fece:e9e7 dev eno1 lladdr 54:39:df:ce:e9:e7 router STALE</code></p>
+<p>发现没有我要的 mac地址<br>如果这个邻居发现不能广播询问周围的ipv6 伙伴 , 那这个就是无意义的</p>
+<h4 id="查看ip-neigh-命令"><a href="#查看ip-neigh-命令" class="headerlink" title="查看ip neigh 命令"></a>查看ip neigh 命令</h4><p>发现有个发现 ip neigh show proxy<br>执行后什么没什么动静<br>想到可能会像ipv4 那样广播询问who is xxx</p>
+<p>于是wireshark  抓包</p>
+<p>过滤条件 ipv6</p>
+<p><img src="https://www.github.com/yunpiao/md/raw/img/1496731023594.jpg" alt="enter description here" title="1496731023594"></p>
+<p>发现许多邻居返回ICMPVv6的arp包</p>
+<p>再过滤<br>eth.addr == 00:00:5e:00:53:00<br>发现服务器返回了ipv6 地址</p>
+<h3 id="胜利的曙光已经不远"><a href="#胜利的曙光已经不远" class="headerlink" title="==胜利的曙光已经不远=="></a>==胜利的曙光已经不远==</h3><h2 id="4-最后的最后"><a href="#4-最后的最后" class="headerlink" title="4. 最后的最后"></a>4. 最后的最后</h2><p>ssh 链接上 ipv6 的服务器</p>
+<p>添加默认路由表</p>
+<p><code>sudo route add default 10.108.112.1</code></p>
+<h3 id="完美解决"><a href="#完美解决" class="headerlink" title="==完美解决=="></a>==完美解决==</h3><h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5. 参考"></a>5. 参考</h2><ul>
+<li><a href="http://www.2cto.com/net/201204/126259.html" target="_blank" rel="external">http://www.2cto.com/net/201204/126259.html</a></li>
+<li><a href="https://www.cellstream.com/intranet/faq/132-neighbor-discovery-nd-table-in-ipv6-windows-machines.html" target="_blank" rel="external">https://www.cellstream.com/intranet/faq/132-neighbor-discovery-nd-table-in-ipv6-windows-machines.html</a></li>
+<li><a href="https://www.systutorials.com/docs/linux/man/8-ip-neighbour/" target="_blank" rel="external">https://www.systutorials.com/docs/linux/man/8-ip-neighbour/</a></li>
+<li><a href="http://www.it165.net/network/html/201309/1183.html" target="_blank" rel="external">http://www.it165.net/network/html/201309/1183.html</a></li>
+<li><a href="http://qubaoquan.blog.51cto.com/1246748/292546" target="_blank" rel="external">http://qubaoquan.blog.51cto.com/1246748/292546</a></li>
+<li><a href="http://www.packetlevel.ch/html/scapy/scapyipv6.html" target="_blank" rel="external">http://www.packetlevel.ch/html/scapy/scapyipv6.html</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/ipv6/" rel="tag"># ipv6</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/02/linux 命令/服务器安装桌面及远程控制/" rel="prev" title="服务器安装桌面及远程控制">
+                服务器安装桌面及远程控制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+
+
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3">
+
+</div>
+<!-- City版安装代码已完成 -->
+
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="yunpiao" />
+          <p class="site-author-name" itemprop="name">yunpiao</p>
+           
+              <p class="site-description motion-element" itemprop="description">转行程序员</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">58</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-当时我看到的路由表是这样的"><span class="nav-number">1.</span> <span class="nav-text">1. 当时我看到的路由表是这样的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-我无脑的删除了这条记录"><span class="nav-number">2.</span> <span class="nav-text">2. 我无脑的删除了这条记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#于是-我的ssh-断了…"><span class="nav-number">2.1.</span> <span class="nav-text">于是 我的ssh 断了…</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-开始想解决方法-我并不知道这个服务器在哪里"><span class="nav-number">3.</span> <span class="nav-text">3. 开始想解决方法(我并不知道这个服务器在哪里)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#３-1-首先想到arp"><span class="nav-number">3.1.</span> <span class="nav-text">３.1 . 首先想到arp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#此处已知mac地址"><span class="nav-number">3.2.</span> <span class="nav-text">==此处已知mac地址==</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-想到ssh-能否用mac地址来连接"><span class="nav-number">3.3.</span> <span class="nav-text">3.2 . 想到ssh 能否用mac地址来连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#失败"><span class="nav-number">3.4.</span> <span class="nav-text">==失败==</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-想到用-ipv6-扫描"><span class="nav-number">3.5.</span> <span class="nav-text">3.3 . 想到用 ipv6 扫描</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#看了下nmap-支持ipv6-于是-想着扫描-结果ipv6-是2的64-个扫描域"><span class="nav-number">3.5.1.</span> <span class="nav-text">看了下nmap 支持ipv6 于是 想着扫描, 结果ipv6 是2的64 个扫描域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#失败-1"><span class="nav-number">3.6.</span> <span class="nav-text">==失败==</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-Google中发现有-邻居发现协议NDP-救命稻草"><span class="nav-number">3.7.</span> <span class="nav-text">3.4 . Google中发现有 邻居发现协议NDP(救命稻草)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#linux-下"><span class="nav-number">3.7.1.</span> <span class="nav-text">linux 下</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看ip-neigh-命令"><span class="nav-number">3.7.2.</span> <span class="nav-text">查看ip neigh 命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#胜利的曙光已经不远"><span class="nav-number">3.8.</span> <span class="nav-text">==胜利的曙光已经不远==</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-最后的最后"><span class="nav-number">4.</span> <span class="nav-text">4. 最后的最后</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#完美解决"><span class="nav-number">4.1.</span> <span class="nav-text">==完美解决==</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5. 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunpiao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2133384"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
