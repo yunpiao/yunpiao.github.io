@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Django 分页功能的实现 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 分页功能的实现">
+<meta property="og:url" content="http://yoursite.com/2017/03/22/Python/Django 分页功能的实现/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。">
+<meta property="og:updated_time" content="2017-03-21T14:09:02.602Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 分页功能的实现">
+<meta name="twitter:description" content="Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python/Django 分页功能的实现" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/Python/Django 分页功能的实现/" class="article-date">
+  <time datetime="2017-03-22T07:18:14.615Z" itemprop="datePublished">2017-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Django 分页功能的实现
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Django提供了一些类来帮助你管理分页的数据 – 也就是说，数据被分在不同页面中，并带有“上一页/下一页”标签。这些类位于django/core/paginator.py中。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="python-代码实现-后台逻辑"><a href="#python-代码实现-后台逻辑" class="headerlink" title="python 代码实现 后台逻辑"></a>python 代码实现 后台逻辑</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> django.core.paginator <span class="keyword">import</span> Paginator, EmptyPage, PageNotAnInteger</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">listing</span><span class="params">(request)</span>:</span></div><div class="line">    contact_list = Contacts.objects.all()</div><div class="line">    paginator = Paginator(contact_list, <span class="number">25</span>) <span class="comment"># Show 25 contacts per page</span></div><div class="line"></div><div class="line">    page = request.GET.get(<span class="string">'page'</span>)</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        contacts = paginator.page(page)</div><div class="line">    <span class="keyword">except</span> PageNotAnInteger:</div><div class="line">        <span class="comment"># If page is not an integer, deliver first page.</span></div><div class="line">        contacts = paginator.page(<span class="number">1</span>)</div><div class="line">    <span class="keyword">except</span> EmptyPage:</div><div class="line">        <span class="comment"># If page is out of range (e.g. 9999), deliver last page of results.</span></div><div class="line">        contacts = paginator.page(paginator.num_pages)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> render_to_response(<span class="string">'list.html'</span>, &#123;<span class="string">"contacts"</span>: contacts&#125;)</div></pre></td></tr></table></figure>
+<h2 id="Django前端显示部分"><a href="#Django前端显示部分" class="headerlink" title="Django前端显示部分"></a>Django前端显示部分</h2><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&lt;html&gt;</div><div class="line"> &lt;head&gt;&lt;/head&gt;</div><div class="line"> &lt;body&gt;</div><div class="line">  &lt;table width="100%" class="table table-striped table-bordered table-hover"&gt; </div><div class="line">   &lt;thead&gt; </div><div class="line">    &lt;tr&gt; </div><div class="line">     &lt;th&gt; uuid&lt;/th&gt; </div><div class="line">     &lt;th&gt; 任务名称&lt;/th&gt; </div><div class="line">     &lt;th&gt; 任务结果&lt;/th&gt; </div><div class="line">     &lt;th&gt; 任务状态&lt;/th&gt; </div><div class="line">     &lt;th&gt; 接收时间&lt;/th&gt; </div><div class="line">     &lt;th&gt; 完成时间&lt;/th&gt; </div><div class="line">     &lt;th&gt; 传入参数&lt;/th&gt; </div><div class="line">    &lt;/tr&gt; </div><div class="line">   &lt;/thead&gt; </div><div class="line">   &lt;tbody&gt;</div><div class="line">     <span class="template-tag">&#123;% <span class="name"><span class="name">for</span></span> i, v <span class="keyword">in</span> model %&#125;</span> </div><div class="line">    &lt;tr&gt; </div><div class="line">     &lt;td&gt; </div><div class="line">      &lt;form method="POST" action="<span class="template-tag">&#123;% <span class="name"><span class="name">url</span></span> " celery_api_task"="" v.uuid="" %&#125;</span>"=""&gt;</div><div class="line">        <span class="template-tag">&#123;% <span class="name"><span class="name">csrf_token</span></span> %&#125;</span> </div><div class="line">       &lt;button type="submit" class="btn btn-default btn-xs" title="任务详情"&gt; <span class="template-variable">&#123;&#123; v.uuid &#125;&#125;</span> &lt;/button&gt; </div><div class="line">      &lt;/form&gt; &lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.name &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.result &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.state &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.received &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.timestamp &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; <span class="template-variable">&#123;&#123; v.args &#125;&#125;</span>&lt;/td&gt; </div><div class="line">     &lt;td&gt; &lt;/td&gt; </div><div class="line">    &lt;/tr&gt; <span class="template-tag">&#123;% <span class="name"><span class="name">endfor</span></span> %&#125;</span> </div><div class="line">   &lt;/tbody&gt; </div><div class="line">  &lt;/table&gt; </div><div class="line">  &lt;div class="col-md-offset-3 " style=""&gt;</div><div class="line">    <span class="template-tag">&#123;% <span class="name">bootstrap_paginate</span> model range=10 show_prev_next=&amp;quot;true&amp;quot; show_first_last=&amp;quot;true&amp;quot; align=&amp;quot;center&amp;quot; %&#125;</span> </div><div class="line">  &lt;/div&gt; </div><div class="line"> &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><h3 id="分页器-objects"><a href="#分页器-objects" class="headerlink" title="分页器 objects"></a>分页器 objects</h3><p>Paginator类拥有以下构造器：</p>
+<blockquote>
+<p>class Paginator(object_list, per_page, orphans=0, allow_empty_first_page=True)[source]¶</p>
+</blockquote>
+<p>所需参数¶</p>
+<pre><code>&gt; object_list
+    A list, tuple, Django QuerySet, or other sliceable object with a count() or __len__() method.
+&gt; per_page
+    The maximum number of items to include on a page, not including orphans (see the orphans optional argument below).
+</code></pre><p>可选参数¶</p>
+<pre><code>&gt; orphans
+    The minimum number of items allowed on the last page, defaults to zero. Use this when you don’t want to have a last page with very few items. If the last page would normally have a number of items less than or equal to orphans, then those items will be added to the previous page (which becomes the last page) instead of leaving the items on a page by themselves. For example, with 23 items, per_page=10, and orphans=3, there will be two pages; the first page with 10 items and the second (and last) page with 13 items.
+
+&gt; allow_empty_first_page
+Whether or not the first page is allowed to be empty. If False and object_list is empty, then an EmptyPage error will be raised.
+</code></pre><p>方法¶</p>
+<pre><code>&gt; Paginator.page(number)[source]¶
+返回在提供的下标处的Page对象，下标以1开始。如果提供的页码不存在，抛出InvalidPage异常。
+</code></pre><p>属性¶</p>
+<pre><code>&gt; Paginator.count¶
+    所有页面的对象总数。
+</code></pre><p>注意<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">当计算object_list所含对象的数量时， Paginator会首先尝试调用object_list.count()。如果object_list没有 count() 方法，Paginator 接着会回退使用len(object_list)。这样会使类似于Django’s QuerySet的对象使用更加便捷的count()方法，如果存在的话。</div><div class="line"></div><div class="line">Paginator.num_pages¶</div><div class="line">页面总数。</div><div class="line"></div><div class="line">Paginator.page_range¶</div><div class="line">页码的范围，从1开始，例如[1, 2, 3, 4]。</div><div class="line"></div><div class="line">InvalidPage exceptions</div><div class="line"></div><div class="line">exception InvalidPage[source]¶</div><div class="line">异常的基类，当paginator传入一个无效的页码时抛出。</div><div class="line"></div><div class="line">Paginator.page()放回在所请求的页面无效（比如不是一个整数）时，或者不包含任何对象时抛出异常。通常，捕获InvalidPage异常就够了，但是如果你想更加精细一些，可以捕获以下两个异常之一：</div><div class="line"></div><div class="line">exception PageNotAnInteger[source]¶</div><div class="line">当向page()提供一个不是整数的值时抛出。</div><div class="line"></div><div class="line">exception EmptyPage[source]¶</div><div class="line">当向page()提供一个有效值，但是那个页面上没有任何对象时抛出。</div><div class="line"></div><div class="line">这两个异常都是InvalidPage的子类，所以你可以通过简单的except InvalidPage来处理它们。</div><div class="line"></div><div class="line">Page objects</div><div class="line"></div><div class="line">你通常不需要手动构建 Page对象 -- 你可以从Paginator.page()来获得它们。</div><div class="line"></div><div class="line">class Page(object_list, number, paginator)[source]¶</div><div class="line">当调用len()或者直接迭代一个页面的时候，它的行为类似于 Page.object_list 的序列。</div><div class="line"></div><div class="line">方法¶</div><div class="line"></div><div class="line">Page.has_next()[source]¶</div><div class="line">如果有下一页，则返回True。</div><div class="line"></div><div class="line">Page.has_previous()[source]¶</div><div class="line">如果有上一页，返回 True。</div><div class="line"></div><div class="line">Page.has_other_pages()[source]¶</div><div class="line">如果有上一页或下一页，返回True。</div><div class="line"></div><div class="line">Page.next_page_number()[source]¶</div><div class="line">返回下一页的页码。如果下一页不存在，抛出InvalidPage异常。</div><div class="line"></div><div class="line">Page.previous_page_number()[source]¶</div><div class="line">返回上一页的页码。如果上一页不存在，抛出InvalidPage异常。</div><div class="line"></div><div class="line">Page.start_index()[source]¶</div><div class="line">返回当前页上的第一个对象，相对于分页列表的所有对象的序号，从1开始。比如，将五个对象的列表分为每页两个对象，第二页的start_index()会返回3。</div><div class="line"></div><div class="line">Page.end_index()[source]¶</div><div class="line">返回当前页上的最后一个对象，相对于分页列表的所有对象的序号，从1开始。 比如，将五个对象的列表分为每页两个对象，第二页的end_index() 会返回 4。</div><div class="line"></div><div class="line">属性¶</div><div class="line"></div><div class="line">Page.object_list¶</div><div class="line">当前页上所有对象的列表。</div><div class="line"></div><div class="line">Page.number¶</div><div class="line">当前页的序号，从1开始。</div><div class="line"></div><div class="line">Page.paginator¶</div><div class="line">相关的Paginator对象。</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/22/Python/Django 分页功能的实现/" data-id="cj0ko5upv006l0dmpy4qnh326" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/django/">django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分页/">分页</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/22/Python/Django 数据库版本迁移/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Django 数据库版本迁移
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/22/Python/celery 学习笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">celery 学习笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/APSchedule/">APSchedule</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CrossOver/">CrossOver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ddos-安全，-防御/">Ddos, 安全， 防御</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django，-python/">Django， python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-容器-安全策略/">Docker,容器,安全策略</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MVVM/">MVVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebSockets/">WebSockets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/amd64/">amd64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/brower/">brower</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cProfile/">cProfile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/disk/">disk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dpkg/">dpkg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fstab/">fstab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goconfig/">goconfig</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greques/">greques</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hash/">hash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i386/">i386</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/instal/">instal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon-openTsdb/">open-falcon,openTsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pycurl/">pycurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-pan/">python pan</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分页/">分页</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令/">命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份l/">备份l</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/局部敏感哈希/">局部敏感哈希</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文案/">文案,</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/桌面-ubuntu/">桌面, ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模拟器/">模拟器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本迁移/">版本迁移</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生成器/">生成器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/端口号/">端口号</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/APSchedule/" style="font-size: 10px;">APSchedule</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/Ddos-安全，-防御/" style="font-size: 10px;">Ddos, 安全， 防御</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Django，-python/" style="font-size: 10px;">Django， python</a> <a href="/tags/Docker-容器-安全策略/" style="font-size: 10px;">Docker,容器,安全策略</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/WebSockets/" style="font-size: 10px;">WebSockets</a> <a href="/tags/amd64/" style="font-size: 10px;">amd64</a> <a href="/tags/brower/" style="font-size: 10px;">brower</a> <a href="/tags/cProfile/" style="font-size: 10px;">cProfile</a> <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/disk/" style="font-size: 10px;">disk</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/dpkg/" style="font-size: 10px;">dpkg</a> <a href="/tags/fstab/" style="font-size: 10px;">fstab</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/goconfig/" style="font-size: 10px;">goconfig</a> <a href="/tags/greques/" style="font-size: 10px;">greques</a> <a href="/tags/hash/" style="font-size: 10px;">hash</a> <a href="/tags/i386/" style="font-size: 10px;">i386</a> <a href="/tags/instal/" style="font-size: 10px;">instal</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/open-falcon-openTsdb/" style="font-size: 10px;">open-falcon,openTsdb</a> <a href="/tags/pip/" style="font-size: 10px;">pip</a> <a href="/tags/pycurl/" style="font-size: 10px;">pycurl</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-pan/" style="font-size: 10px;">python pan</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/分页/" style="font-size: 10px;">分页</a> <a href="/tags/命令/" style="font-size: 10px;">命令</a> <a href="/tags/备份l/" style="font-size: 10px;">备份l</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/安全/" style="font-size: 16.67px;">安全</a> <a href="/tags/局部敏感哈希/" style="font-size: 10px;">局部敏感哈希</a> <a href="/tags/文案/" style="font-size: 10px;">文案,</a> <a href="/tags/桌面-ubuntu/" style="font-size: 10px;">桌面, ubuntu</a> <a href="/tags/模拟器/" style="font-size: 10px;">模拟器</a> <a href="/tags/版本迁移/" style="font-size: 10px;">版本迁移</a> <a href="/tags/生成器/" style="font-size: 10px;">生成器</a> <a href="/tags/端口号/" style="font-size: 16.67px;">端口号</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/22/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/机器学习/文本相识度/">文本相识度</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/前端/MVVM 学习笔记/">MVVM 学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/Go/使用goconfig 读取配置文件/">使用goconfig 读取配置文件</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/监控平台/open-falcon监控系统调研/">open-falcon监控系统调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

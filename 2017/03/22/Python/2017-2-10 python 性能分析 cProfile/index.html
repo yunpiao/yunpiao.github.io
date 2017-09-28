@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>python 性能分析 cProfile | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。这三个性能分析模块的介绍如下：
+cProfile：基于lsprof的用C语言实现的扩展应用，运行开销比较合理，适合分析运行时间较长的程序，推荐使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python 性能分析 cProfile">
+<meta property="og:url" content="http://yoursite.com/2017/03/22/Python/2017-2-10 python 性能分析 cProfile/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。这三个性能分析模块的介绍如下：
+cProfile：基于lsprof的用C语言实现的扩展应用，运行开销比较合理，适合分析运行时间较长的程序，推荐使">
+<meta property="og:updated_time" content="2017-03-21T14:09:02.554Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python 性能分析 cProfile">
+<meta name="twitter:description" content="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。这三个性能分析模块的介绍如下：
+cProfile：基于lsprof的用C语言实现的扩展应用，运行开销比较合理，适合分析运行时间较长的程序，推荐使">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python/2017-2-10 python 性能分析 cProfile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/Python/2017-2-10 python 性能分析 cProfile/" class="article-date">
+  <time datetime="2017-03-22T07:18:14.500Z" itemprop="datePublished">2017-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      python 性能分析 cProfile
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile-profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。"><a href="#Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile-profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。" class="headerlink" title="Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。"></a>Python标准库中提供了三种用来分析程序性能的模块，分别是cProfile, profile和hotshot，另外还有一个辅助模块stats。这些模块提供了对Python程序的确定性分析功能，同时也提供了相应的报表生成工具，方便用户快速地检查和分析结果。</h4><h3 id="这三个性能分析模块的介绍如下："><a href="#这三个性能分析模块的介绍如下：" class="headerlink" title="这三个性能分析模块的介绍如下："></a>这三个性能分析模块的介绍如下：</h3><blockquote>
+<p>cProfile：基于lsprof的用C语言实现的扩展应用，运行开销比较合理，适合分析运行时间较长的程序，推荐使用这个模块；</p>
+<p>profile：纯Python实现的性能分析模块，接口和cProfile一致。但在分析程序时增加了很大的运行开销。不过，如果你想扩展profiler的功能，可以通过继承这个模块实现；</p>
+<p>hotshot：一个试验性的C模块，减少了性能分析时的运行开销，但是需要更长的数据后处理的次数。目前这个模块不再被维护，有可能在新版本中被弃用。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="内置cProfile"><a href="#内置cProfile" class="headerlink" title="内置cProfile"></a>内置cProfile</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum_num</span><span class="params">(max_num)</span>:</span></div><div class="line">    total = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(max_num):</div><div class="line">        total += i</div><div class="line">    <span class="keyword">return</span> total</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line">    total = <span class="number">0</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">40000</span>):</div><div class="line">        total += i</div><div class="line"></div><div class="line">    t1 = sum_num(<span class="number">100000</span>)</div><div class="line">    t2 = sum_num(<span class="number">400000</span>)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> total</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    <span class="keyword">import</span> cProfile</div><div class="line"></div><div class="line">    <span class="comment"># 直接把分析结果打印到控制台</span></div><div class="line">    cProfile.run(<span class="string">"test()"</span>)</div><div class="line">    <span class="comment"># 把分析结果保存到文件中</span></div><div class="line">    cProfile.run(<span class="string">"test()"</span>, filename=<span class="string">"result.out"</span>)</div><div class="line">    <span class="comment"># 增加排序方式</span></div><div class="line">    cProfile.run(<span class="string">"test()"</span>, filename=<span class="string">"result.out"</span>, sort=<span class="string">"cumulative"</span>)</div></pre></td></tr></table></figure>
+<pre><code>      6 function calls in 0.028 seconds
+
+Ordered by: standard name
+
+ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+     2    0.024    0.012    0.024    0.012 &lt;ipython-input-2-691327147ef5&gt;:1(sum_num)
+     1    0.003    0.003    0.028    0.028 &lt;ipython-input-2-691327147ef5&gt;:8(test)
+     1    0.000    0.000    0.028    0.028 &lt;string&gt;:1(&lt;module&gt;)
+     1    0.000    0.000    0.028    0.028 {built-in method builtins.exec}
+     1    0.000    0.000    0.000    0.000 {method &apos;disable&apos; of &apos;_lsprof.Profiler&apos; objects}
+</code></pre><h1 id="分析工具"><a href="#分析工具" class="headerlink" title="分析工具"></a>分析工具</h1><h2 id="使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单："><a href="#使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单：" class="headerlink" title="使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单："></a>使用cProfile分析的结果可以输出到指定的文件中，但是文件内容是以二进制的方式保存的，用文本编辑器打开时乱码。所以，Python提供了一个pstats模块，用来分析cProfile输出的文件内容。它支持多种形式的报表输出，是文本界面下一个较为实用的工具。使用非常简单：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> pstats</div><div class="line"></div><div class="line"><span class="comment"># 创建Stats对象</span></div><div class="line">p = pstats.Stats(<span class="string">"result.out"</span>)</div><div class="line"></div><div class="line"><span class="comment"># strip_dirs(): 去掉无关的路径信息</span></div><div class="line"><span class="comment"># sort_stats(): 排序，支持的方式和上述的一致</span></div><div class="line"><span class="comment"># print_stats(): 打印分析结果，可以指定打印前几行</span></div><div class="line"></div><div class="line"><span class="comment"># 和直接运行cProfile.run("test()")的结果是一样的</span></div><div class="line">p.strip_dirs().sort_stats(<span class="number">-1</span>).print_stats()</div><div class="line"></div><div class="line"><span class="comment"># 按照函数名排序，只打印前3行函数的信息, 参数还可为小数,表示前百分之几的函数信息</span></div><div class="line">p.strip_dirs().sort_stats(<span class="string">"name"</span>).print_stats(<span class="number">3</span>)</div><div class="line"></div><div class="line"><span class="comment"># 按照运行时间和函数名进行排序</span></div><div class="line">p.strip_dirs().sort_stats(<span class="string">"cumulative"</span>, <span class="string">"name"</span>).print_stats(<span class="number">0.5</span>)</div><div class="line"></div><div class="line"><span class="comment"># 如果想知道有哪些函数调用了sum_num</span></div><div class="line">p.print_callers(<span class="number">0.5</span>, <span class="string">"sum_num"</span>)</div><div class="line"></div><div class="line"><span class="comment"># 查看test()函数中调用了哪些函数</span></div><div class="line">p.print_callees(<span class="string">"test"</span>)</div></pre></td></tr></table></figure>
+<pre><code>Fri Feb 10 17:27:19 2017    result.out
+
+         6 function calls in 0.021 seconds
+
+   Ordered by: standard name
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        2    0.020    0.010    0.020    0.010 &lt;ipython-input-2-691327147ef5&gt;:1(sum_num)
+        1    0.001    0.001    0.021    0.021 &lt;ipython-input-2-691327147ef5&gt;:8(test)
+        1    0.000    0.000    0.021    0.021 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.000    0.000    0.021    0.021 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method &apos;disable&apos; of &apos;_lsprof.Profiler&apos; objects}
+
+
+Fri Feb 10 17:27:19 2017    result.out
+
+         6 function calls in 0.021 seconds
+
+   Ordered by: function name
+   List reduced from 5 to 3 due to restriction &lt;3&gt;
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.021    0.021 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method &apos;disable&apos; of &apos;_lsprof.Profiler&apos; objects}
+        1    0.000    0.000    0.021    0.021 &lt;string&gt;:1(&lt;module&gt;)
+
+
+Fri Feb 10 17:27:19 2017    result.out
+
+         6 function calls in 0.021 seconds
+
+   Ordered by: cumulative time, function name
+   List reduced from 5 to 3 due to restriction &lt;0.5&gt;
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.021    0.021 {built-in method builtins.exec}
+        1    0.000    0.000    0.021    0.021 &lt;string&gt;:1(&lt;module&gt;)
+        1    0.001    0.001    0.021    0.021 &lt;ipython-input-2-691327147ef5&gt;:8(test)
+
+
+   Ordered by: cumulative time, function name
+   List reduced from 5 to 1 due to restriction &lt;&apos;test&apos;&gt;
+
+Function                                called...
+                                            ncalls  tottime  cumtime
+&lt;ipython-input-2-691327147ef5&gt;:8(test)  -&gt;       2    0.020    0.020  &lt;ipython-input-2-691327147ef5&gt;:1(sum_num)
+
+
+
+
+
+
+
+&lt;pstats.Stats at 0x7f204c476518&gt;
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/22/Python/2017-2-10 python 性能分析 cProfile/" data-id="cj0ko5upw006q0dmplkf5p9kv" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cProfile/">cProfile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/22/Python/2017-2-10 Python 字符串/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Python 字符串 匹配
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/22/Python/2017-2-10 Pycurl 记录/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Pycurl 记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/APSchedule/">APSchedule</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CrossOver/">CrossOver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ddos-安全，-防御/">Ddos, 安全， 防御</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django，-python/">Django， python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-容器-安全策略/">Docker,容器,安全策略</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MVVM/">MVVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebSockets/">WebSockets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/amd64/">amd64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/brower/">brower</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cProfile/">cProfile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/disk/">disk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dpkg/">dpkg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fstab/">fstab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goconfig/">goconfig</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greques/">greques</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hash/">hash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i386/">i386</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/instal/">instal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon-openTsdb/">open-falcon,openTsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pycurl/">pycurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-pan/">python pan</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分页/">分页</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令/">命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份l/">备份l</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/局部敏感哈希/">局部敏感哈希</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文案/">文案,</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/桌面-ubuntu/">桌面, ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模拟器/">模拟器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本迁移/">版本迁移</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生成器/">生成器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/端口号/">端口号</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/APSchedule/" style="font-size: 10px;">APSchedule</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/Ddos-安全，-防御/" style="font-size: 10px;">Ddos, 安全， 防御</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Django，-python/" style="font-size: 10px;">Django， python</a> <a href="/tags/Docker-容器-安全策略/" style="font-size: 10px;">Docker,容器,安全策略</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/WebSockets/" style="font-size: 10px;">WebSockets</a> <a href="/tags/amd64/" style="font-size: 10px;">amd64</a> <a href="/tags/brower/" style="font-size: 10px;">brower</a> <a href="/tags/cProfile/" style="font-size: 10px;">cProfile</a> <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/disk/" style="font-size: 10px;">disk</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/dpkg/" style="font-size: 10px;">dpkg</a> <a href="/tags/fstab/" style="font-size: 10px;">fstab</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/goconfig/" style="font-size: 10px;">goconfig</a> <a href="/tags/greques/" style="font-size: 10px;">greques</a> <a href="/tags/hash/" style="font-size: 10px;">hash</a> <a href="/tags/i386/" style="font-size: 10px;">i386</a> <a href="/tags/instal/" style="font-size: 10px;">instal</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/open-falcon-openTsdb/" style="font-size: 10px;">open-falcon,openTsdb</a> <a href="/tags/pip/" style="font-size: 10px;">pip</a> <a href="/tags/pycurl/" style="font-size: 10px;">pycurl</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-pan/" style="font-size: 10px;">python pan</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/分页/" style="font-size: 10px;">分页</a> <a href="/tags/命令/" style="font-size: 10px;">命令</a> <a href="/tags/备份l/" style="font-size: 10px;">备份l</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/安全/" style="font-size: 16.67px;">安全</a> <a href="/tags/局部敏感哈希/" style="font-size: 10px;">局部敏感哈希</a> <a href="/tags/文案/" style="font-size: 10px;">文案,</a> <a href="/tags/桌面-ubuntu/" style="font-size: 10px;">桌面, ubuntu</a> <a href="/tags/模拟器/" style="font-size: 10px;">模拟器</a> <a href="/tags/版本迁移/" style="font-size: 10px;">版本迁移</a> <a href="/tags/生成器/" style="font-size: 10px;">生成器</a> <a href="/tags/端口号/" style="font-size: 16.67px;">端口号</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/22/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/机器学习/文本相识度/">文本相识度</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/前端/MVVM 学习笔记/">MVVM 学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/Go/使用goconfig 读取配置文件/">使用goconfig 读取配置文件</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/监控平台/open-falcon监控系统调研/">open-falcon监控系统调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

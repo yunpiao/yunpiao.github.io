@@ -1,0 +1,849 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="机器学习,knn," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="机器学习">
+<meta name="keywords" content="机器学习,knn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习">
+<meta property="og:url" content="http://yunpiao.pub/2017/09/28/机器学习/机器学习/index.html">
+<meta property="og:site_name" content="偷得浮生半日闲">
+<meta property="og:description" content="机器学习">
+<meta property="og:image" content="http://yunpiao.pub/2017/09/28/机器学习/机器学习/output_4_0.png">
+<meta property="og:image" content="http://yunpiao.pub/2017/09/28/机器学习/机器学习/output_5_0.png">
+<meta property="og:image" content="http://yunpiao.pub/2017/09/28/机器学习/机器学习/output_6_0.png">
+<meta property="og:image" content="http://yunpiao.pub/2017/09/28/机器学习/机器学习/output_12_0.png">
+<meta property="og:updated_time" content="2017-09-28T11:41:03.737Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习">
+<meta name="twitter:description" content="机器学习">
+<meta name="twitter:image" content="http://yunpiao.pub/2017/09/28/机器学习/机器学习/output_4_0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yunpiao.pub/2017/09/28/机器学习/机器学习/"/>
+
+
+
+
+
+  <title>机器学习 | 偷得浮生半日闲</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98719558-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?eb6a0c09a5722869261ea7ab931e3a98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">偷得浮生半日闲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yunpiao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/haha" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.pub/2017/09/28/机器学习/机器学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T19:41:03+08:00">
+                2017/09/28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="机器学习"><a href="#机器学习" class="headerlink" title="机器学习"></a>机器学习</h1><a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> random</div><div class="line"><span class="keyword">import</span> operator</div><div class="line"><span class="keyword">import</span> datetime</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">import</span> statsmodels.api <span class="keyword">as</span> sm</div><div class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># 100个正态分布的悲伤</span></div><div class="line">grief_heights = np.random.normal(<span class="number">50</span>, <span class="number">6</span>, <span class="number">100</span>)</div><div class="line">grief_weights = np.random.normal(<span class="number">5</span>, <span class="number">0.5</span>, <span class="number">100</span>)</div><div class="line"></div><div class="line"><span class="comment"># 100个正态分布的痛苦</span></div><div class="line">agony_heights = np.random.normal(<span class="number">30</span>,<span class="number">6</span>,<span class="number">100</span>)</div><div class="line">agony_weights = np.random.normal(<span class="number">4</span>,<span class="number">0.5</span>,<span class="number">100</span>)</div><div class="line"></div><div class="line"><span class="comment"># 100个正态分布的绝望</span></div><div class="line">despair_heights = np.random.normal(<span class="number">45</span>,<span class="number">6</span>,<span class="number">100</span>)</div><div class="line">despair_weights = np.random.normal(<span class="number">2.5</span>, <span class="number">0.5</span>, <span class="number">100</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 设置图片大小</span></div><div class="line">fig_size = plt.rcParams[<span class="string">"figure.figsize"</span>]</div><div class="line">fig_size[<span class="number">0</span>] = <span class="number">15</span></div><div class="line">fig_size[<span class="number">1</span>] = <span class="number">10</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">plt.scatter(grief_heights,grief_weights,c=<span class="string">'g'</span>,marker=<span class="string">'s'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>)</div><div class="line">plt.axis((<span class="number">10</span>, <span class="number">70</span>,<span class="number">1</span>,<span class="number">7</span>))</div><div class="line">plt.xlabel(<span class="string">'身高 (cm)'</span>,size=<span class="number">15</span>)</div><div class="line">plt.ylabel(<span class="string">'体重 (kg)'</span>, size=<span class="number">15</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="output_4_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">plt.scatter(grief_heights,grief_weights,c=<span class="string">'g'</span>,marker=<span class="string">'s'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>)</div><div class="line">plt.scatter(agony_heights,agony_weights,c=<span class="string">'b'</span>,marker=<span class="string">'^'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>)</div><div class="line">plt.axis((<span class="number">10</span>, <span class="number">70</span>,<span class="number">1</span>,<span class="number">7</span>))</div><div class="line">plt.xlabel(<span class="string">'身高 (cm)'</span>,size=<span class="number">15</span>)</div><div class="line">plt.ylabel(<span class="string">'体重 (kg)'</span>, size=<span class="number">15</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="output_5_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">plt.scatter(grief_heights,grief_weights,c=<span class="string">'g'</span>,marker=<span class="string">'s'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>)</div><div class="line">plt.scatter(agony_heights,agony_weights,c=<span class="string">'b'</span>,marker=<span class="string">'^'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>)</div><div class="line">plt.scatter(despair_heights,despair_weights, c=<span class="string">'y'</span>, s=<span class="number">50</span>, alpha=<span class="number">0.8</span>)</div><div class="line">plt.axis((<span class="number">10</span>, <span class="number">70</span>,<span class="number">1</span>,<span class="number">7</span>))</div><div class="line">plt.xlabel(<span class="string">'身高 (cm)'</span>,size=<span class="number">15</span>)</div><div class="line">plt.ylabel(<span class="string">'体重 (kg)'</span>, size=<span class="number">15</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="output_6_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">kdtree</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="comment"># 创建 kdtree 喵</span></div><div class="line">    <span class="comment"># point_list 是一个 list 的 pair，pair[0] 是一 tuple 的特征，pair[1] 是类别</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, point_list, depth=<span class="number">0</span>, root=None)</span>:</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> len(point_list) &gt; <span class="number">0</span>:</div><div class="line"></div><div class="line">            <span class="comment"># 轮换按照树深度选择坐标轴</span></div><div class="line">            k = len(point_list[<span class="number">0</span>][<span class="number">0</span>])</div><div class="line">            axis = depth % k</div><div class="line"></div><div class="line">            <span class="comment"># 选中位线，切</span></div><div class="line">            point_list.sort(key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>][axis])</div><div class="line">            median = len(point_list) // <span class="number">2</span></div><div class="line"></div><div class="line">            self.axis = axis</div><div class="line">            self.root = root</div><div class="line">            self.size = len(point_list)</div><div class="line"></div><div class="line">            <span class="comment"># 造节点</span></div><div class="line">            self.node = point_list[median]</div><div class="line">            <span class="comment"># 递归造左枝和右枝</span></div><div class="line">            <span class="keyword">if</span> len(point_list[:median]) &gt; <span class="number">0</span>:</div><div class="line">                self.left = kdtree(point_list[:median], depth + <span class="number">1</span>, self)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                self.left = <span class="keyword">None</span></div><div class="line">            <span class="keyword">if</span> len(point_list[median + <span class="number">1</span>:]) &gt; <span class="number">0</span>:</div><div class="line">                self.right = kdtree(point_list[median + <span class="number">1</span>:], depth + <span class="number">1</span>, self)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                self.right = <span class="keyword">None</span></div><div class="line">                <span class="comment"># 记录是按哪个方向切的还有树根</span></div><div class="line"></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">None</span></div><div class="line"></div><div class="line">    <span class="comment"># 在树上加一点</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self, point)</span>:</span></div><div class="line">        self.size += <span class="number">1</span></div><div class="line"></div><div class="line">        <span class="comment"># 分析是左还是右，递归加在叶子上</span></div><div class="line">        <span class="keyword">if</span> point[<span class="number">0</span>][self.axis] &lt; self.node[<span class="number">0</span>][self.axis]:</div><div class="line">            <span class="keyword">if</span> self.left != <span class="keyword">None</span>:</div><div class="line">                self.left.insert(point)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                self.left = kdtree([point], self.axis + <span class="number">1</span>, self)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">if</span> self.right != <span class="keyword">None</span>:</div><div class="line">                self.right.insert(point)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                self.right = kdtree([point], self.axis + <span class="number">1</span>, self)</div><div class="line"></div><div class="line">    <span class="comment"># 输入一点</span></div><div class="line">    <span class="comment"># 按切分寻找叶子</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">find_leaf</span><span class="params">(self, point)</span>:</span></div><div class="line">        <span class="keyword">if</span> self.left == <span class="keyword">None</span> <span class="keyword">and</span> self.right == <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">return</span> self</div><div class="line">        <span class="keyword">elif</span> self.left == <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">return</span> self.right.find_leaf(point)</div><div class="line">        <span class="keyword">elif</span> self.right == <span class="keyword">None</span>:</div><div class="line">            <span class="keyword">return</span> self.left.find_leaf(point)</div><div class="line">        <span class="keyword">elif</span> point[self.axis] &lt; self.node[<span class="number">0</span>][self.axis][<span class="number">0</span>]:</div><div class="line">            <span class="keyword">return</span> self.left.find_leaf(point)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">return</span> self.right.find_leaf(point)</div><div class="line"></div><div class="line">    <span class="comment"># 查找最近的 k 个点，复杂度 O(DlogN)，D是维度，N是树的大小</span></div><div class="line">    <span class="comment"># 输入一点、一距离函数、一k。距离函数默认是 L_2</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">knearest</span><span class="params">(self, point, k=<span class="number">1</span>, dist=lambda x, y: sum<span class="params">(map<span class="params">(lambda u, v: <span class="params">(u - v)</span> ** <span class="number">2</span>, x, y)</span>)</span>)</span>:</span></div><div class="line">        <span class="comment"># 往下戳到最底叶</span></div><div class="line">        leaf = self.find_leaf(point)</div><div class="line">        <span class="comment"># 从叶子网上爬</span></div><div class="line">        <span class="keyword">return</span> leaf.k_down_up(point, k, dist, result=[], stop=self, visited=<span class="keyword">None</span>)</div><div class="line"></div><div class="line">    <span class="comment"># 从下往上爬函数，stop是到哪里去，visited是从哪里来</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">k_down_up</span><span class="params">(self, point, k, dist, result=[], stop=None, visited=None)</span>:</span></div><div class="line"></div><div class="line">        <span class="comment"># 选最长距离</span></div><div class="line">        <span class="keyword">if</span> result == []:</div><div class="line">            max_dist = <span class="number">0</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            max_dist = max([x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> result])</div><div class="line"></div><div class="line">        other_result = []</div><div class="line"></div><div class="line">        <span class="comment"># 如果离分界线的距离小于现有最大距离，或者数据点不够，就从另一边的树根开始刨</span></div><div class="line">        <span class="keyword">if</span> (self.left == visited <span class="keyword">and</span> self.node[<span class="number">0</span>][<span class="number">0</span>][self.axis] - point[self.axis] &lt; max_dist <span class="keyword">and</span> self.right != <span class="keyword">None</span>) <span class="keyword">or</span> (</div><div class="line">                    len(result) &lt; k <span class="keyword">and</span> self.left == visited <span class="keyword">and</span> self.right != <span class="keyword">None</span>):</div><div class="line">            other_result = self.right.knearest(point, k, dist)</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (self.right == visited <span class="keyword">and</span> point[self.axis] - self.node[<span class="number">0</span>][<span class="number">0</span>][self.axis] &lt; max_dist <span class="keyword">and</span> self.left != <span class="keyword">None</span>) <span class="keyword">or</span> (</div><div class="line">                    len(result) &lt; k <span class="keyword">and</span> self.right == visited <span class="keyword">and</span> self.left != <span class="keyword">None</span>):</div><div class="line">            other_result = self.left.knearest(point, k, dist)</div><div class="line"></div><div class="line">        <span class="comment"># 刨出来的点放一起，选前 k 个</span></div><div class="line">        result.append((self.node, dist(point, self.node[<span class="number">0</span>])))</div><div class="line">        result = sorted(result + other_result, key=<span class="keyword">lambda</span> pair: pair[<span class="number">1</span>])[:k]</div><div class="line"></div><div class="line">        <span class="comment"># 到停点就返回结果</span></div><div class="line">        <span class="keyword">if</span> self == stop:</div><div class="line">            <span class="keyword">return</span> result</div><div class="line">        <span class="comment"># 没有就带着现有结果接着往上爬</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">return</span> self.root.k_down_up(point, k, dist, result, stop, self)</div><div class="line"></div><div class="line">    <span class="comment"># 输入 特征、类别、k、距离函数</span></div><div class="line">    <span class="comment"># 返回这个点属于该类别的概率</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">kNN_prob</span><span class="params">(self, point, label, k, dist=lambda x, y: sum<span class="params">(map<span class="params">(lambda u, v: <span class="params">(u - v)</span> ** <span class="number">2</span>, x, y)</span>)</span>)</span>:</span></div><div class="line">        nearests = self.knearest(point, k, dist)</div><div class="line">        <span class="keyword">return</span> float(len([pair <span class="keyword">for</span> pair <span class="keyword">in</span> nearests <span class="keyword">if</span> pair[<span class="number">0</span>][<span class="number">1</span>] == label])) / float(len(nearests))</div><div class="line"></div><div class="line">    <span class="comment"># 输入 特征、k、距离函数</span></div><div class="line">    <span class="comment"># 返回该点概率最大的类别以及相对应的概率</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">kNN</span><span class="params">(self, point, k, dist=lambda x, y: sum<span class="params">(map<span class="params">(lambda u, v: <span class="params">(u - v)</span> ** <span class="number">2</span>, x, y)</span>)</span>)</span>:</span></div><div class="line">        nearests = self.knearest(point, k, dist)</div><div class="line"></div><div class="line">        statistics = &#123;&#125;</div><div class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> nearests:</div><div class="line">            label = data[<span class="number">0</span>][<span class="number">1</span>]</div><div class="line">            <span class="keyword">if</span> label <span class="keyword">not</span> <span class="keyword">in</span> statistics:</div><div class="line">                statistics[label] = <span class="number">1</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                statistics[label] += <span class="number">1</span></div><div class="line"></div><div class="line">        max_label = max(statistics.items(), key=operator.itemgetter(<span class="number">1</span>))[<span class="number">0</span>]</div><div class="line">        <span class="keyword">return</span> max_label, float(statistics[max_label]) / float(len(nearests))</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 设置样本集</span></div><div class="line">grieves = list(map(<span class="keyword">lambda</span> x,y:tuple(((x,y),<span class="string">'g'</span>)),grief_heights, grief_weights))</div><div class="line">agonies =  list(map(<span class="keyword">lambda</span> u,v:tuple(((u,v),<span class="string">'b'</span>)),agony_heights, agony_weights))</div><div class="line">despairs =  list(map(<span class="keyword">lambda</span> a,b:tuple(((a,b),<span class="string">'y'</span>)),despair_heights, despair_weights))</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建kd树</span></div><div class="line">tree = kdtree(list((grieves,agonies,despairs)))</div><div class="line"></div><div class="line"><span class="comment"># 穷举生成空间上的点</span></div><div class="line">all_points = []</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>,<span class="number">701</span>):</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">100</span>,<span class="number">701</span>):</div><div class="line">        all_points.append((float(i)/<span class="number">10.</span>, float(j)/<span class="number">100.</span>))</div><div class="line">        </div><div class="line">        </div><div class="line"><span class="comment"># 一共是36万个点</span></div><div class="line">len(all_points)</div><div class="line"></div><div class="line"><span class="comment"># 设置归一化距离函数</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalized_dist</span><span class="params">(x, y)</span>:</span></div><div class="line">    <span class="keyword">return</span> (x[<span class="number">0</span>] - y[<span class="number">0</span>][<span class="number">0</span>]) ** <span class="number">2</span> + (<span class="number">10</span> * x[<span class="number">1</span>] - <span class="number">10</span> * y[<span class="number">0</span>][<span class="number">1</span>]) ** <span class="number">2</span></div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">now = datetime.datetime.now()</div><div class="line">fifteen_NN_result = []</div><div class="line"><span class="keyword">for</span> point <span class="keyword">in</span> all_points:</div><div class="line"><span class="comment">#     print(point)</span></div><div class="line">    fifteen_NN_result.append((point, tree.kNN(point,k=<span class="number">15</span>, dist=normalized_dist)[<span class="number">0</span>]))</div><div class="line">print(datetime.datetime.now() - now)</div></pre></td></tr></table></figure>
+<pre><code>0:00:04.620688
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 把每个颜色的数据分开</span></div><div class="line">fifteen_NN_yellow = []</div><div class="line">fifteen_NN_green = []</div><div class="line">fifteen_NN_blue = []</div><div class="line"></div><div class="line"><span class="keyword">for</span> pair <span class="keyword">in</span> fifteen_NN_result:</div><div class="line">    <span class="keyword">if</span> pair[<span class="number">1</span>]==<span class="string">'y'</span>:</div><div class="line">        fifteen_NN_yellow.append(pair[<span class="number">0</span>])</div><div class="line">    <span class="keyword">if</span> pair[<span class="number">1</span>]==<span class="string">'g'</span>:</div><div class="line">        fifteen_NN_green.append(pair[<span class="number">0</span>])</div><div class="line">    <span class="keyword">if</span> pair[<span class="number">1</span>]==<span class="string">'b'</span>:</div><div class="line">        fifteen_NN_blue.append(pair[<span class="number">0</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">plt.scatter(<span class="number">40</span>,<span class="number">2.7</span>, c=<span class="string">'r'</span>, s=<span class="number">200</span>, marker=<span class="string">'*'</span>,alpha=<span class="number">0.8</span>, zorder=<span class="number">10</span>)</div><div class="line">plt.scatter(grief_heights,grief_weights,c=<span class="string">'g'</span>,marker=<span class="string">'s'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>,zorder=<span class="number">10</span>)</div><div class="line">plt.scatter(agony_heights,agony_weights,c=<span class="string">'b'</span>,marker=<span class="string">'^'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>,zorder=<span class="number">10</span>)</div><div class="line">plt.scatter(despair_heights,despair_weights, c=<span class="string">'y'</span>, s=<span class="number">50</span>, alpha=<span class="number">0.8</span>,zorder=<span class="number">10</span>)</div><div class="line">plt.scatter([x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_yellow], [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_yellow], s=<span class="number">1</span>, c=<span class="string">'yellow'</span>, marker=<span class="string">'1'</span>, alpha=<span class="number">0.3</span>)</div><div class="line">plt.scatter([x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_blue], [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_blue], s=<span class="number">1</span>, c=<span class="string">'blue'</span>, marker=<span class="string">'2'</span>, alpha=<span class="number">0.3</span>)</div><div class="line">plt.scatter([x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_green], [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_green], s=<span class="number">1</span>, c=<span class="string">'green'</span>, marker=<span class="string">'3'</span>, alpha=<span class="number">0.3</span>)</div><div class="line">plt.axis((<span class="number">10</span>, <span class="number">70</span>,<span class="number">1</span>,<span class="number">7</span>))</div><div class="line">plt.title(<span class="string">'15NN分类'</span>,size=<span class="number">30</span>)</div><div class="line">plt.xlabel(<span class="string">'身高 (cm)'</span>,size=<span class="number">15</span>)</div><div class="line">plt.ylabel(<span class="string">'体重 (kg)'</span>, size=<span class="number">15</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
+<p><img src="output_12_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 每个点运算 1NN，并记录计算时间</span></div><div class="line">now = datetime.datetime.now()</div><div class="line">one_NN_result = []</div><div class="line"><span class="keyword">for</span> point <span class="keyword">in</span> all_points:</div><div class="line">    one_NN_result.append((point, tree.kNN(point,k=<span class="number">1</span>, dist=<span class="keyword">lambda</span> x,y: (x[<span class="number">0</span>]-y[<span class="number">0</span>])**<span class="number">2</span>+(<span class="number">10</span>*x[<span class="number">1</span>]<span class="number">-10</span>*y[<span class="number">1</span>])**<span class="number">2</span>)[<span class="number">0</span>]))</div><div class="line">print(datetime.datetime.now() - now)</div></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-28-03a1c722823e&gt; in &lt;module&gt;()
+      3 one_NN_result = []
+      4 for point in all_points:
+----&gt; 5     one_NN_result.append((point, tree.kNN(point,k=1, dist=lambda x,y: (x[0]-y[0])**2+(10*x[1]-10*y[1])**2)[0]))
+      6 print(datetime.datetime.now() - now)
+
+
+&lt;ipython-input-19-bf4a3fccbc59&gt; in kNN(self, point, k, dist)
+    112     # 返回该点概率最大的类别以及相对应的概率
+    113     def kNN(self, point, k, dist=lambda x, y: sum(map(lambda u, v: (u - v) ** 2, x, y))):
+--&gt; 114         nearests = self.knearest(point, k, dist)
+    115 
+    116         statistics = {}
+
+
+&lt;ipython-input-19-bf4a3fccbc59&gt; in knearest(self, point, k, dist)
+     70         leaf = self.find_leaf(point)
+     71         # 从叶子网上爬
+---&gt; 72         return leaf.k_down_up(point, k, dist, result=[], stop=self, visited=None)
+     73 
+     74     # 从下往上爬函数，stop是到哪里去，visited是从哪里来
+
+
+&lt;ipython-input-19-bf4a3fccbc59&gt; in k_down_up(self, point, k, dist, result, stop, visited)
+     93 
+     94         # 刨出来的点放一起，选前 k 个
+---&gt; 95         result.append((self.node, dist(point, self.node[0])))
+     96         result = sorted(result + other_result, key=lambda pair: pair[1])[:k]
+     97 
+
+
+&lt;ipython-input-28-03a1c722823e&gt; in &lt;lambda&gt;(x, y)
+      3 one_NN_result = []
+      4 for point in all_points:
+----&gt; 5     one_NN_result.append((point, tree.kNN(point,k=1, dist=lambda x,y: (x[0]-y[0])**2+(10*x[1]-10*y[1])**2)[0]))
+      6 print(datetime.datetime.now() - now)
+
+
+TypeError: unsupported operand type(s) for -: &apos;float&apos; and &apos;tuple&apos;
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/knn/" rel="tag"># knn</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/28/Python/flask 下载文件/" rel="next" title="flask 下载文件">
+                <i class="fa fa-chevron-left"></i> flask 下载文件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/28/新媒体/文案/" rel="prev" title="文案">
+                文案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+
+
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3">
+
+</div>
+<!-- City版安装代码已完成 -->
+
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="yunpiao" />
+          <p class="site-author-name" itemprop="name">yunpiao</p>
+           
+              <p class="site-description motion-element" itemprop="description">转行程序员</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">67</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#机器学习"><span class="nav-number">1.</span> <span class="nav-text">机器学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunpiao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2133384"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

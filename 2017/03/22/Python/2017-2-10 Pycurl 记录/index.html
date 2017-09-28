@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pycurl 记录 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="PycurlPycurl包是一个libcurl的Python接口，它是由C语言编写的。与urllib相比，它的速度要快很多。
+Libcurl 是一个支持FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 和 LDAP的客户端URL传输库.libcurl也支持HTTPS认证,HTTP POST,HTTP PUT,FTP上传,代理,Cookies,基">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pycurl 记录">
+<meta property="og:url" content="http://yoursite.com/2017/03/22/Python/2017-2-10 Pycurl 记录/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="PycurlPycurl包是一个libcurl的Python接口，它是由C语言编写的。与urllib相比，它的速度要快很多。
+Libcurl 是一个支持FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 和 LDAP的客户端URL传输库.libcurl也支持HTTPS认证,HTTP POST,HTTP PUT,FTP上传,代理,Cookies,基">
+<meta property="og:updated_time" content="2017-03-21T14:09:02.547Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pycurl 记录">
+<meta name="twitter:description" content="PycurlPycurl包是一个libcurl的Python接口，它是由C语言编写的。与urllib相比，它的速度要快很多。
+Libcurl 是一个支持FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 和 LDAP的客户端URL传输库.libcurl也支持HTTPS认证,HTTP POST,HTTP PUT,FTP上传,代理,Cookies,基">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python/2017-2-10 Pycurl 记录" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/Python/2017-2-10 Pycurl 记录/" class="article-date">
+  <time datetime="2017-03-22T07:18:14.474Z" itemprop="datePublished">2017-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Pycurl 记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h1 id="Pycurl"><a href="#Pycurl" class="headerlink" title="Pycurl"></a>Pycurl</h1><p>Pycurl包是一个libcurl的Python接口，它是由C语言编写的。与urllib相比，它的速度要快很多。</p>
+<p>Libcurl 是一个支持FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 和 LDAP的客户端URL传输库.libcurl也支持HTTPS认证,HTTP POST,HTTP PUT,FTP上传,代理,Cookies,基本身份验证,FTP文件断点继传,HTTP代理通道等等。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pycurl</div><div class="line"><span class="keyword">import</span> StringIO</div><div class="line"></div><div class="line">c = pycurl.Curl() <span class="comment">#创建一个同libcurl中的CURL处理器相对应的Curl对象</span></div><div class="line"></div><div class="line">b = StringIO.StringIO()</div><div class="line"></div><div class="line"><span class="comment">#c.setopt(c.POST, 1)</span></div><div class="line"></div><div class="line">c.setopt(pycurl.URL, url) <span class="comment">#设置要访问的网址 url = "http://www.cnn.com"</span></div><div class="line"></div><div class="line"><span class="comment">#写的回调</span></div><div class="line">c.setopt(pycurl.WRITEFUNCTION, b.write)</div><div class="line">c.setopt(pycurl.FOLLOWLOCATION, <span class="number">1</span>) <span class="comment">#参数有1、2</span></div><div class="line"></div><div class="line"><span class="comment">#最大重定向次数,可以预防重定向陷阱</span></div><div class="line">c.setopt(pycurl.MAXREDIRS, <span class="number">5</span>)</div><div class="line"><span class="comment">#连接超时设置</span></div><div class="line">c.setopt(pycurl.CONNECTTIMEOUT, <span class="number">60</span>) <span class="comment">#链接超时</span></div><div class="line"><span class="comment"># c.setopt(pycurl.TIMEOUT, 300) #下载超时</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(pycurl.HEADER, True)</span></div><div class="line"><span class="comment"># c.setopt(c.HTTPHEADER, ["Content-Type: application/x-www-form-urlencoded","X-Requested-With:XMLHttpRequest","Cookie:"+set_cookie[0]])</span></div><div class="line"><span class="comment">#模拟浏览器</span></div><div class="line">c.setopt(pycurl.USERAGENT, <span class="string">"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)"</span>)</div><div class="line"><span class="comment"># c.setopt(pycurl.AUTOREFERER,1)</span></div><div class="line"><span class="comment"># c.setopt(c.REFERER, url)</span></div><div class="line"></div><div class="line"><span class="comment"># cookie设置</span></div><div class="line"><span class="comment"># Option -b/--cookie &lt;name=string/file&gt; Cookie string or file to read cookies from</span></div><div class="line"><span class="comment"># Note: must be a string, not a file object.</span></div><div class="line"><span class="comment"># c.setopt(pycurl.COOKIEFILE, "cookie_file_name")</span></div><div class="line"></div><div class="line"><span class="comment"># Option -c/--cookie-jar Write cookies to this file after operation</span></div><div class="line"><span class="comment"># Note: must be a string, not a file object.</span></div><div class="line"><span class="comment"># c.setopt(pycurl.COOKIEJAR, "cookie_file_name")</span></div><div class="line"></div><div class="line"><span class="comment"># Option -d/--data HTTP POST data</span></div><div class="line">post_data_dic = &#123;<span class="string">"name"</span>:<span class="string">"value"</span>&#125;</div><div class="line">c.setopt(c.POSTFIELDS, urllib.urlencode(post_data_dic))</div><div class="line"></div><div class="line"><span class="comment">#设置代理</span></div><div class="line"><span class="comment"># c.setopt(pycurl.PROXY, ‘http://11.11.11.11:8080′)</span></div><div class="line"><span class="comment"># c.setopt(pycurl.PROXYUSERPWD, ‘aaa:aaa’)</span></div><div class="line"><span class="comment">#不明确作用</span></div><div class="line"><span class="comment"># c.setopt(pycurl.HTTPPROXYTUNNEL,1) #隧道代理</span></div><div class="line"><span class="comment"># c.setopt(pycurl.NOSIGNAL, 1)</span></div><div class="line"></div><div class="line"><span class="comment">#设置post请求， 上传文件的字段名 上传的文件</span></div><div class="line"><span class="comment">#post_file = "/home/ubuntu/avatar.jpg"</span></div><div class="line">c.setopt(c.HTTPPOST, [(<span class="string">"textname"</span>, (c.FORM_FILE, post_file))])</div><div class="line"></div><div class="line"><span class="comment"># 调试回调.调试信息类型是一个调试信 息的整数标示类型.在这个回调被调用时VERBOSE选项必须可用</span></div><div class="line"><span class="comment"># c.setopt(c.VERBOSE, 1) #verbose 详细</span></div><div class="line"><span class="comment"># c.setopt(c.DEBUGFUNCTION, test)</span></div><div class="line"></div><div class="line"><span class="comment"># f = open("body", "wb")</span></div><div class="line"><span class="comment"># c.setopt(c.WRITEDATA, f)</span></div><div class="line"><span class="comment"># h = open("header", "wb")</span></div><div class="line"><span class="comment"># c.setopt(c.WRITEHEADER, h)</span></div><div class="line"><span class="comment"># print "Header is in file 'header', body is in file 'body'"</span></div><div class="line"><span class="comment"># f.close()</span></div><div class="line"><span class="comment"># h.close()</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(c.NOPROGRESS, 0)</span></div><div class="line"><span class="comment"># c.setopt(c.PROGRESSFUNCTION, progress)</span></div><div class="line"></div><div class="line"><span class="comment"># c.setopt(c.OPT_FILETIME, 1)</span></div><div class="line"></div><div class="line"><span class="comment">#访问,阻塞到访问结束</span></div><div class="line">c.perform() <span class="comment">#执行上述访问网址的操作</span></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"HTTP-code:"</span>, c.getinfo(c.HTTP_CODE) <span class="comment">#打印出 200(HTTP状态码)</span></div><div class="line"><span class="keyword">print</span> <span class="string">"Total-time:"</span>, c.getinfo(c.TOTAL_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Download speed: %.2f bytes/second"</span> % c.getinfo(c.SPEED_DOWNLOAD)</div><div class="line"><span class="keyword">print</span> <span class="string">"Document size: %d bytes"</span> % c.getinfo(c.SIZE_DOWNLOAD)</div><div class="line"><span class="keyword">print</span> <span class="string">"Effective URL:"</span>, c.getinfo(c.EFFECTIVE_URL)</div><div class="line"><span class="keyword">print</span> <span class="string">"Content-type:"</span>, c.getinfo(c.CONTENT_TYPE)</div><div class="line"><span class="keyword">print</span> <span class="string">"Namelookup-time:"</span>, c.getinfo(c.NAMELOOKUP_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Redirect-time:"</span>, c.getinfo(c.REDIRECT_TIME)</div><div class="line"><span class="keyword">print</span> <span class="string">"Redirect-count:"</span>, c.getinfo(c.REDIRECT_COUNT)</div><div class="line"></div><div class="line"><span class="comment"># epoch = c.getinfo(c.INFO_FILETIME)</span></div><div class="line"><span class="comment">#print "Filetime: %d (%s)" % (epoch, time.ctime(epoch))</span></div><div class="line"></div><div class="line">html = b.getvalue()</div><div class="line">print(html)</div><div class="line"></div><div class="line">b.close()</div><div class="line">c.close()</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> grequests</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">pattern = re.compile(<span class="string">r'((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+'</span>)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url</span><span class="params">(html)</span>:</span></div><div class="line">    m = re.findall(<span class="string">r'(https|http?:\/\/[^\s]+.com|cn|org)'</span>, html)</div><div class="line">    <span class="comment"># m = re.findall(r'^https?://[\d\-a-zA-Z]+(\.[\d\-a-zA-Z]+)*/?$', html)</span></div><div class="line">    <span class="keyword">return</span> (m)</div><div class="line"></div><div class="line">html= requests.get(<span class="string">"http://www.best918.com/"</span>).text</div><div class="line">urls = get_url(html)</div><div class="line">gen = (grequests.get(i, proxies=proxies, timeout=<span class="number">3</span>)  <span class="keyword">for</span> i <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> grequests.imap(gen, size=<span class="number">200</span>):</div><div class="line">    print(i.url)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> get_url(i.text):</div><div class="line">        urls.append(k)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">import</span>  grequests</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line">start_time = time.time()</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">  <span class="string">"https"</span>: <span class="string">"https://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">urls = [</div><div class="line">        <span class="string">"http://www.baidu.com"</span>,</div><div class="line">        <span class="string">"http://www.google.com"</span>,</div><div class="line">    ]</div><div class="line"></div><div class="line">rs = (grequests.get(u, timeout=<span class="number">3</span>, proxies=proxies) <span class="keyword">for</span> u <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> grequests.imap(rs, size=<span class="number">200</span>):</div><div class="line">    print(r.content)</div><div class="line"></div><div class="line">duration = time.time() - start_time</div><div class="line"><span class="keyword">print</span> (<span class="string">'pycurl takes %s seconds  '</span> % (duration))</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/22/Python/2017-2-10 Pycurl 记录/" data-id="cj0ko5upl006c0dmpu0xlvdob" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pycurl/">pycurl</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/22/Python/2017-2-10 python 性能分析 cProfile/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          python 性能分析 cProfile
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/22/Python/2017-2-10 python生成器 迭代器/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">python生成器 迭代器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/APSchedule/">APSchedule</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CrossOver/">CrossOver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ddos-安全，-防御/">Ddos, 安全， 防御</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django，-python/">Django， python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-容器-安全策略/">Docker,容器,安全策略</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MVVM/">MVVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebSockets/">WebSockets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/amd64/">amd64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/brower/">brower</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cProfile/">cProfile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/disk/">disk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dpkg/">dpkg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fstab/">fstab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goconfig/">goconfig</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greques/">greques</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hash/">hash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i386/">i386</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/instal/">instal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon-openTsdb/">open-falcon,openTsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pycurl/">pycurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-pan/">python pan</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分页/">分页</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令/">命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份l/">备份l</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/局部敏感哈希/">局部敏感哈希</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文案/">文案,</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/桌面-ubuntu/">桌面, ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模拟器/">模拟器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本迁移/">版本迁移</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生成器/">生成器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/端口号/">端口号</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/APSchedule/" style="font-size: 10px;">APSchedule</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/Ddos-安全，-防御/" style="font-size: 10px;">Ddos, 安全， 防御</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Django，-python/" style="font-size: 10px;">Django， python</a> <a href="/tags/Docker-容器-安全策略/" style="font-size: 10px;">Docker,容器,安全策略</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/WebSockets/" style="font-size: 10px;">WebSockets</a> <a href="/tags/amd64/" style="font-size: 10px;">amd64</a> <a href="/tags/brower/" style="font-size: 10px;">brower</a> <a href="/tags/cProfile/" style="font-size: 10px;">cProfile</a> <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/disk/" style="font-size: 10px;">disk</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/dpkg/" style="font-size: 10px;">dpkg</a> <a href="/tags/fstab/" style="font-size: 10px;">fstab</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/goconfig/" style="font-size: 10px;">goconfig</a> <a href="/tags/greques/" style="font-size: 10px;">greques</a> <a href="/tags/hash/" style="font-size: 10px;">hash</a> <a href="/tags/i386/" style="font-size: 10px;">i386</a> <a href="/tags/instal/" style="font-size: 10px;">instal</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/open-falcon-openTsdb/" style="font-size: 10px;">open-falcon,openTsdb</a> <a href="/tags/pip/" style="font-size: 10px;">pip</a> <a href="/tags/pycurl/" style="font-size: 10px;">pycurl</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-pan/" style="font-size: 10px;">python pan</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/分页/" style="font-size: 10px;">分页</a> <a href="/tags/命令/" style="font-size: 10px;">命令</a> <a href="/tags/备份l/" style="font-size: 10px;">备份l</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/安全/" style="font-size: 16.67px;">安全</a> <a href="/tags/局部敏感哈希/" style="font-size: 10px;">局部敏感哈希</a> <a href="/tags/文案/" style="font-size: 10px;">文案,</a> <a href="/tags/桌面-ubuntu/" style="font-size: 10px;">桌面, ubuntu</a> <a href="/tags/模拟器/" style="font-size: 10px;">模拟器</a> <a href="/tags/版本迁移/" style="font-size: 10px;">版本迁移</a> <a href="/tags/生成器/" style="font-size: 10px;">生成器</a> <a href="/tags/端口号/" style="font-size: 16.67px;">端口号</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/22/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/机器学习/文本相识度/">文本相识度</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/前端/MVVM 学习笔记/">MVVM 学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/Go/使用goconfig 读取配置文件/">使用goconfig 读取配置文件</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/监控平台/open-falcon监控系统调研/">open-falcon监控系统调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Grequest 记录 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Grequest 记录GRequests: Asynchronous Requests
+GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Grequest 记录">
+<meta property="og:url" content="http://yoursite.com/2017/03/22/Python/2017-2-10 grequest 记录/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Grequest 记录GRequests: Asynchronous Requests
+GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。">
+<meta property="og:updated_time" content="2017-03-21T14:09:02.525Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Grequest 记录">
+<meta name="twitter:description" content="Grequest 记录GRequests: Asynchronous Requests
+GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Python/2017-2-10 grequest 记录" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/22/Python/2017-2-10 grequest 记录/" class="article-date">
+  <time datetime="2017-03-22T07:18:14.415Z" itemprop="datePublished">2017-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Grequest 记录
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Grequest-记录"><a href="#Grequest-记录" class="headerlink" title="Grequest 记录"></a>Grequest 记录</h1><p>GRequests: Asynchronous Requests</p>
+<p>GRequests allows you to use Requests with Gevent to make asynchronous HTTP Requests easily.<br>异步请求 GRequests允许您使用具有Gevent的Requests轻松地进行异步HTTP请求。</p>
+<a id="more"></a>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>pip install grequests</p>
+</blockquote>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 这种写法会造成程序崩溃</span></div><div class="line">rs = (grequests.get(url) <span class="keyword">for</span> url <span class="keyword">in</span> url_chunk)</div><div class="line">res_items = grequests.map(rs, timeout=<span class="number">10</span>s) <span class="comment"># this is the item that times out</span></div><div class="line"></div><div class="line"><span class="comment"># 这样写可以优化性能</span></div><div class="line">rs = (grequests.get(u, timeout=<span class="number">3</span>, proxies=proxies) <span class="keyword">for</span> u <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> r <span class="keyword">in</span> grequests.imap(rs, size=<span class="number">200</span>):</div><div class="line">    print(r.content)</div></pre></td></tr></table></figure>
+<h2 id="事例"><a href="#事例" class="headerlink" title="事例"></a>事例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 爬取url 中的 url</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">import</span> grequests</div><div class="line"></div><div class="line">proxies = &#123;</div><div class="line">  <span class="string">"http"</span>: <span class="string">"http://127.0.0.1:1080"</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url</span><span class="params">(html)</span>:</span></div><div class="line">    m = re.findall(<span class="string">r'(https|http?:\/\/[^\s]+.com|cn|org)'</span>, html)</div><div class="line">    <span class="keyword">return</span> (m)</div><div class="line"></div><div class="line">html= requests.get(<span class="string">"http://www.best918.com/"</span>).text</div><div class="line">urls = get_url(html)</div><div class="line">gen = (grequests.get(i, proxies=proxies, timeout=<span class="number">3</span>)  <span class="keyword">for</span> i <span class="keyword">in</span> urls)</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> grequests.imap(gen, size=<span class="number">200</span>):</div><div class="line">    print(i.url)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> get_url(i.text):</div><div class="line">        urls.append(k)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/03/22/Python/2017-2-10 grequest 记录/" data-id="cj0ko5upq006g0dmp40gu07xr" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greques/">greques</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/22/Python/2017-2-10 Plan 设置 crontab python 接口/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Plan 设置 crontab python 接口
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/03/22/linux 命令/git 命令/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">git 命令</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/APSchedule/">APSchedule</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CrossOver/">CrossOver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ddos-安全，-防御/">Ddos, 安全， 防御</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django，-python/">Django， python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker-容器-安全策略/">Docker,容器,安全策略</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MVVM/">MVVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebSockets/">WebSockets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/amd64/">amd64</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/brower/">brower</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cProfile/">cProfile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/celery/">celery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/disk/">disk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/django/">django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dpkg/">dpkg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fstab/">fstab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goconfig/">goconfig</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greques/">greques</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hash/">hash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i386/">i386</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/instal/">instal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/open-falcon-openTsdb/">open-falcon,openTsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pip/">pip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pycurl/">pycurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-pan/">python pan</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/server/">server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式/">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分页/">分页</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令/">命令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/备份l/">备份l</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/安全/">安全</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/局部敏感哈希/">局部敏感哈希</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文案/">文案,</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/桌面-ubuntu/">桌面, ubuntu</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/模拟器/">模拟器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/版本迁移/">版本迁移</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生成器/">生成器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/端口号/">端口号</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/APSchedule/" style="font-size: 10px;">APSchedule</a> <a href="/tags/CrossOver/" style="font-size: 10px;">CrossOver</a> <a href="/tags/Ddos-安全，-防御/" style="font-size: 10px;">Ddos, 安全， 防御</a> <a href="/tags/Django/" style="font-size: 10px;">Django</a> <a href="/tags/Django，-python/" style="font-size: 10px;">Django， python</a> <a href="/tags/Docker-容器-安全策略/" style="font-size: 10px;">Docker,容器,安全策略</a> <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/WebSockets/" style="font-size: 10px;">WebSockets</a> <a href="/tags/amd64/" style="font-size: 10px;">amd64</a> <a href="/tags/brower/" style="font-size: 10px;">brower</a> <a href="/tags/cProfile/" style="font-size: 10px;">cProfile</a> <a href="/tags/celery/" style="font-size: 10px;">celery</a> <a href="/tags/disk/" style="font-size: 10px;">disk</a> <a href="/tags/django/" style="font-size: 10px;">django</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/dpkg/" style="font-size: 10px;">dpkg</a> <a href="/tags/fstab/" style="font-size: 10px;">fstab</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/goconfig/" style="font-size: 10px;">goconfig</a> <a href="/tags/greques/" style="font-size: 10px;">greques</a> <a href="/tags/hash/" style="font-size: 10px;">hash</a> <a href="/tags/i386/" style="font-size: 10px;">i386</a> <a href="/tags/instal/" style="font-size: 10px;">instal</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/open-falcon-openTsdb/" style="font-size: 10px;">open-falcon,openTsdb</a> <a href="/tags/pip/" style="font-size: 10px;">pip</a> <a href="/tags/pycurl/" style="font-size: 10px;">pycurl</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-pan/" style="font-size: 10px;">python pan</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/server/" style="font-size: 10px;">server</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/分页/" style="font-size: 10px;">分页</a> <a href="/tags/命令/" style="font-size: 10px;">命令</a> <a href="/tags/备份l/" style="font-size: 10px;">备份l</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/安全/" style="font-size: 16.67px;">安全</a> <a href="/tags/局部敏感哈希/" style="font-size: 10px;">局部敏感哈希</a> <a href="/tags/文案/" style="font-size: 10px;">文案,</a> <a href="/tags/桌面-ubuntu/" style="font-size: 10px;">桌面, ubuntu</a> <a href="/tags/模拟器/" style="font-size: 10px;">模拟器</a> <a href="/tags/版本迁移/" style="font-size: 10px;">版本迁移</a> <a href="/tags/生成器/" style="font-size: 10px;">生成器</a> <a href="/tags/端口号/" style="font-size: 16.67px;">端口号</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/03/22/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/机器学习/文本相识度/">文本相识度</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/前端/MVVM 学习笔记/">MVVM 学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/Go/使用goconfig 读取配置文件/">使用goconfig 读取配置文件</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/22/监控平台/open-falcon监控系统调研/">open-falcon监控系统调研</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

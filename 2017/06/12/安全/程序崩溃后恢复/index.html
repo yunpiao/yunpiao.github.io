@@ -1,0 +1,807 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="yunpiao,," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1. Pydbg 进程快照">
+<meta name="keywords" content="yunpiao,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件测试--程序崩溃后如何恢复">
+<meta property="og:url" content="http://yunpiao.pub/2017/06/12/安全/程序崩溃后恢复/index.html">
+<meta property="og:site_name" content="偷得浮生半日闲">
+<meta property="og:description" content="1. Pydbg 进程快照">
+<meta property="og:updated_time" content="2017-09-28T11:41:03.670Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="软件测试--程序崩溃后如何恢复">
+<meta name="twitter:description" content="1. Pydbg 进程快照">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yunpiao.pub/2017/06/12/安全/程序崩溃后恢复/"/>
+
+
+
+
+
+  <title>软件测试--程序崩溃后如何恢复 | 偷得浮生半日闲</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98719558-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?eb6a0c09a5722869261ea7ab931e3a98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">偷得浮生半日闲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yunpiao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/haha" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.pub/2017/06/12/安全/程序崩溃后恢复/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">软件测试--程序崩溃后如何恢复</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T22:26:45+08:00">
+                2017/06/12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-Pydbg-进程快照"><a href="#1-Pydbg-进程快照" class="headerlink" title="1. Pydbg 进程快照"></a>1. Pydbg 进程快照</h2><a id="more"></a>
+<p>第一步,在一个准确的时间获得一份目标进程的精确快照。</p>
+<h3 id="基本步骤"><a href="#基本步骤" class="headerlink" title="基本步骤"></a>基本步骤</h3><ol>
+<li>为了防止在获取快照的时候，进程的数据或者状态被修改，需要将进程挂起来，</li>
+<li>这个任 务由 suspend_all_threads()完成。</li>
+<li>挂起进程之后，可以用 process_snapshot()获取快照。</li>
+<li>快照完成之后，用 resume_all_threads()恢复挂起的进程，让程序继续执行。</li>
+<li>当某个时刻我们需要将 进程恢复到从前的状态，简单的 process_restore()就行了。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#snapshot.py</span></div><div class="line"><span class="keyword">from</span> pydbg <span class="keyword">import</span> *</div><div class="line"><span class="keyword">from</span> pydbg.defines <span class="keyword">import</span> * </div><div class="line"><span class="keyword">import</span> threading</div><div class="line"><span class="keyword">import</span> time </div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">snapshotter</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">init</span> <span class="params">(self,exe_path)</span>:</span></div><div class="line">        self.exe_path = exe_path</div><div class="line">        self.pid = <span class="keyword">None</span></div><div class="line">        self.dbg = <span class="keyword">None</span></div><div class="line">        self.running = <span class="keyword">True</span></div><div class="line">        <span class="comment"># Start the debugger thread, and loop until it sets the PID</span></div><div class="line">        <span class="comment"># of our target process</span></div><div class="line">        pydbg_thread = threading.Thread(target=self.start_debugger) pydbg_thread.setDaemon(<span class="number">0</span>)</div><div class="line">        pydbg_thread.start()</div><div class="line">        <span class="keyword">while</span> self.pid == <span class="keyword">None</span>: </div><div class="line">            time.sleep(<span class="number">1</span>)</div><div class="line">        <span class="comment"># We now have a PID and the target is running; let's get a</span></div><div class="line">        <span class="comment"># second thread running to do the snapshots</span></div><div class="line">        monitor_thread = threading.Thread(target=self.monitor_debugger) monitor_thread.setDaemon(<span class="number">0</span>)</div><div class="line">        monitor_thread.start() </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">monitor_debugger</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">while</span> self.running == <span class="keyword">True</span>:</div><div class="line">            input = raw_input(<span class="string">"Enter: 'snap','restore' or 'quit'"</span>) </div><div class="line">            input = input.lower().strip()</div><div class="line">            <span class="keyword">if</span> input == <span class="string">"quit"</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Exiting the snapshotter."</span> </div><div class="line">                self.running = <span class="keyword">False</span> self.dbg.terminate_process()</div><div class="line">            <span class="keyword">elif</span> input == <span class="string">"snap"</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Suspending all threads."</span> self.dbg.suspend_all_threads()</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Obtaining snapshot."</span> </div><div class="line">                self.dbg.process_snapshot()</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Resuming operation."</span> </div><div class="line">                self.dbg.resume_all_threads()</div><div class="line">            <span class="keyword">elif</span> input == <span class="string">"restore"</span>:</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Suspending all threads."</span> self.dbg.suspend_all_threads()</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Restoring snapshot."</span> </div><div class="line">                self.dbg.process_restore()</div><div class="line">                <span class="keyword">print</span> <span class="string">"[*] Resuming operation."</span> </div><div class="line">                self.dbg.resume_all_threads()</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">start_debugger</span><span class="params">(self)</span>:</span> self.dbg = pydbg()</div><div class="line">        pid = self.dbg.load(self.exe_path) </div><div class="line">        self.pid = self.dbg.pid</div><div class="line">        self.dbg.run() </div><div class="line">        exe_path = <span class="string">"C:\\WINDOWS\\System32\\calc.exe"</span> </div><div class="line">snapshotter(exe_path)</div></pre></td></tr></table></figure>
+<h1 id="2-虚拟机快照"><a href="#2-虚拟机快照" class="headerlink" title="2. 虚拟机快照"></a>2. 虚拟机快照</h1><ol>
+<li>在系统运行正常时候拍摄快照 </li>
+<li>进行fuzz测试</li>
+<li>当系程序崩溃时, 使用快照恢复技术进行恢复</li>
+</ol>
+<hr>
+<blockquote>
+<p>VBoxManage snapshot | 为指定的虚拟机拍快照<br>take 为快照取名<br>[-desc ]| 给快照添加描述<br>discard | | 丢弃指定的快照<br>discardcurrent -state| 恢复到最近的快照<br>-all | 恢复到倒数第二个快照<br>edit || 编辑指定的快照<br>-current 编辑当前快照<br>[-newname ] 修改快照名称<br>[-newdesc ] 修改快照描述</p>
+<h2 id="showvminfo-显示快照的虚拟机信息"><a href="#showvminfo-显示快照的虚拟机信息" class="headerlink" title="showvminfo | 显示快照的虚拟机信息"></a>showvminfo | 显示快照的虚拟机信息</h2></blockquote>
+<h1 id="3-win32api-模拟点击"><a href="#3-win32api-模拟点击" class="headerlink" title="3. win32api 模拟点击"></a>3. win32api 模拟点击</h1><hr>
+<p>示例 模拟qq登录<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">import</span> win32api</div><div class="line"><span class="keyword">import</span> win32con</div><div class="line"><span class="keyword">import</span> time</div><div class="line"></div><div class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">an</span><span class="params">(qq)</span>:</span>                                                           <span class="comment">#自定义 键盘输入</span></div><div class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> qq:</div><div class="line">        <span class="comment">#print(i)</span></div><div class="line">        win32api.keybd_event(ord(i),<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>) </div><div class="line">        win32api.keybd_event(ord(i),<span class="number">0</span>,win32con.KEYEVENTF_KEYUP,<span class="number">0</span>)</div><div class="line">        time.sleep(<span class="number">0.5</span>)</div><div class="line"></div><div class="line">qq_exe = <span class="string">r"D:\qq\Bin\QQ.exe"</span>                                          <span class="comment">#打开QQ</span></div><div class="line">subprocess.Popen([qq_exe])</div><div class="line">time.sleep(<span class="number">5</span>)</div><div class="line"></div><div class="line">windll.user32.SetCursorPos(<span class="number">969</span>, <span class="number">583</span>)</div><div class="line">win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)    </div><div class="line">win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)         <span class="comment">#选定QQ账号输出框</span></div><div class="line">time.sleep(<span class="number">0.5</span>)</div><div class="line"></div><div class="line">an(<span class="string">"*****"</span>)                                                           <span class="comment">#输入账号</span></div><div class="line"></div><div class="line">win32api.keybd_event(<span class="number">9</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>)</div><div class="line">win32api.keybd_event(<span class="number">9</span>,<span class="number">0</span>,win32con.KEYEVENTF_KEYUP,<span class="number">0</span>)                   <span class="comment">#Tab</span></div><div class="line">    </div><div class="line">an(<span class="string">"*******"</span>)                                                          <span class="comment">#输入密码</span></div><div class="line">win32api.keybd_event(<span class="number">13</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>)</div><div class="line">win32api.keybd_event(<span class="number">13</span>,<span class="number">0</span>,win32con.KEYEVENTF_KEYUP,<span class="number">0</span>)                  <span class="comment">#回车</span></div><div class="line">time.sleep(<span class="number">5</span>)</div></pre></td></tr></table></figure></p>
+<ol>
+<li>使用subprocess 启动待测试程序, 获取进程句柄</li>
+<li>根据句柄操作控制鼠标点击, 按键输入等操作,进行配置</li>
+<li>继续进行测试</li>
+</ol>
+<h1 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h1><p><a href="https://segmentfault.com/q/1010000005931937" target="_blank" rel="external">https://segmentfault.com/q/1010000005931937</a><br><a href="http://book.51cto.com/art/200902/110503.htm" target="_blank" rel="external">http://book.51cto.com/art/200902/110503.htm</a><br><a href="http://www.programgo.com/article/66691241819/" target="_blank" rel="external">http://www.programgo.com/article/66691241819/</a><br><a href="https://wizardforcel.gitbooks.io/grey-hat-python/content/20.html" target="_blank" rel="external">https://wizardforcel.gitbooks.io/grey-hat-python/content/20.html</a><br><a href="https://www.zhihu.com/question/21973351" target="_blank" rel="external">https://www.zhihu.com/question/21973351</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/yunpiao/" rel="tag"># yunpiao,</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/15/安全/数据报文回放/" rel="next" title="数据报文回放-- tcpreplay">
+                <i class="fa fa-chevron-left"></i> 数据报文回放-- tcpreplay
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/07/linux 命令/Nginx python, fastcgi, uwsgi 搭建/" rel="prev" title="Nginx python, fastcgi, uwsgi 搭建">
+                Nginx python, fastcgi, uwsgi 搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+
+
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3">
+
+</div>
+<!-- City版安装代码已完成 -->
+
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="yunpiao" />
+          <p class="site-author-name" itemprop="name">yunpiao</p>
+           
+              <p class="site-description motion-element" itemprop="description">转行程序员</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Pydbg-进程快照"><span class="nav-number">1.</span> <span class="nav-text">1. Pydbg 进程快照</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本步骤"><span class="nav-number">1.1.</span> <span class="nav-text">基本步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-虚拟机快照"><span class="nav-number"></span> <span class="nav-text">2. 虚拟机快照</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#showvminfo-显示快照的虚拟机信息"><span class="nav-number">1.</span> <span class="nav-text">showvminfo | 显示快照的虚拟机信息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-win32api-模拟点击"><span class="nav-number"></span> <span class="nav-text">3. win32api 模拟点击</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考网址"><span class="nav-number"></span> <span class="nav-text">参考网址</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunpiao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2133384"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

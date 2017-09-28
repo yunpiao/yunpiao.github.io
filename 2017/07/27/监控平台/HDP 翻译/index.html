@@ -1,0 +1,779 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="yunpiao,," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="说明">
+<meta name="keywords" content="yunpiao,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HDP 翻译">
+<meta property="og:url" content="http://yunpiao.pub/2017/07/27/监控平台/HDP 翻译/index.html">
+<meta property="og:site_name" content="偷得浮生半日闲">
+<meta property="og:description" content="说明">
+<meta property="og:updated_time" content="2017-09-28T11:41:03.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HDP 翻译">
+<meta name="twitter:description" content="说明">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yunpiao.pub/2017/07/27/监控平台/HDP 翻译/"/>
+
+
+
+
+
+  <title>HDP 翻译 | 偷得浮生半日闲</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98719558-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?eb6a0c09a5722869261ea7ab931e3a98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">偷得浮生半日闲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yunpiao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/haha" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.pub/2017/07/27/监控平台/HDP 翻译/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HDP 翻译</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-27T20:24:57+08:00">
+                2017/07/27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>说明</p>
+</blockquote>
+<a id="more"></a>
+<p>Type to search<br>Hortonworks 中文教程<br>Hello World</p>
+<ol>
+<li>学习Hortonworks Sandbox的线索</li>
+<li>Hadoop教程之从HDP开始<br>2.1. 简介<br>2.2. 概念<br>Published with GitBook<br>Hortonworks 中文教程<br>概念</li>
+</ol>
+<p>简介</p>
+<p>在本教程中，我们考察几个重要概念，以加强我们的Hortonworks数据平台(HDP)基础。 Apache Hadoop是处理和存储海量数据的结构层。 在我们的案例中，HDP平台将Apache Hadoop被当作企业级解决方案。 在HDP底层存在着我们的数据存储环境，即所谓的hadoop分布式文件系统。 当数据文件被Hive，Pig或者其他编程语言处理时，YARN作为数据操作系统，以满足他们对数据的分析，维护，或者处理。 HDP包含多个组件，提供了新的机遇和效率，为健康、金融、保险和其他企业应用保驾护航。<br>准备</p>
+<p>下载并安装最新版Hortonworks Sandbox<br>学习Hortonworks Sandbox的线索](<a href="http://zh.hortonworks.com/hadoop-tutorial/learning-the-ropes-of-the-hortonworks-sandbox/" target="_blank" rel="external">http://zh.hortonworks.com/hadoop-tutorial/learning-the-ropes-of-the-hortonworks-sandbox/</a>)<br>大纲</p>
+<p>概念:Hadoop &amp; HDP<br>概念:HDFS<br>概念:MapReduce &amp; YARN<br>概念:Hive and Pig<br>第1个概念：Hadoop &amp; HDP</p>
+<p>1.1 简介</p>
+<p>在本模块，你将学习Apache Hadoop和是什么使它能够处理大数据集。 我们也将讨论Hadoop生态系统中多个组件，这些组件使Apache Hadoop投入商用从而构成了Hortonworks数据平台（HDP）版本。 本模块讨论Apache Hadoop， 它的处理数据的能力和Hadoop的核心以及周边生态解决方案,是如何满足企业需求，是如何和数据仓库和作为现代数据架构的一部分的其他数据系统集成的。<br>1.2 本节目标</p>
+<p>理解Hadoop。<br>理解HDP的5个核心部分。<br>理解HDP组件和他们的目的。<br>1.3a Apache Hadoop</p>
+<p>Apache Hadoop® 是一个开源可在普通硬件上实现分布存储和大数据处理的框架。 Hadooop能够使商业在海量结构化或非结构化数据上快速聚焦。 Numerous Apache Software Foundation项目向企业提供部署、集成和在Hadoop上工作的服务。<br>Hortonworks博客：理解Hadoop 2.0<br>基本的Apache Hadoop框架由如下部分构成：<br>Hadoop Common — 包含其他Hadoop模块需要的类库和工具集。<br>Hadoop Distributed File System (HDFS) — 可在廉价机器上存储数据的分布式文件集群，需要在集群中提供高带宽。<br>Hadoop YARN — 负责管理集群中的资源的资源管理平台并为用户应用调度资源。<br>Hadoop MapReduce - 大数据处理编程模块。<br>每个项目功能定义明确，每个模块有自己的开发社区和独立的发布循环。5大核心部件使Hadoop达到企业应用级别:<br>数据管理(Data Management) — 在可水平扩展存储层面上，存储和处理海量数据。Hadoop分布式文件系统（HDFS）是水平扩展存储的技术核心，它被设计成可运行在低廉价硬件上。Apache Hadoop YARN是企业级Hadoop必须的。因为它提供了资源管理和可插拔的架构，可预性能和服务级别的基础上，可使用各种数据处理方法来处理存储在Hadoop中的数据。<br>Apache Hadodop YARN - Hadoop项目的核心之一，YARN是下一代Hadoop数据处理框架，扩展了MapReduce的能力，结合其他编程模型支持非MapReduce工作负载。<br>HDFS - Hadoop分布式文件系统是基于java的文件系统，提供可扩展并可靠的数据存储，被设计成可跨越大量廉价集群运行。<br>数据获取（Data Access） - 已多种形式影响你的数据 - 从批量到实时。Apache Hive是最普遍采用的数据获取技术，尽管还有很多专业的引擎。例如，Apache Pig提供了可编程的能力， Apache Storm提供了实时处理，Apache HBase提供了NoSQL列存储， Apache Accumulo提供了单元格级别的获取控制。所有这些引擎由于YARN均可跨数据集和资源工作。实时引擎，比如Apache Tez，可交互式获取数据，并且Apache Slider可支持长时间运行的应用。YARN同时提供了灵活的获取最新数据的方式，比如Apache Solr提供了检索功能，还有编程框架，比如Cascading。<br>Apache Hive - 构建在MapReduce框架之上，Hive是一个数据仓库，能够轻松对存储在HDFS上的数据汇总和通过类SQL接口执行ad-hoc查询。<br>Apache Pig - 处理和分析大数据的平台。Pig包含一个数据分析程序表达高级语言（Pig Latin）,配合MapRduce框架来处理这门语言。<br>Mapreduce - MapReduce是一个写应用的框架，以可靠、可容错的方式，在上千台服务器集群上并行处理海量非机构化或结构化的数据。<br>Apache Spark - Spark在内存中处理数据方面表现完美。它允许数据科学家实现快速、迭代高级分析算法，比如聚类和分类数据集。<br>Apache Storm - Storm是一个处理快速大量流数据分布式实时运算系统，为Apache Hadoop® 2.x增加了可靠的实时数据处理能力。<br>Apache HBase - 一个基于列的NoSQL数据存储系统，为用户应用提供随机实时大数据读写。<br>Apache Tez - Tez将MapReduce模式推广到更加强大的框架， 可执行复杂的DAG（有向无环图）任务，接近实时大数据处理。<br>Apache Kafka - Kafka是一个快速可扩展公开订阅消息传递系统，由于他具有高吞吐量、主从复制和容错能力，经常用到传统消息隧道的场景。<br>Apache HCatalog - 一个表和元数据管理服务，它为数据处理系统理解存储在Apache Hadoop中的数据结构和位置，提供了集中式的方式。<br>Apache Slider - 一个为在Hadoop中长时数据处理应用部署的框架。Slider对YARN资源管理起到杠杆作用，在应用部署、生命周期管理和衡量它们的启停等方面。<br>Apache Solr - Solr是一个开源的Hadoop数据检索平台。Solr具有强大的全文检索并接近实时索引许多世界性的大型互联网网站。<br>Apache Mahout - Mahout提供可扩展的Hadoop机器学习算法，它能够帮助数据科学家对数据聚合、分类和基于协同过滤的批量处理。<br>Apache Accumulo - Accumulo是一个高性能的可基于单元格控制的数据存储和检索系统。它是一个工作于Apache Hadoop和Apache Zookeeper顶层的Google Big Table设计的可扩展的实现。<br>数据支配和集成（Data Governance and Integration） - 快速简单地加载数据和基于策略的管理。Apache Falcon为数据支配提供了基于策略的工作流，同时Apache Flume和Sqoop能够简单地进行数据提取，类似于通过NFS和WebHDFS接口操作HDFS。<br>Apache Falcon - Falcon是一个数据管理框架，可简化数据生命周期管理和Apache Hadoop中的管道处理。可使用户将数据请求、管道处理、灾难恢复和数据保留的工作流结合起来。<br>Apache Flume - Flume允许我们从不同的数据源高效聚合和移动大量日志数据到Hadoop。<br>Apache Sqoop - Sqoop是一个工具可加速和简化数据移入和移除Hadoop。它可提供可靠并行地从各种各样、常用的企业级数据源加载数据。<br>安全（Security） - 满足认证、授权、账户管理和数据保护。Apache Knox在Hadoop堆栈每一层都提供了安全措施，从HDFS和YARN到Hive，以至于贯穿在整个集群中的其他数据获取组件。<br>Apache Knox - Knox网关（“Knox”）为集群上的Apache Hadoop服务提供了单点认证和管理。本项目的目标是为获取集群数据和执行任务的用户和集群操作员简化Hadodop安全管理。<br>Apache Ranger - Apache Ranger为Hadoop集群提供了一种更容易理解的安全管理方式。它提供集中的安全策略管理，贯穿于企业核心安全需求，授权、账户管理和数据保护。<br>操作（Operations） - 在一定规模范围内，规范，管理，监控和操作Hadoop集群。<br>Apache Ambari - 一个开源的对Apache Hadoop集群进行生命周期管理，管理和监控系统的安装程序。<br>Apache OOzie - 用于调度Apache Hadoop任务（jobs）的Java Web应用。OOzie合并多个任务按序进入工作中的一个逻辑单元(logical unit of work)。<br>Apache ZooKeeper - 一个协调分布式处理的高可用系统。分布式应用使用Zookeeper来存储和间接更新重要配置信息。<br>对于实质上每家垂直产业，Apache Hadoop在很多用例场景中都非常有用。它已变得非常流行，它已出现在你需要存储、处理和分析大数据里的数据的任何地方。比如包含电子商务自动化、欺诈侦测和保护、社交网络和关系分析、预测新药品模型、商场零售行为分析、和基于移动设备位置的营销等。学习更多Apache Hadoop知识，请看如下视频介绍： <a href="https://youtu.be/6UtD53BzDNk" target="_blank" rel="external">https://youtu.be/6UtD53BzDNk</a><br>1.3b Hortonworks数据平台(HDP)</p>
+<p>Hortonworks数据平台是一个打包好的hadoop发行版软件包， 旨在简化部署和管理Hadoop集群，相对于简单下载各种Apache代码包然后尝试将他们运行到一起形成一个系统。从外部看，Hortonworks数据平台(HDP)已架构、已部署并彻底搭建完成，它提供已为企业准备妥当的数据平台，能够使组织用来作为现代数据架构。使用YARN最为此架构的核心，为通过一系列处理方式完成多任务处理提供了数据平台 —— 从批处理到交互式到实时处理， 已满足企业数据平台主要功能需求 — 跨越管理，安全和操作。Hortonworks Sandbox是一个Hortworks数据平台的单节点实现。它被打包成一个虚拟机，可快速简单地模拟和体验使用HDP.本教程和Sandbox中的产品特点源于让用户浏览HDP是如何帮助我们解决企业大数据问题的。Sandbox的教程将带你将一些示例数据放入HDP并使用内建在HDP中的工具维护数据。向你展示如何开始和如何在HDP中完成任务是本教程的基本想法。HDP可免费下载并在你的企业中使用，你可以在这里下载:Hortonworks数据平台下载<br>建议阅读</p>
+<p>HDFS是Hadoop4大组件之一,其他3个是Hadoop Common，Hadoop YARN和Hadoop MapReduce。<br>学习更多HDFS请看下边的HDFS介绍视频<br>学习更多YARN请看下边的YARN介绍视频<br>Hadoop博客<br>Hadoop 2.7.0博客<br>深入理解Hadoop 2.0<br>概念: HDFS</p>
+<p>2.1 简介</p>
+<p>随着数据的增长，单台机器的存储能力将会达到饱和。因此迫切需要将数据跨越多台机器进行分区。通过计算机网络来管理数据存储的文件系统，这种类型的文件系统被称作分布式文件系统。HDFS是Apache Hadoop的一个核心组件，设计用来存储大数据量流式数据文件，可运行在低廉硬件集群上。使用Hortonworks数据平台HDP 2.2，HDFS现已被扩展为在HDFS集群上支持多种存储介质。<br>2.2 本节目标</p>
+<p>理解HDFS架构<br>理解Hortonworks Sandbox Ambari File用户界面<br>2.3 Hadoop分布式文件系统</p>
+<p>HDFS是一个分布式文件系统，设计用来存储大数据量文件。HDFS是一个基于Java的文件系统，提供可扩展和可靠的数据存储，并且设计为可跨越大量廉价服务器集群上。HDFS已被证明生产能力，存储高达200PB，并且4500台服务器的集群，支持十亿个文件和块。HDFS是可扩展的、容错的、分布式存储系统，在YARN的调节下，几乎可以和大量的并行数据处理应用同时工作。HDFS“能够”运行在多样的物理的和系统的环境。通过分布式存储和跨多台机器运算，这种组合存储资源可以根据需求线性增长，同时在每个存储上保证节约。 HDFS<br>HDFS由一个负责管理集群元数据的NameNode,和存储数据的DataNodes组成。所有文件和文件夹在NameNode中用节点（inodes）表示。Inodes记录属性，像权限，修改和获取时间，或者命名空间和磁盘空间配额。文件内容被拆分成大的区块(blocks)(标准为128Mb)，每个文件区块被独立备份到多个DataNodes。区块存储在DataNodes的本地文件系统中。NameNode动态监控区块副本的数量。当一个区块副本由于DataNode问题或者硬盘问题丢失时，NameNode会创建另一个区块副本。NameNode维护命名空间树和区块与DataNodes的对应关系，保持全部命名空间镜像在RAM中。NameNode不会直接发送请求到DataNodes。它会通过回答DataNodes发送的心跳来发送指令给DataNodes。这些指令包含如下命令：<br>备份区块到其他节点，<br>删除本地区块副本，<br>重新注册和发送即刻区块报告，或者<br>关闭节点<br>HDFS存储</p>
+<p>HDFS更多细节:<a href="http://hortonworks.com/hadoop/hdfs/" target="_blank" rel="external">http://hortonworks.com/hadoop/hdfs/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/yunpiao/" rel="tag"># yunpiao,</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/03/监控平台/HDP搭建/" rel="next" title="HDP搭建">
+                <i class="fa fa-chevron-left"></i> HDP搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/18/安全/docker 命令/" rel="prev" title="docker 命令">
+                docker 命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+
+
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3">
+
+</div>
+<!-- City版安装代码已完成 -->
+
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="yunpiao" />
+          <p class="site-author-name" itemprop="name">yunpiao</p>
+           
+              <p class="site-description motion-element" itemprop="description">转行程序员</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunpiao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2133384"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

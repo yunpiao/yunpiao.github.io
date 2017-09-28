@@ -1,0 +1,803 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+  
+  
+  <link rel="stylesheet" media="all" href="/lib/Han/dist/han.min.css?v=3.3">
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="安全,端口号," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1、域名溯源whois 查询基本信息http://whois.chinaz.com/ 根据注册人、 反查、 域名、 邮箱反查明目下的所有域名等信息通过社工库 反查信息    社工库例子：  http://www.shouyeren.org/free.htmlhttp://www.sgk98.com/ 2、域名查真实IP（IP）获得 Hosting History http://toolbar.n">
+<meta name="keywords" content="安全,端口号">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IP溯源">
+<meta property="og:url" content="http://yunpiao.pub/2017/02/14/安全/IP溯源/index.html">
+<meta property="og:site_name" content="偷得浮生半日闲">
+<meta property="og:description" content="1、域名溯源whois 查询基本信息http://whois.chinaz.com/ 根据注册人、 反查、 域名、 邮箱反查明目下的所有域名等信息通过社工库 反查信息    社工库例子：  http://www.shouyeren.org/free.htmlhttp://www.sgk98.com/ 2、域名查真实IP（IP）获得 Hosting History http://toolbar.n">
+<meta property="og:updated_time" content="2017-09-28T04:59:55.509Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IP溯源">
+<meta name="twitter:description" content="1、域名溯源whois 查询基本信息http://whois.chinaz.com/ 根据注册人、 反查、 域名、 邮箱反查明目下的所有域名等信息通过社工库 反查信息    社工库例子：  http://www.shouyeren.org/free.htmlhttp://www.sgk98.com/ 2、域名查真实IP（IP）获得 Hosting History http://toolbar.n">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yunpiao.pub/2017/02/14/安全/IP溯源/"/>
+
+
+
+
+
+  <title>IP溯源 | 偷得浮生半日闲</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-98719558-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?eb6a0c09a5722869261ea7ab931e3a98";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">偷得浮生半日闲</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">yunpiao's Blog</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/haha" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yunpiao.pub/2017/02/14/安全/IP溯源/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yunpiao">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="偷得浮生半日闲">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">IP溯源</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-14T17:31:21+08:00">
+                2017/02/14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body han-init-context" itemprop="articleBody">
+
+      
+      
+
+      
+        <a id="more"></a>
+<h1 id="1、域名溯源"><a href="#1、域名溯源" class="headerlink" title="1、域名溯源"></a>1、域名溯源</h1><h3 id="whois-查询基本信息"><a href="#whois-查询基本信息" class="headerlink" title="whois 查询基本信息"></a><a href="http://undefined" target="_blank" rel="external"></a>whois 查询基本信息</h3><p><a href="http://whois.chinaz.com/" target="_blank" rel="external">http://whois.chinaz.com/</a></p>
+<h3 id="根据注册人、-反查、-域名、-邮箱反查明目下的所有域名等信息"><a href="#根据注册人、-反查、-域名、-邮箱反查明目下的所有域名等信息" class="headerlink" title="根据注册人、 反查、 域名、 邮箱反查明目下的所有域名等信息"></a><a href="http://undefined" target="_blank" rel="external"></a><span style="font-size: 22px;">根据注册人、 反查、 域名、 邮箱反查明目下的所有域名等信</span>息</h3><div><span style="font-size: 22px;">通过</span><span style="color: inherit; font-family: inherit; font-size: 22px;">社工库 反查信息</span></div>
+
+<div><span style="color: inherit; font-family: inherit; font-size: 22px;"><br></span></div>
+
+<div><span style="font-size: 22px;">社工库例子：</span></div>
+
+<p><a href="http://www.shouyeren.org/free.html" target="_blank" rel="external">http://www.shouyeren.org/free.html</a><br><a href="http://www.sgk98.com/" target="_blank" rel="external">http://www.sgk98.com/</a></p>
+<h1 id="2、域名查真实IP（IP）"><a href="#2、域名查真实IP（IP）" class="headerlink" title="2、域名查真实IP（IP）"></a><a href="http://undefined" target="_blank" rel="external"></a>2、域名查真实IP（IP）</h1><p><span style="font-size: 22px;">获得 Hosting History</span></p>
+<p><a href="http://toolbar.netcraft.com/site_report" target="_blank" rel="external">http://toolbar.netcraft.com/site_report</a> </p>
+<h3 id="百度ip定位"><a href="#百度ip定位" class="headerlink" title="百度ip定位"></a><a href="http://undefined" target="_blank" rel="external"></a>百度ip定位</h3><p><a href="http://lbsyun.baidu.com/skins/MySkin/resources/iframs/heightAccApi.html" target="_blank" rel="external">http://lbsyun.baidu.com/skins/MySkin/resources/iframs/heightAccApi.html</a></p>
+<h3 id="综合定位"><a href="#综合定位" class="headerlink" title="综合定位"></a><a href="http://undefined" target="_blank" rel="external"></a>综合定位</h3><p><a href="https://www.ipip.net/ip.html" target="_blank" rel="external">https://www.ipip.net/ip.html</a></p>
+<h3 id="高精度定位"><a href="#高精度定位" class="headerlink" title="高精度定位"></a><a href="http://undefined" target="_blank" rel="external"></a>高精度定位</h3><p><a href="https://www.opengps.cn/Data/IP/IPHighAccuracy.aspx" target="_blank" rel="external">https://www.opengps.cn/Data/IP/IPHighAccuracy.aspx</a></p>
+<h1 id="3、安卓各大市场"><a href="#3、安卓各大市场" class="headerlink" title="3、安卓各大市场"></a><a href="http://undefined" target="_blank" rel="external"></a>3、安卓各大市场</h1><p><span style="font-size: 22px;">根据开发者信息查询， 包括身份信息， 手机号等</span></p>
+<p><a href="https://play.google.com/store/apps" target="_blank" rel="external">https://play.google.com/store/apps</a></p>
+<p><a href="http://app.hicloud.com/" target="_blank" rel="external">http://app.hicloud.com/</a></p>
+<p><a href="http://apk.hiapk.com/" target="_blank" rel="external">http://apk.hiapk.com/</a></p>
+<p><a href="http://app.mi.com/" target="_blank" rel="external">http://app.mi.com/</a><br><span style="font-size: 22px;">通过 获取 内容提供者 提交时间等信息 确定市场上最早出现的地点。</span></p>
+<p></p>
+<p>=<a href="./markdownFile.md">markdownFile.md</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/安全/" rel="tag"># 安全</a>
+          
+            <a href="/tags/端口号/" rel="tag"># 端口号</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/14/安全/Ddos 防御相关/" rel="next" title="Ddos 防御相关">
+                <i class="fa fa-chevron-left"></i> Ddos 防御相关
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/14/新媒体/文案/" rel="prev" title="文案">
+                文案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+
+
+        <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3">
+
+</div>
+<!-- City版安装代码已完成 -->
+
+
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yODYyNi81MTk3"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="yunpiao" />
+          <p class="site-author-name" itemprop="name">yunpiao</p>
+           
+              <p class="site-description motion-element" itemprop="description">转行程序员</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">66</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1、域名溯源"><span class="nav-number">1.</span> <span class="nav-text">1、域名溯源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#whois-查询基本信息"><span class="nav-number">1.0.1.</span> <span class="nav-text">whois 查询基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据注册人、-反查、-域名、-邮箱反查明目下的所有域名等信息"><span class="nav-number">1.0.2.</span> <span class="nav-text">根据注册人、 反查、 域名、 邮箱反查明目下的所有域名等信息</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2、域名查真实IP（IP）"><span class="nav-number">2.</span> <span class="nav-text">2、域名查真实IP（IP）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#百度ip定位"><span class="nav-number">2.0.1.</span> <span class="nav-text">百度ip定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#综合定位"><span class="nav-number">2.0.2.</span> <span class="nav-text">综合定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高精度定位"><span class="nav-number">2.0.3.</span> <span class="nav-text">高精度定位</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3、安卓各大市场"><span class="nav-number">3.</span> <span class="nav-text">3、安卓各大市场</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yunpiao</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2133384"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
