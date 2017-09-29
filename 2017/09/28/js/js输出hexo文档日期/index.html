@@ -96,17 +96,17 @@
 
 
 
-<meta name="description" content="由于使用小书匠作为编辑器，为方便模板自动输出data， js输出指定时间格式">
+<meta name="description" content="详细记录hexo的配置文档">
 <meta name="keywords" content="yunpiao">
 <meta property="og:type" content="article">
-<meta property="og:title" content="js输出hexo文档日期">
+<meta property="og:title" content="HEXO blog 配置文档">
 <meta property="og:url" content="http://yunpiao.pub/2017/09/28/js/js输出hexo文档日期/index.html">
 <meta property="og:site_name" content="偷得浮生半日闲">
-<meta property="og:description" content="由于使用小书匠作为编辑器，为方便模板自动输出data， js输出指定时间格式">
-<meta property="og:updated_time" content="2017-09-28T04:55:11.266Z">
+<meta property="og:description" content="详细记录hexo的配置文档">
+<meta property="og:updated_time" content="2017-09-29T09:51:56.808Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="js输出hexo文档日期">
-<meta name="twitter:description" content="由于使用小书匠作为编辑器，为方便模板自动输出data， js输出指定时间格式">
+<meta name="twitter:title" content="HEXO blog 配置文档">
+<meta name="twitter:description" content="详细记录hexo的配置文档">
 
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>js输出hexo文档日期 | 偷得浮生半日闲</title>
+  <title>HEXO blog 配置文档 | 偷得浮生半日闲</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -261,47 +261,9 @@
       
 
       
-        <li class="menu-item menu-item-search">
-          
-            <a href="javascript:;" class="popup-trigger">
-          
-            
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
-            
-            搜索
-          </a>
-        </li>
-      
     </ul>
   
 
-  
-    <div class="site-search">
-      
-  
-  <div class="algolia-popup popup search-popup">
-    <div class="algolia-search">
-      <div class="algolia-search-input-icon">
-        <i class="fa fa-search"></i>
-      </div>
-      <div class="algolia-search-input" id="algolia-search-input"></div>
-    </div>
-
-    <div class="algolia-results">
-      <div id="algolia-stats"></div>
-      <div id="algolia-hits"></div>
-      <div id="algolia-pagination" class="algolia-pagination"></div>
-    </div>
-
-    <span class="popup-btn-close">
-      <i class="fa fa-times-circle"></i>
-    </span>
-  </div>
-
-
-
-
-    </div>
   
 </nav>
 
@@ -343,7 +305,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">js输出hexo文档日期</h1>
+          <h1 class="post-title" itemprop="name headline">HEXO blog 配置文档</h1>
         
 
         <div class="post-meta">
@@ -355,7 +317,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T12:50:57+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T12:50:57+00:00">
                 2017/09/28
               </time>
             
@@ -396,10 +358,17 @@
 
       
         <blockquote>
+<p>详细记录hexo的配置文档<br><a id="more"></a></p>
+</blockquote>
+<h2 id="js输出hexo文档日期"><a href="#js输出hexo文档日期" class="headerlink" title="js输出hexo文档日期"></a>js输出hexo文档日期</h2><blockquote>
 <p>由于使用小书匠作为编辑器，为方便模板自动输出data， js输出指定时间格式</p>
 </blockquote>
-<a id="more"></a>
-<p><code>date: &lt;% print((new Date()).getFullYear().toString()+ &#39;-&#39;+ ((new Date()).getMonth() + 1).toString() + &#39;-&#39;+ (new Date()).getDate().toString() + &quot; &quot;+(new Date().getHours().toString()) + &#39;:&#39; +  (new Date().getMinutes().toString()) + &#39;:&#39; + (new Date().getSeconds().toString())   ); %&gt;</code></p>
+<figure class="highlight plain"><figcaption><span><% print((new="" date()).getfullyear().tostring()+="" '-'+="" ((new="" date()).getmonth()="" +="" 1).tostring()="" (new="" date()).getdate().tostring()="" "="" "+(new="" date().gethours().tostring())="" ':'="" date().getminutes().tostring())="" date().getseconds().tostring())="" );="" %=""></%></span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<h2 id="图床设置"><a href="#图床设置" class="headerlink" title="图床设置"></a>图床设置</h2><p>打开绑定，验证token ，制定库名称与分支</p>
+<h2 id="添加评论"><a href="#添加评论" class="headerlink" title="添加评论"></a>添加评论</h2><p>使用来比力</p>
+<p>网址 <a href="https://livere.com/apply" target="_blank" rel="external">https://livere.com/apply</a></p>
+<p>获取uid后在hexo主题配置文件中添加uid</p>
+<h2 id="添加搜索"><a href="#添加搜索" class="headerlink" title="添加搜索"></a>添加搜索</h2><p>安装搜索<br>npm install hexo-generator-searchdb –save</p>
 
       
     </div>
@@ -512,8 +481,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -566,6 +544,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#js输出hexo文档日期"><span class="nav-number">1.</span> <span class="nav-text">js输出hexo文档日期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图床设置"><span class="nav-number">2.</span> <span class="nav-text">图床设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加评论"><span class="nav-number">3.</span> <span class="nav-text">添加评论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加搜索"><span class="nav-number">4.</span> <span class="nav-text">添加搜索</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -766,19 +760,6 @@
   
 
 
-
-
-  
-  
-  
-  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
-
-  
-  
-  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
-  
-
-  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
 
 
 
