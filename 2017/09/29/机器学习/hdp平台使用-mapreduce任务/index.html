@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="偷得浮生半日闲">
 <meta property="og:description" content="以wordcount 为例子， 展示在hdp平台上使用mapreduce">
 <meta property="og:image" content="https://www.github.com/yunpiao/md/raw/img/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1506677531556.jpg">
-<meta property="og:updated_time" content="2017-09-29T09:41:45.980Z">
+<meta property="og:updated_time" content="2017-10-08T09:04:27.218Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hdp平台使用-mapreduce任务">
 <meta name="twitter:description" content="以wordcount 为例子， 展示在hdp平台上使用mapreduce">
@@ -401,9 +401,12 @@
 <p>以wordcount 为例子， 展示在hdp平台上使用mapreduce</p>
 </blockquote>
 <a id="more"></a>
-<h2 id="1-上传数据到HDFS"><a href="#1-上传数据到HDFS" class="headerlink" title="1. 上传数据到HDFS"></a>1. 上传数据到HDFS</h2><p>上传一个文本文件到hdp平台<br>本文展示的上传了一个http通信过程的文本文件</p>
+<h2 id="1-上传数据到HDFS"><a href="#1-上传数据到HDFS" class="headerlink" title="1. 上传数据到HDFS"></a>1. 上传数据到HDFS</h2><p>上传一个文本文件到hdfs 的input文件夹下</p>
+<p>本文上传了一个http通信过程的文本文件</p>
 <p><img src="https://www.github.com/yunpiao/md/raw/img/%E5%B0%8F%E4%B9%A6%E5%8C%A0/1506677531556.jpg" alt="上传数据"></p>
-<h2 id="2-终端运行hadoop-mapreduce"><a href="#2-终端运行hadoop-mapreduce" class="headerlink" title="2. 终端运行hadoop mapreduce"></a>2. 终端运行hadoop mapreduce</h2>
+<h2 id="2-终端运行hadoop-mapreduce"><a href="#2-终端运行hadoop-mapreduce" class="headerlink" title="2. 终端运行hadoop mapreduce"></a>2. 终端运行hadoop mapreduce</h2><p>由于hdp没有mapreduce的命令终端， 所以这是进入终端执行hadoop命令</p>
+<p><code>hadoop jar /usr/hdp/2.6.0.3-8/hadoop-mapreduce/hadoop-mapreduce-examples.jar  wordcount input output</code><br>命令解释  jar 后， 指定wordcount的jar包位置， wordcount指定运行函数 </p>
+
       
     </div>
 
@@ -444,6 +447,10 @@
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/29/大数据/Idea 使用maven构建udf开发环境/" rel="next" title="Idea 使用maven构建udf开发环境">
+                <i class="fa fa-chevron-left"></i> Idea 使用maven构建udf开发环境
+              </a>
             
           </div>
 
@@ -536,7 +543,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-count">72</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
