@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://yunpiao.pub/2017/02/14/机器学习/机器学习/output_5_0.png">
 <meta property="og:image" content="http://yunpiao.pub/2017/02/14/机器学习/机器学习/output_6_0.png">
 <meta property="og:image" content="http://yunpiao.pub/2017/02/14/机器学习/机器学习/output_12_0.png">
-<meta property="og:updated_time" content="2017-09-28T04:55:31.189Z">
+<meta property="og:updated_time" content="2018-02-27T10:27:30.023Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习">
 <meta name="twitter:description" content="机器学习">
@@ -419,50 +419,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">plt.scatter(<span class="number">40</span>,<span class="number">2.7</span>, c=<span class="string">'r'</span>, s=<span class="number">200</span>, marker=<span class="string">'*'</span>,alpha=<span class="number">0.8</span>, zorder=<span class="number">10</span>)</div><div class="line">plt.scatter(grief_heights,grief_weights,c=<span class="string">'g'</span>,marker=<span class="string">'s'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>,zorder=<span class="number">10</span>)</div><div class="line">plt.scatter(agony_heights,agony_weights,c=<span class="string">'b'</span>,marker=<span class="string">'^'</span>,s=<span class="number">50</span>,alpha=<span class="number">0.8</span>,zorder=<span class="number">10</span>)</div><div class="line">plt.scatter(despair_heights,despair_weights, c=<span class="string">'y'</span>, s=<span class="number">50</span>, alpha=<span class="number">0.8</span>,zorder=<span class="number">10</span>)</div><div class="line">plt.scatter([x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_yellow], [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_yellow], s=<span class="number">1</span>, c=<span class="string">'yellow'</span>, marker=<span class="string">'1'</span>, alpha=<span class="number">0.3</span>)</div><div class="line">plt.scatter([x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_blue], [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_blue], s=<span class="number">1</span>, c=<span class="string">'blue'</span>, marker=<span class="string">'2'</span>, alpha=<span class="number">0.3</span>)</div><div class="line">plt.scatter([x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_green], [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> fifteen_NN_green], s=<span class="number">1</span>, c=<span class="string">'green'</span>, marker=<span class="string">'3'</span>, alpha=<span class="number">0.3</span>)</div><div class="line">plt.axis((<span class="number">10</span>, <span class="number">70</span>,<span class="number">1</span>,<span class="number">7</span>))</div><div class="line">plt.title(<span class="string">'15NN分类'</span>,size=<span class="number">30</span>)</div><div class="line">plt.xlabel(<span class="string">'身高 (cm)'</span>,size=<span class="number">15</span>)</div><div class="line">plt.ylabel(<span class="string">'体重 (kg)'</span>, size=<span class="number">15</span>)</div><div class="line">plt.show()</div></pre></td></tr></table></figure>
 <p><img src="output_12_0.png" alt="png"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 每个点运算 1NN，并记录计算时间</span></div><div class="line">now = datetime.datetime.now()</div><div class="line">one_NN_result = []</div><div class="line"><span class="keyword">for</span> point <span class="keyword">in</span> all_points:</div><div class="line">    one_NN_result.append((point, tree.kNN(point,k=<span class="number">1</span>, dist=<span class="keyword">lambda</span> x,y: (x[<span class="number">0</span>]-y[<span class="number">0</span>])**<span class="number">2</span>+(<span class="number">10</span>*x[<span class="number">1</span>]<span class="number">-10</span>*y[<span class="number">1</span>])**<span class="number">2</span>)[<span class="number">0</span>]))</div><div class="line">print(datetime.datetime.now() - now)</div></pre></td></tr></table></figure>
-<pre><code>---------------------------------------------------------------------------
 
-TypeError                                 Traceback (most recent call last)
-
-&lt;ipython-input-28-03a1c722823e&gt; in &lt;module&gt;()
-      3 one_NN_result = []
-      4 for point in all_points:
-----&gt; 5     one_NN_result.append((point, tree.kNN(point,k=1, dist=lambda x,y: (x[0]-y[0])**2+(10*x[1]-10*y[1])**2)[0]))
-      6 print(datetime.datetime.now() - now)
-
-
-&lt;ipython-input-19-bf4a3fccbc59&gt; in kNN(self, point, k, dist)
-    112     # 返回该点概率最大的类别以及相对应的概率
-    113     def kNN(self, point, k, dist=lambda x, y: sum(map(lambda u, v: (u - v) ** 2, x, y))):
---&gt; 114         nearests = self.knearest(point, k, dist)
-    115 
-    116         statistics = {}
-
-
-&lt;ipython-input-19-bf4a3fccbc59&gt; in knearest(self, point, k, dist)
-     70         leaf = self.find_leaf(point)
-     71         # 从叶子网上爬
----&gt; 72         return leaf.k_down_up(point, k, dist, result=[], stop=self, visited=None)
-     73 
-     74     # 从下往上爬函数，stop是到哪里去，visited是从哪里来
-
-
-&lt;ipython-input-19-bf4a3fccbc59&gt; in k_down_up(self, point, k, dist, result, stop, visited)
-     93 
-     94         # 刨出来的点放一起，选前 k 个
----&gt; 95         result.append((self.node, dist(point, self.node[0])))
-     96         result = sorted(result + other_result, key=lambda pair: pair[1])[:k]
-     97 
-
-
-&lt;ipython-input-28-03a1c722823e&gt; in &lt;lambda&gt;(x, y)
-      3 one_NN_result = []
-      4 for point in all_points:
-----&gt; 5     one_NN_result.append((point, tree.kNN(point,k=1, dist=lambda x,y: (x[0]-y[0])**2+(10*x[1]-10*y[1])**2)[0]))
-      6 print(datetime.datetime.now() - now)
-
-
-TypeError: unsupported operand type(s) for -: &apos;float&apos; and &apos;tuple&apos;
-</code></pre>
       
     </div>
 
@@ -506,8 +463,8 @@ TypeError: unsupported operand type(s) for -: &apos;float&apos; and &apos;tuple&
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/02/14/新媒体/文案/" rel="next" title="文案">
-                <i class="fa fa-chevron-left"></i> 文案
+              <a href="/2017/02/14/Python/WebSockets学习/" rel="next" title="WebSockets学习">
+                <i class="fa fa-chevron-left"></i> WebSockets学习
               </a>
             
           </div>
@@ -516,8 +473,8 @@ TypeError: unsupported operand type(s) for -: &apos;float&apos; and &apos;tuple&
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/02/14/前端/angularJS/" rel="prev" title="angularJS">
-                angularJS <i class="fa fa-chevron-right"></i>
+              <a href="/2014/03/03/Python/2017-2-10 python生成器 迭代器/" rel="prev" title="python生成器 迭代器">
+                python生成器 迭代器 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -601,7 +558,7 @@ TypeError: unsupported operand type(s) for -: &apos;float&apos; and &apos;tuple&
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">70</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

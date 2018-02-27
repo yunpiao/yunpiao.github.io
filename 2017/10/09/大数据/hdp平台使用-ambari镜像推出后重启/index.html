@@ -99,13 +99,13 @@
 <meta name="description" content="由于hdp平台搭建在docker镜像中，所以如果镜像推出后，重新开启后还是有一些操作">
 <meta name="keywords" content="yunpiao">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hdp平台使用-ambari镜像推出后重启">
+<meta property="og:title" content="hdp平台-ambari镜像退出后重启">
 <meta property="og:url" content="http://yunpiao.pub/2017/10/09/大数据/hdp平台使用-ambari镜像推出后重启/index.html">
 <meta property="og:site_name" content="偷得浮生半日闲">
 <meta property="og:description" content="由于hdp平台搭建在docker镜像中，所以如果镜像推出后，重新开启后还是有一些操作">
-<meta property="og:updated_time" content="2017-10-09T12:31:33.395Z">
+<meta property="og:updated_time" content="2018-02-27T10:27:29.977Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hdp平台使用-ambari镜像推出后重启">
+<meta name="twitter:title" content="hdp平台-ambari镜像退出后重启">
 <meta name="twitter:description" content="由于hdp平台搭建在docker镜像中，所以如果镜像推出后，重新开启后还是有一些操作">
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>hdp平台使用-ambari镜像推出后重启 | 偷得浮生半日闲</title>
+  <title>hdp平台-ambari镜像退出后重启 | 偷得浮生半日闲</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -343,7 +343,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">hdp平台使用-ambari镜像推出后重启</h1>
+          <h1 class="post-title" itemprop="name headline">hdp平台-ambari镜像退出后重启</h1>
         
 
         <div class="post-meta">
@@ -401,9 +401,10 @@
 <a id="more"></a>
 <p>编写关闭后启动脚本如下</p>
 <p>start hdp-server 容器</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">docker start hdp-server</div><div class="line">docker <span class="built_in">exec</span> hdp-server service sshd start</div><div class="line">docker <span class="built_in">exec</span> hdp-server service postgresql start</div><div class="line">docker <span class="built_in">exec</span> hdp-server ntpd</div><div class="line">docker <span class="built_in">exec</span> hdp-server ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</div><div class="line">docker <span class="built_in">exec</span> -it hdp-server bash</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">docker start hdp-server</div><div class="line">docker <span class="built_in">exec</span> hdp-server service sshd start</div><div class="line">docker <span class="built_in">exec</span> hdp-server service postgresql start</div><div class="line">docker <span class="built_in">exec</span> hdp-server ntpd</div><div class="line">docker <span class="built_in">exec</span> hdp-server ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</div><div class="line">docker <span class="built_in">exec</span> hdp-server ambari-agent start </div><div class="line">docker <span class="built_in">exec</span> hdp-server ambari-server start </div><div class="line"></div><div class="line">docker <span class="built_in">exec</span> -it hdp-server bash</div></pre></td></tr></table></figure>
 <p>start hdp-client 容器</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker start hdp-client</div><div class="line">docker <span class="built_in">exec</span> hdp-client service sshd start</div><div class="line">docker <span class="built_in">exec</span> hdp-client ntpd</div><div class="line">docker <span class="built_in">exec</span> hdp-client ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</div><div class="line">docker <span class="built_in">exec</span> -it hdp-client bash</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">docker start hdp-client</div><div class="line">docker <span class="built_in">exec</span> hdp-client service sshd start</div><div class="line">docker <span class="built_in">exec</span> hdp-client ntpd</div><div class="line">docker <span class="built_in">exec</span> hdp-client ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime</div><div class="line">docker <span class="built_in">exec</span> hdp-server ambari-agent start </div><div class="line">docker <span class="built_in">exec</span> -it hdp-client bash</div></pre></td></tr></table></figure>
+<p>之后再打开web端ambari 启动所有进程</p>
 
       
     </div>
@@ -452,8 +453,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/29/大数据/Idea 使用maven构建udf开发环境/" rel="prev" title="Idea 使用maven构建udf开发环境">
-                Idea 使用maven构建udf开发环境 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/28/机器学习/spark 使用ml步骤/" rel="prev" title="spark 使用ml步骤">
+                spark 使用ml步骤 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -528,7 +529,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-count">70</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -583,7 +584,7 @@
         <div class="copyright" >
   
   &copy;  2015 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

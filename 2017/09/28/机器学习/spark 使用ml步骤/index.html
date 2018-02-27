@@ -80,7 +80,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="yunpiao,spark,机器学习," />
+  <meta name="keywords" content="机器学习,spark," />
 
 
 
@@ -97,13 +97,13 @@
 
 
 <meta name="description" content="使用大数据工具进行数据预测">
-<meta name="keywords" content="yunpiao,spark,机器学习">
+<meta name="keywords" content="机器学习,spark">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spark 使用ml步骤">
 <meta property="og:url" content="http://yunpiao.pub/2017/09/28/机器学习/spark 使用ml步骤/index.html">
 <meta property="og:site_name" content="偷得浮生半日闲">
 <meta property="og:description" content="使用大数据工具进行数据预测">
-<meta property="og:updated_time" content="2017-09-28T05:32:08.366Z">
+<meta property="og:updated_time" content="2018-02-27T10:27:30.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spark 使用ml步骤">
 <meta name="twitter:description" content="使用大数据工具进行数据预测">
@@ -407,26 +407,23 @@
 <li>3.866,-2.6383,1.9242,0.10645,0</li>
 <li>3.4566,9.5228,-4.0112,-3.5944,0</li>
 <li>0.32924,-4.4552,4.5718,-0.9888,0</li>
-<li>… …<br>*/<br>val parsedRDD = sc.textFile(args(0)).map(_.split(“,”)).map(eachRow =&gt; {<br>val a = eachRow.map(x =&gt; x.toDouble)<br>(a(0),a(1),a(2),a(3),a(4))<br>})<br>val df = sqlCtx.createDataFrame(parsedRDD).toDF(<br>“f0”,”f1”,”f2”,”f3”,”label”).cache()</li>
+<li>… …<br>*/</li>
 </ul>
 </li>
 </ul>
-<h2 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h2><p> 为了容易使用机器学习算法 设置lable index 从0开始<br><figure class="highlight plain"><figcaption><span>labelIndexer = new StringIndexer()</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.setInputCol(&quot;label&quot;)</div><div class="line">.setOutputCol(&quot;indexedLabel&quot;)</div><div class="line">.fit(df)</div></pre></td></tr></table></figure></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">val</span> parsedRDD = sc.textFile(args(<span class="number">0</span>)).map(_.split(<span class="string">","</span>)).map(eachRow =&gt; &#123;</div><div class="line"> <span class="keyword">val</span> a = eachRow.map(x =&gt; x.toDouble)</div><div class="line"> (a(<span class="number">0</span>),a(<span class="number">1</span>),a(<span class="number">2</span>),a(<span class="number">3</span>),a(<span class="number">4</span>))</div><div class="line"> &#125;)</div><div class="line"> <span class="keyword">val</span> df = sqlCtx.createDataFrame(parsedRDD).toDF(</div><div class="line"> <span class="string">"f0"</span>,<span class="string">"f1"</span>,<span class="string">"f2"</span>,<span class="string">"f3"</span>,<span class="string">"label"</span>).cache()</div><div class="line">``` </div><div class="line"> </div><div class="line"> ## <span class="type">Step</span> <span class="number">2</span></div><div class="line"> 为了容易使用机器学习算法 设置lable index 从<span class="number">0</span>开始 </div><div class="line">```scala</div><div class="line"><span class="keyword">val</span> labelIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</div><div class="line"> .setInputCol(<span class="string">"label"</span>)</div><div class="line"> .setOutputCol(<span class="string">"indexedLabel"</span>)</div><div class="line"> .fit(df)</div></pre></td></tr></table></figure>
 <h2 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h2><p> 定义特征列</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">val vectorAssembler = new VectorAssembler()</div><div class="line">.setInputCols(Array(&quot;f0&quot;,&quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;))</div><div class="line">.setOutputCol(&quot;featureVector&quot;)</div></pre></td></tr></table></figure>
-<h2 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h2><p>创建随机森林分类器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">val rfClassifier = new RandomForestClassifier()</div><div class="line"> .setLabelCol(&quot;indexedLabel&quot;)</div><div class="line"> .setFeaturesCol(&quot;featureVector&quot;)</div><div class="line"> .setNumTrees(5)</div></pre></td></tr></table></figure></p>
+ <figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">val</span> vectorAssembler = <span class="keyword">new</span> <span class="type">VectorAssembler</span>()</div><div class="line">.setInputCols(<span class="type">Array</span>(<span class="string">"f0"</span>,<span class="string">"f1"</span>,<span class="string">"f2"</span>,<span class="string">"f3"</span>))</div><div class="line">.setOutputCol(<span class="string">"featureVector"</span>)</div></pre></td></tr></table></figure>
+<h2 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h2><p>创建随机森林分类器<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> rfClassifier = <span class="keyword">new</span> <span class="type">RandomForestClassifier</span>()</div><div class="line"> .setLabelCol(<span class="string">"indexedLabel"</span>)</div><div class="line"> .setFeaturesCol(<span class="string">"featureVector"</span>)</div><div class="line"> .setNumTrees(<span class="number">5</span>)</div></pre></td></tr></table></figure></p>
 <h2 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5"></a>Step 5</h2><p>转换lable列 到原始数据</p>
-<figure class="highlight plain"><figcaption><span>labelConverter = new IndexToString()</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.setInputCol(&quot;prediction&quot;)</div><div class="line">.setOutputCol(&quot;predictedLabel&quot;)</div><div class="line">.setLabels(labelIndexer.labels)</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> labelConverter = <span class="keyword">new</span> <span class="type">IndexToString</span>()</div><div class="line"> .setInputCol(<span class="string">"prediction"</span>)</div><div class="line"> .setOutputCol(<span class="string">"predictedLabel"</span>)</div><div class="line"> .setLabels(labelIndexer.labels)</div></pre></td></tr></table></figure>
 <h2 id="Step-6"><a href="#Step-6" class="headerlink" title="Step 6"></a>Step 6</h2><p>拆分数据</p>
-<p><code>val Array(trainingData, testData) = df.randomSplit(Array(0.8, 0.2))</code></p>
-<h2 id="Step-7"><a href="#Step-7" class="headerlink" title="Step 7"></a>Step 7</h2><p> 创建 ML pipeline .<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">val pipeline = new Pipeline().setStages(Array(labelIndexer,vectorAssembler,rfClassifier,labelConverter))</div><div class="line"> val model = pipeline.fit(trainingData)</div></pre></td></tr></table></figure></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> <span class="type">Array</span>(trainingData, testData) = df.randomSplit(<span class="type">Array</span>(<span class="number">0.8</span>, <span class="number">0.2</span>))`</div><div class="line">``` </div><div class="line"> ## <span class="type">Step</span> <span class="number">7</span></div><div class="line"> 创建 <span class="type">ML</span> pipeline .</div><div class="line"> </div><div class="line">```scala</div><div class="line"><span class="keyword">val</span> pipeline = <span class="keyword">new</span> <span class="type">Pipeline</span>().setStages(<span class="type">Array</span>(labelIndexer,vectorAssembler,rfClassifier,labelConverter))</div><div class="line"> <span class="keyword">val</span> model = pipeline.fit(trainingData)</div></pre></td></tr></table></figure>
 <h2 id="Step-8"><a href="#Step-8" class="headerlink" title="Step 8"></a>Step 8</h2><p> 设置填充数据预测</p>
-<p> <code>val predictionResultDF = model.transform(testData)</code></p>
-<h2 id="Step-9"><a href="#Step-9" class="headerlink" title="Step 9"></a>Step 9</h2><p>选择标签行</p>
-<p><code>predictionResultDF.select(&quot;f0&quot;,&quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,&quot;label&quot;,&quot;predictedLabel&quot;).show(20)</code></p>
-<h2 id="Step-10"><a href="#Step-10" class="headerlink" title="Step 10"></a>Step 10</h2><p>输出准确率<br><figure class="highlight plain"><figcaption><span>evaluator = new MulticlassClassificationEvaluator()</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.setLabelCol(&quot;label&quot;)</div><div class="line">.setPredictionCol(&quot;prediction&quot;)</div><div class="line">.setMetricName(&quot;precision&quot;)</div><div class="line">val predictionAccuracy = evaluator.evaluate(predictionResultDF)</div><div class="line">println(&quot;Testing Error = &quot; + (1.0 - predictionAccuracy))</div></pre></td></tr></table></figure></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> predictionResultDF = model.transform(testData)`</div><div class="line">``` </div><div class="line"> </div><div class="line"> ##  <span class="type">Step</span> <span class="number">9</span></div><div class="line">选择标签行</div><div class="line"></div><div class="line">```scala</div><div class="line">predictionResultDF.select(<span class="string">"f0"</span>,<span class="string">"f1"</span>,<span class="string">"f2"</span>,<span class="string">"f3"</span>,<span class="string">"label"</span>,<span class="string">"predictedLabel"</span>).show(<span class="number">20</span>)`</div></pre></td></tr></table></figure>
+<h2 id="Step-10"><a href="#Step-10" class="headerlink" title="Step 10"></a>Step 10</h2><p>输出准确率<br><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> evaluator = <span class="keyword">new</span> <span class="type">MulticlassClassificationEvaluator</span>()</div><div class="line"> .setLabelCol(<span class="string">"label"</span>)</div><div class="line"> .setPredictionCol(<span class="string">"prediction"</span>)</div><div class="line"> .setMetricName(<span class="string">"precision"</span>)</div><div class="line"> <span class="keyword">val</span> predictionAccuracy = evaluator.evaluate(predictionResultDF)</div><div class="line"> println(<span class="string">"Testing Error = "</span> + (<span class="number">1.0</span> - predictionAccuracy))</div></pre></td></tr></table></figure></p>
 <h2 id="Step-11"><a href="#Step-11" class="headerlink" title="Step 11"></a>Step 11</h2><p>保存模型</p>
-<figure class="highlight plain"><figcaption><span>randomForestModel = model.stages(2).asInstanceOf[RandomForestClassificationModel]</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> println(&quot;Trained Random Forest Model is:\n&quot; + randomForestModel.toDebugString)</div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> randomForestModel = model.stages(<span class="number">2</span>).asInstanceOf[<span class="type">RandomForestClassificationModel</span>]</div><div class="line"> println(<span class="string">"Trained Random Forest Model is:\n"</span> + randomForestModel.toDebugString)</div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
       
     </div>
 
@@ -455,11 +452,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/yunpiao/" rel="tag"># yunpiao</a>
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
             <a href="/tags/spark/" rel="tag"># spark</a>
-          
-            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
           
         </div>
       
@@ -472,8 +467,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/29/机器学习/hdp平台使用-mapreduce任务/" rel="next" title="hdp平台使用-mapreduce任务">
-                <i class="fa fa-chevron-left"></i> hdp平台使用-mapreduce任务
+              <a href="/2017/10/09/大数据/hdp平台使用-ambari镜像推出后重启/" rel="next" title="hdp平台-ambari镜像退出后重启">
+                <i class="fa fa-chevron-left"></i> hdp平台-ambari镜像退出后重启
               </a>
             
           </div>
@@ -567,7 +562,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">70</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -615,7 +610,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-1"><span class="nav-number">1.</span> <span class="nav-text">Step 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-2"><span class="nav-number">2.</span> <span class="nav-text">Step 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-3"><span class="nav-number">3.</span> <span class="nav-text">Step 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-4"><span class="nav-number">4.</span> <span class="nav-text">Step 4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-5"><span class="nav-number">5.</span> <span class="nav-text">Step 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-6"><span class="nav-number">6.</span> <span class="nav-text">Step 6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-7"><span class="nav-number">7.</span> <span class="nav-text">Step 7</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-8"><span class="nav-number">8.</span> <span class="nav-text">Step 8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-9"><span class="nav-number">9.</span> <span class="nav-text">Step 9</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-10"><span class="nav-number">10.</span> <span class="nav-text">Step 10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-11"><span class="nav-number">11.</span> <span class="nav-text">Step 11</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-1"><span class="nav-number">1.</span> <span class="nav-text">Step 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-3"><span class="nav-number">2.</span> <span class="nav-text">Step 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-4"><span class="nav-number">3.</span> <span class="nav-text">Step 4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-5"><span class="nav-number">4.</span> <span class="nav-text">Step 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-6"><span class="nav-number">5.</span> <span class="nav-text">Step 6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-8"><span class="nav-number">6.</span> <span class="nav-text">Step 8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-10"><span class="nav-number">7.</span> <span class="nav-text">Step 10</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step-11"><span class="nav-number">8.</span> <span class="nav-text">Step 11</span></a></li></ol></div>
             
 
           </div>
